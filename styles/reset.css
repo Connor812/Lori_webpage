@@ -1,0 +1,74 @@
+/* reset.css */
+
+/* Apply a general reset to most common HTML elements */
+html, body, div, span, h1, h2, h3, p, a, img, ul, ol, li, form, input, button, table, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+/* Make sure images and other embedded content don't have a border */
+img, object, embed {
+    border: none;
+}
+
+/* Correct inline-block display */
+/* This can help with browser inconsistencies in the way inline-block elements are displayed */
+/* Adjust as needed for your layout */
+.inline-block {
+    display: inline-block;
+    display: inline;
+    zoom: 1;
+}
+
+/* Remove list styles */
+ul, ol {
+    list-style: none;
+}
+
+/* Remove the underlines from links */
+a {
+    text-decoration: none;
+}
+
+/* Reset heading elements */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 100%;
+}
+
+/* Remove bold font style from strong elements */
+strong {
+    font-weight: normal;
+}
+
+/* Set block-level elements to have no margins by default */
+div, p, form, input, button, textarea {
+    margin: 0;
+}
+
+/* Specify the box sizing for all elements */
+/* 'border-box' makes sure that padding and border are included in the element's total width */
+/* This can help with box model inconsistencies */
+/* Adjust as needed for your layout */
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Set default styles for input and textarea elements */
+input, textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+    border: 1px solid #ccc;
+    font-size: 100%;
+    padding: 5px;
+}
