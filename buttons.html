@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+  <head><script src="../assets/js/color-modes.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.118.2">
+    <title>Starter Template · Bootstrap v5.3</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/starter-template/">
+
+    
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/ur.css" rel="stylesheet">
+
+    <style>
+    
+    </style>
+
+    
+  </head>
+  <body>
+   
+  <body>
+      <div class="button-container">
+          <button class="modal-button" data-modal="modal-1">Button 1</button>
+          <button class="modal-button" data-modal="modal-2">Button 2</button>
+          <button class="modal-button" data-modal="modal-3">Button 3</button>
+          <!-- Add more buttons for a total of 10 -->
+      </div>
+  
+      <div class="modal" id="modal-1">
+          <div class="modal-content">
+              <span class="close-button" data-modal="modal-1">&times;</span>
+              <h2>Modal 1</h2>
+              <p>This is the content for Modal 1.</p>
+          </div>
+      </div>
+      <div class="modal" id="modal-2">
+          <div class="modal-content">
+              <span class="close-button" data-modal="modal-2">&times;</span>
+              <h2>Modal 2</h2>
+              <p>This is the content for Modal 2.</p>
+          </div>
+      </div>
+      <div class="modal" id="modal-3">
+          <div class="modal-content">
+              <span class="close-button" data-modal="modal-3">&times;</span>
+              <h2>Modal 3</h2>
+              <p>This is the content for Modal 3.</p>
+          </div>
+      </div>
+      <!-- Add more modals for a total of 10 -->
+      <script src="script.js"></script>
+      <script>
+      const modalButtons = document.querySelectorAll('.modal-button');
+        modalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'block';
+            });
+        });
+        
+        const closeButtons = document.querySelectorAll('.close-button');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modalId = button.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'none';
+            });
+        });
+        </script>
+  </body>
+  </html>
+  
+<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>
