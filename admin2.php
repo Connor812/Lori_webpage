@@ -202,7 +202,7 @@ function add_button($id)
 }
 ?>
 <?php
-require_once 'admin-header.php';
+// require_once 'admin-header.php';
 // call first button
 echo add_button(0);
 ?>
