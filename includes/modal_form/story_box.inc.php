@@ -71,8 +71,6 @@ if ($mysqli->query($sql)) {
     echo "Error adding column: " . $mysqli->error;
 }
 
-
-
 // SQL query to get the latest ID
 $sql = "SELECT MAX(id) FROM journal_page;";
 $result = $mysqli->query($sql);
@@ -93,7 +91,7 @@ if ($result->num_rows > 0) {
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
                 echo "New section added!";
-                header("Location: " . BASE_URL . "/admin2.php?page_num=" . $page_num);
+                header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
             } else {
                 echo "Error adding section";
             }
