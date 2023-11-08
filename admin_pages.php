@@ -293,9 +293,9 @@
                             <label class="form-label" for="customFile">Image Name</label>
                             <input name="section_name" type="text" class="form-control"
                                 placeholder="Chose a name for the Image" />
-                            <label class="form-label" for="customFile">Image Name</label>
+                            <label class="form-label" for="customFile">Image Text</label>
                             <textarea name="image_text" type="text" class="form-control"
-                                placeholder="Chose a name for the Image"></textarea>
+                                placeholder="The text that will be displayed beside the image"></textarea>
                             <label class="form-label" for="customFile">Upload a Image</label>
                             <input name="my_image" type="file" class="form-control" id="customFile" />
 
