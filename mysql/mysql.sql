@@ -7,13 +7,20 @@ USE loridb;
 -- Set up of tables -------------------------------------------->
 
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id int(11) AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE permission (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id int(11) NOT NULL,
+    page_num int(11) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE journal_page (
@@ -102,6 +109,8 @@ CREATE TABLE text (
 
 INSERT INTO `users` (`username`, `email`, `password`, `first_name`, `last_name`) VALUES 
 ('Connor812','connor812@gmail.com','123','Connor','Savoy');
+
+INSERT INTO `permission`(`username`, `page_num`) VALUES ('Connor812','1');
 
 INSERT INTO journal_page (`section_type`, `section_name`, `order_num`, `page_num`) VALUES 
 ('heading', 'heading 1', '1', '1'),
