@@ -11,7 +11,7 @@ require_once "admin-header.php";
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <?php
             // Grabs all the users from the database and displays them here
-            $sql = "SELECT username FROM users";
+            $sql = "SELECT id, username FROM users;";
             $result = mysqli_query($mysqli, $sql);
 
             if (!$result) {
@@ -20,7 +20,8 @@ require_once "admin-header.php";
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $username = $row['username'];
-                echo '<li><a class="dropdown-item" href="admin_users.php?username=' . $username . '">' . $username . '</a></li>';
+                $user_id = $row['id'];
+                echo '<li><a class="dropdown-item" href="admin_users.php?username=' . $username . '&user_id=' . $user_id . '">' . $username . '</a></li>';
             }
             ?>
         </ul>
@@ -62,7 +63,7 @@ if (isset($_GET['username'])) {
                 $page_nums = $row['num_pages'];
 
                 // This section will display the users information
-                echo '<div width="%100" class="d-flex justify-content-center">
+                echo '<div width="%100" class="d-flex justify-content-center m-3">
                 <div id="user_info" class="container row border border-dark border-2 rounded p-4">
                     <div class="col d-flex flex-column gap-5">
                         <div>
@@ -136,12 +137,53 @@ if (isset($_GET['username'])) {
         echo "Query preparation failed: " . $mysqli->error;
     }
 
-    $mysqli->close();
-
 } else {
     echo 'No user selected';
 }
 ?>
+
+<div class="d-flex justify-content-center">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            Dropdown button
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php
+            require_once "connect/db.php";
+
+            $username = $_GET['username'];
+            $user_id = $_GET['user_id'];
+
+            $sql = 'SELECT * FROM permission WHERE user_id = ?;';
+            $stmt = $mysqli->prepare($sql);
+
+            if ($stmt) {
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $page_num = $row['page_num'];
+                        // Generate the dropdown items
+                        echo '<li><a class="dropdown-item" href="admin_users.php?username=' . $username . '&user_id=' . $user_id . '&page_num=' . $page_num . '">Page ' . $page_num . '</a></li>';
+                    }
+                } else {
+                    echo '<li><a class="dropdown-item" href="#">No permissions found</a></li>';
+                }
+
+                $stmt->close();
+            } else {
+                echo "Prepare failed: " . $mysqli->error;
+                exit;
+            }
+            ?>
+        </ul>
+    </div>
+</div>
+
+
 <?php
 require_once 'admin_footer.php';
 ?>
