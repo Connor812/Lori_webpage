@@ -148,7 +148,7 @@ footer {
 }
 
 .ocean-image {
-  background-image: url(/images/sadgirlocean.jpg);
+  background-image: url(../images/sadgirlocean.jpg);
   /* The image used */
   height: 350px;
   /* You must set a specified height */
