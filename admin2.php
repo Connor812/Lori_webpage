@@ -88,7 +88,6 @@ WHERE cl.id = ?;";
                 <br>';
             }
         }
-        $stmt->close();
     } else {
         echo "Prepare failed: " . $mysqli->error;
         exit;
@@ -184,6 +183,73 @@ function image_section($image_row)
     echo add_button($image_row['order_num']);
 }
 
+// Handles displaying a bullet section
+
+function bullet_section($bullet_row, $mysqli)
+{
+
+    $section_name = $bullet_row['section_name'];
+    $bullet_id = $bullet_row['bullet_id'];
+
+
+    $sql = 'SELECT * FROM `bullet_point` WHERE bullet_id = ?';
+
+    $stmt = $mysqli->prepare($sql);
+
+    if ($stmt) {
+        // Bind the parameter
+        $stmt->bind_param("i", $bullet_id); // Assuming $bullet_id is the value you want to match
+
+        // Execute the prepared statement
+        $stmt->execute();
+
+        // Get the result set
+        $result = $stmt->get_result();
+
+        if ($result) {
+            // Start the bullet point list
+            echo $section_name;
+            echo '<ul>'; 
+            // Fetch data from the result set
+            while ($row = $result->fetch_assoc()) {
+                // Access data in $row
+                $bullet_content = $row['bullet_content'];
+                
+                echo '<li>' . $bullet_content . '</li>';
+
+            }
+            // End the bullet point list
+            echo '</ul>';
+            // Close the statement
+        } else {
+            echo "Error getting result set: " . $mysqli->error;
+            // Handle the error
+        }
+    } else {
+        echo "Prepare failed: " . $mysqli->error;
+        // Handle the error
+    }
+
+    echo add_button($bullet_row['order_num']);
+
+}
+
+// Handles displaying a text section
+
+function text_section($text_row)
+{
+
+    echo '<section class="d-flex justify-content-center">
+
+        ' . $text_row['text_content'] . '
+
+</section>';
+
+echo add_button($text_row['order_num']);
+
+}
+
+
 // Function to add the button after each section to toggle the modal window to add new sections
 
 function add_button($id)
@@ -238,7 +304,10 @@ echo add_button(0);
     sh.subheading_content,
     i.id AS image_id,
     i.image_src,
-    i.image_text
+    i.image_text,
+    t.id AS text_id,
+    t.text_content,
+    bu.id AS bullet_id
 FROM journal_page AS jp
 LEFT JOIN heading AS h ON jp.id = h.section_id
 LEFT JOIN quote AS q ON jp.id = q.section_id
@@ -248,6 +317,8 @@ LEFT JOIN video AS v ON jp.id = v.section_id
 LEFT JOIN click_list AS c ON jp.id = c.section_id
 LEFT JOIN subheading AS sh ON jp.id = sh.section_id
 LEFT JOIN image AS i ON jp.id = i.section_id
+LEFT JOIN text AS t ON jp.id = t.section_id
+LEFT JOIN bullet AS bu ON jp.id = bu.section_id
 WHERE jp.page_num = ?  -- Filter by page_num = 1
 ORDER BY jp.order_num ASC;";
 
@@ -275,6 +346,10 @@ ORDER BY jp.order_num ASC;";
                     subheading_section($row);
                 } elseif ($row['section_type'] == 'image') {
                     image_section($row);
+                } elseif ($row['section_type'] == 'bullet') {
+                    bullet_section($row, $mysqli);
+                } elseif ($row['section_type'] == 'text') {
+                    text_section($row);
                 }
             }
         } else {
@@ -284,6 +359,6 @@ ORDER BY jp.order_num ASC;";
     ?>
 
 
-<?php 
+    <?php
     require_once 'admin_footer.php';
-?>
+    ?>
