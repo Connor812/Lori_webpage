@@ -20,6 +20,9 @@
     elseif ($param == "username_doesnt_exist") {
         echo "Username Doesn't Exist, Please try again";
     }
+    elseif ($param == "invalid_password") {
+        echo "Invalid password, Please try again";
+    }
     elseif ($success == "successful_signup") {
         echo "Successfully Create a new user, please login.";
     }

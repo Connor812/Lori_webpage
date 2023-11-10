@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 imageForm.setAttribute('action', `includes/modal_form/image.inc.php?section_id=${sectionId}&page_num=${page_num}`)
             }
             else if (formType == 'bullets') {
-                const bulletsForm = document.getElementById('bullets_form');
+                const bulletsForm = document.getElementById('bullet_form');
                 bulletsForm.setAttribute('action', `includes/modal_form/bullets.inc.php?section_id=${sectionId}&page_num=${page_num}`)
             }
             else if (formType == 'text') {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const form_holder = document.getElementById('form_holder');
+    const click_list_input_container = document.getElementById('click_list_input_container');
     // Add a click event listener to each item
     const dropdownItems = document.querySelectorAll('.check_box_input');
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const dataItem = this.getAttribute('data-item');
             console.log('Selected data-item: ' + dataItem);
-            const numOfItems = form_holder.children.length;
+            const numOfItems = click_list_input_container.children.length;
 
 
             if (dataItem == 'checkbox') {
@@ -99,9 +99,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="hidden" name="placeholder_text[]" value=""> <!-- Hidden field for the type -->
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
-                form_holder.insertAdjacentHTML('beforeend', newItem);
+                click_list_input_container.insertAdjacentHTML('beforeend', newItem);
                 // This calls the query selector all to get the new delete buttons
-                getAllDeleteBtns();
+                getAllDeleteItemBtns();
             }
             else if (dataItem == 'textarea') {
                 const newItem = `
@@ -115,18 +115,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input name="placeholder_text[]" placeholder="Examples/Explanation of question" type="text" class="form-control" />
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
-                form_holder.insertAdjacentHTML('beforeend', newItem);
+                click_list_input_container.insertAdjacentHTML('beforeend', newItem);
                 // This calls the query selector all to get the new delete buttons
-                getAllDeleteBtns();
+                getAllDeleteItemBtns();
             }
-
 
         });
     });
 
 
+    const add_bullet_btn = document.getElementById('add_bullet_btn');
+    const bullet_input_container = document.getElementById('bullet_input_container');
+
+    add_bullet_btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const numOfItems = bullet_input_container.children.length;
+        const newBullet = `
+        <div id=bullet_${numOfItems}>
+            <label class="form-label">Bullet Content</label>
+            <input name="bullet_content[]" type="text" class="form-control"
+            placeholder="Please enter bullet content" />
+            <button class="btn btn-danger delete_item_btn" value="bullet_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
+        </div>
+        `;
+        bullet_input_container.insertAdjacentHTML('beforeend', newBullet);
+        getAllDeleteItemBtns();
+    });
+
     // Function that will get all the delete item buttons, add an event listener to delete the item section if not needed
-    function getAllDeleteBtns() {
+    function getAllDeleteItemBtns() {
         const deleteItemButtons = document.querySelectorAll('.delete_item_btn');
         console.log(deleteItemButtons);
         deleteItemButtons.forEach(function (deleteItemButton) {

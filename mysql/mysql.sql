@@ -98,6 +98,19 @@ CREATE TABLE click_list_items (
     FOREIGN KEY (click_list_id) REFERENCES click_list(id) ON DELETE CASCADE
 );
 
+CREATE TABLE bullet (
+    id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    section_id int(11) NOT NULL,
+    FOREIGN KEY (section_id) REFERENCES journal_page(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bullet_point (
+    id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    bullet_content TEXT NOT NULL,
+    bullet_id int(11) NOT NULL,
+    FOREIGN KEY (bullet_id) REFERENCES bullet(id) ON DELETE CASCADE
+);
+
 CREATE TABLE text (
     id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
     text_content TEXT NOT NULL,
@@ -110,7 +123,7 @@ CREATE TABLE text (
 INSERT INTO `users` (`username`, `email`, `password`, `first_name`, `last_name`) VALUES 
 ('Connor812','connor812@gmail.com','123','Connor','Savoy');
 
-INSERT INTO `permission`(`username`, `page_num`) VALUES ('Connor812','1');
+INSERT INTO `permission`(`user_id`, `page_num`) VALUES ('1','1');
 
 INSERT INTO journal_page (`section_type`, `section_name`, `order_num`, `page_num`) VALUES 
 ('heading', 'heading 1', '1', '1'),
@@ -129,6 +142,8 @@ INSERT INTO journal_page (`section_type`, `section_name`, `order_num`, `page_num
 ('story_box', 'story_box 2', '14', '1'),
 ('video', 'video 1', '15', '1'),
 ('image', 'image 1', "16", '1'),
+('text', 'text 1', "17", '1'),
+('bullet', 'bullet 1', "18", '1'),
 ('heading', 'heading 1', '1', '2'),
 ('heading', 'heading 2', '2', '2'),
 ('heading', 'heading 3', '3', '2'),
@@ -140,10 +155,10 @@ INSERT INTO heading (`heading_content`, `section_id`) VALUES
 ('Connors Second Heading','2'),
 ('Connors Third Heading','3'),
 ('Connors Forth Heading','4'),
-('Connors First Heading','17'),
-('Connors Second Heading','18'),
-('Connors Third Heading','19'),
-('Connors Forth Heading','20');
+('Connors First Heading','19'),
+('Connors Second Heading','20'),
+('Connors Third Heading','21'),
+('Connors Forth Heading','22');
 
 INSERT INTO byline (`byline_content`, `section_id`) VALUES 
 ('byline content 1', '5'),
@@ -177,6 +192,17 @@ INSERT INTO video (`video_src`, `section_id`) VALUES
 
 INSERT INTO image (`image_src`, `image_text`, `section_id`) VALUES 
 ('images/book1.png', 'Image Text', '16');
+
+INSERT INTO text (`text_content`, `section_id`) VALUES 
+('text 1', '17');
+
+INSERT INTO bullet ('section_id') VALUES 
+('18');
+
+INSERT INTO `bullet_point`(`bullet_content`, `bullet_id`) VALUES 
+('Bullet 1','1'),
+('Bullet 2','1'),
+('Bullet 3','1');
 
 -- Table for the user input ------------------------------------------------------------->
 
