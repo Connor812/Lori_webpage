@@ -93,7 +93,7 @@ CREATE TABLE click_list_items (
     item_type varchar(30) NOT NULL,
     item_title TEXT NOT NULL,
     placeholder_text TEXT DEFAULT NULL,
-    item_userdata_name varchar(100) NOT NULL,
+    item_userdata_name varchar(100) NOT NULL UNIQUE,
     click_list_id int(11) NOT NULL,
     FOREIGN KEY (click_list_id) REFERENCES click_list(id) ON DELETE CASCADE
 );
@@ -118,6 +118,19 @@ CREATE TABLE text (
     FOREIGN KEY (section_id) REFERENCES journal_page(id) ON DELETE CASCADE
 );
 
+CREATE TABLE comment (
+    id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    comment_userdata_name TEXT NOT NULL,
+    comment_placeholder TEXT NOT NULL,
+    section_id int(11) NOT NULL,
+    FOREIGN KEY (section_id) REFERENCES journal_page(id) ON DELETE CASCADE
+);
+
+CREATE TABLE user_input (
+    id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    user_id int(11) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 -- Seed data  ------------------------------------------------------>
 
 INSERT INTO `users` (`username`, `email`, `password`, `first_name`, `last_name`) VALUES 
@@ -196,7 +209,7 @@ INSERT INTO image (`image_src`, `image_text`, `section_id`) VALUES
 INSERT INTO text (`text_content`, `section_id`) VALUES 
 ('text 1', '17');
 
-INSERT INTO bullet ('section_id') VALUES 
+INSERT INTO bullet (`section_id`) VALUES 
 ('18');
 
 INSERT INTO `bullet_point`(`bullet_content`, `bullet_id`) VALUES 
@@ -315,7 +328,10 @@ SELECT
     sh.subheading_content,
     i.id AS image_id,
     i.image_src,
-    i.image_text
+    i.image_text,
+    cm.id AS comment_id,  -- Add the comment_id and other relevant fields here
+    cm.comment_userdata_name,
+    cm.comment_placeholder
 FROM journal_page AS jp
 LEFT JOIN heading AS h ON jp.id = h.section_id
 LEFT JOIN quote AS q ON jp.id = q.section_id
@@ -325,6 +341,7 @@ LEFT JOIN video AS v ON jp.id = v.section_id
 LEFT JOIN click_list AS c ON jp.id = c.section_id
 LEFT JOIN subheading AS sh ON jp.id = sh.section_id
 LEFT JOIN image AS i ON jp.id = i.section_id
+LEFT JOIN comment AS cm ON jp.id = cm.section_id  -- Add a LEFT JOIN for the comment table
 WHERE jp.page_num = ?  -- Filter by page_num = 1
 ORDER BY jp.order_num ASC;
 -- Query for getting the click_list items for the click list

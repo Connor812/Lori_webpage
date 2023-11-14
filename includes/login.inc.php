@@ -10,10 +10,10 @@ echo "Username: " . $username . " Password: " . $pwd; //Make sure to delete for 
 
 // Error Handlers for the login form
 if (empty($username)) {
-    header("Location: " . BASE_URL . " /login.php?error=empty_username");
+    header("Location: " . BASE_URL . "/login.php?error=empty_username");
     exit;
 } elseif (empty($pwd)) {
-    header("Location: " . BASE_URL . " /login.php?error=empty_pwd");
+    header("Location: " . BASE_URL . "/login.php?error=empty_pwd");
     exit;
 }
 

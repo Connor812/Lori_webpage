@@ -33,47 +33,65 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             else if (formType == 'subheading') {
                 const subheadingForm = document.getElementById('subheading_form');
-                subheadingForm.setAttribute('action', `includes/modal_form/subheading.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                subheadingForm.setAttribute('action', `includes/modal_form/subheading.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'quote') {
                 const quoteForm = document.getElementById('quote_form');
-                quoteForm.setAttribute('action', `includes/modal_form/quote.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                quoteForm.setAttribute('action', `includes/modal_form/quote.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'byline') {
                 const bylineForm = document.getElementById('byline_form');
-                bylineForm.setAttribute('action', `includes/modal_form/byline.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                bylineForm.setAttribute('action', `includes/modal_form/byline.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'story_box') {
                 const story_boxForm = document.getElementById('story_box_form');
-                story_boxForm.setAttribute('action', `includes/modal_form/story_box.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                story_boxForm.setAttribute('action', `includes/modal_form/story_box.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'video') {
                 const videoForm = document.getElementById('video_form');
-                videoForm.setAttribute('action', `includes/modal_form/video.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                videoForm.setAttribute('action', `includes/modal_form/video.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'check_box') {
                 const check_boxForm = document.getElementById('check_box_form');
-                check_boxForm.setAttribute('action', `includes/modal_form/check_box.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                check_boxForm.setAttribute('action', `includes/modal_form/check_box.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'check_list') {
                 const check_listForm = document.getElementById('check_list_form');
-                check_listForm.setAttribute('action', `includes/modal_form/check_list.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                check_listForm.setAttribute('action', `includes/modal_form/check_list.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'image') {
                 const imageForm = document.getElementById('image_form');
-                imageForm.setAttribute('action', `includes/modal_form/image.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                imageForm.setAttribute('action', `includes/modal_form/image.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'bullets') {
                 const bulletsForm = document.getElementById('bullet_form');
-                bulletsForm.setAttribute('action', `includes/modal_form/bullets.inc.php?section_id=${sectionId}&page_num=${page_num}`)
+                bulletsForm.setAttribute('action', `includes/modal_form/bullets.inc.php?section_id=${sectionId}&page_num=${page_num}`);
             }
             else if (formType == 'text') {
                 const textForm = document.getElementById('text_form');
-                textForm.setAttribute('action', `includes/modal_form/text.inc.php?section_id=${sectionId}&page_num=${page_num}`)
-            }
+                textForm.setAttribute('action', `includes/modal_form/text.inc.php?section_id=${sectionId}&page_num=${page_num}`);
+            } 
+            else if (formType == 'comment') {
+                const textForm = document.getElementById('comment_form');
+                textForm.setAttribute('action', `includes/modal_form/comment.inc.php?section_id=${sectionId}&page_num=${page_num}`);
+            } 
 
         });
     });
+
+    const delete_btns = document.querySelectorAll('.delete-section-btn');
+    delete_btns.forEach(delete_btn => {
+        delete_btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const section_id = delete_btn.getAttribute('section_id');
+            const selectedElement = document.getElementById('selected_page');
+            const page_num = selectedElement.value;
+            const delete_section_form = document.getElementById('delete_section_form');
+            delete_section_form.setAttribute('action', `includes/delete_section.inc.php?section_id=${section_id}&page_num=${page_num}`);
+        });
+    });
+
+
 
     const click_list_input_container = document.getElementById('click_list_input_container');
     // Add a click event listener to each item

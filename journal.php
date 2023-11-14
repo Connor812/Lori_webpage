@@ -82,9 +82,15 @@ require_once 'header.php';
         </div>
     </div>
 
+
     <?php
         if (isset($_SESSION['user_id'])) {
+            echo '<form class="container-fluid p-3" id="journal-form" method="post" action="includes/journal-form.inc.php">
+            ';
             require_once 'journal-form.php';
+            echo '
+                    <button id="journal-submit-btn" type="submit" class="journal-submit-btn hide">Submit</button>
+            </form>';
         }
     ?>
 

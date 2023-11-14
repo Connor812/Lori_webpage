@@ -1,6 +1,7 @@
 <?php
 
 require_once "../connect/db.php";
+require_once "../config-url.php";
 
 $user_id = $_GET['user_id'];
 $username = $_GET['username'];
@@ -89,6 +90,6 @@ if (isset($_POST)) {
     }
 
     // Redirect to the admin_users.php page
-    header("Location: http://localhost/lori/admin_users.php?username=$username");
+    header("Location: " . BASE_URL . "/admin_users.php?username=$username&user_id=$user_id");
     exit; // Make sure to exit after redirection
 }

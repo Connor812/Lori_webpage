@@ -8,52 +8,64 @@ require_once "connect/db.php";
     <div class="row">
         <div class="col-sm-6">
             <form method='post' action='<?php echo BASE_URL . "/admin_pages.php" ?>'>
-                <select id="selected_page" name="selected_page" class="form-select form-select-md mb-3">
-                    aria-label="Large select example">
-                    <option value="add_page">... Add Page</option>
-                    <?php
-                    // Check $_POST for selected_page
-                    $selected_page = isset($_POST['selected_page']) ? $_POST['selected_page'] : null;
 
-                    if ($selected_page == 'add_page') {
-                        $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
-                        $result = mysqli_query($mysqli, $sql);
+                <div class="input-group mb-3">
+                    <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+                    <select class="form-select" name="selected_page" id="selected_page"
+                        aria-label="Example select with button addon">
+                        <option value="add_page">Add Page...</option>
+                        <?php
+                        // Check $_POST for selected_page
+                        $selected_page = isset($_POST['selected_page']) ? $_POST['selected_page'] : null;
 
-                        if ($result) {
-                            $row = mysqli_fetch_assoc($result);
-                            $page_nums = $row['num_pages'] + 1;
-                            for ($i = 1; $i <= $page_nums; $i++) {
-                                $selected = ($page_nums == $i) ? 'selected' : ''; // Check if the option should be selected
-                                echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
+                        if ($selected_page == 'add_page') {
+                            $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
+                            $result = mysqli_query($mysqli, $sql);
+
+                            if ($result) {
+                                $row = mysqli_fetch_assoc($result);
+                                $page_nums = $row['num_pages'] + 1;
+                                for ($i = 1; $i <= $page_nums; $i++) {
+                                    $selected = ($page_nums == $i) ? 'selected' : ''; // Check if the option should be selected
+                                    echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
+                                }
+                            } else {
+                                echo "Query Error: " . mysqli_error($mysqli);
                             }
                         } else {
-                            echo "Query Error: " . mysqli_error($mysqli);
-                        }
-                    } else {
 
-                        // If not found in $_POST, check $_GET for page_num
-                        if ($selected_page === null && isset($_GET['page_num'])) {
-                            $selected_page = $_GET['page_num'];
-                        }
-
-                        // You can now use $selected_page as the selected value
-                        $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
-                        $result = mysqli_query($mysqli, $sql);
-
-                        if ($result) {
-                            $row = mysqli_fetch_assoc($result);
-                            $page_nums = $row['num_pages'];
-                            for ($i = 1; $i <= $page_nums; $i++) {
-                                $selected = ($selected_page == $i) ? 'selected' : ''; // Check if the option should be selected
-                                echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
+                            // If not found in $_POST, check $_GET for page_num
+                            if (isset($_POST['selected_page'])) {
+                                $selected_page = $_POST['selected_page'];
+                            } elseif (isset($_GET['page_num'])) {
+                                $selected_page = $_GET['page_num'];
+                            } else {
+                                $selected_page = 1;
                             }
-                        } else {
-                            echo "Query Error: " . mysqli_error($mysqli);
+
+                            // You can now use $selected_page as the selected value
+                            $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
+                            $result = mysqli_query($mysqli, $sql);
+
+                            if ($result) {
+                                $row = mysqli_fetch_assoc($result);
+                                $page_nums = $row['num_pages'];
+                                if ($page_nums == 0) {
+                                    // Handle the case where there are no pages
+                                    echo '<option value="1" selected>Page 1</option>';
+                                } else {
+                                    for ($i = 1; $i <= $page_nums; $i++) {
+                                        $selected = ($selected_page == $i) ? 'selected' : ''; // Check if the option should be selected
+                                        echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
+                                    }
+                                }
+                            } else {
+                                echo "Query Error: " . mysqli_error($mysqli);
+                            }
                         }
-                    }
-                    ?>
-                </select>
-                <input class="btn btn-primary" type="submit" value="Submit">
+                        ?>
+                    </select>
+                </div>
             </form>
         </div>
     </div>
@@ -374,6 +386,65 @@ require_once "connect/db.php";
         </div>
     </div>
 
+    <!-- Comment Modal -->
+    <div class="modal top fade" add-type="Comment" add-section="add-section" id="comment-modal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog   modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add a Comment</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Modal Content goes here -->
+
+                    <form id="comment_form" method="post">
+
+                        <label class="form-label">What do you want the user to comment on</label>
+                        <input name="section_name" type="text" class="form-control"
+                            placeholder="Please give a brief description of the question you are asking" />
+                        <label class="form-label">Short form for the question</label>
+                        <input name="comment_userdata_name" type="text" class="form-control"
+                            placeholder="Please give short form name for this question" />
+                        <label class="form-label">Comment Description</label>
+                        <textarea name="comment_placeholder" type="text" class="form-control"
+                            placeholder="Please explain/examples of the question you are asking"></textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal top fade" add-type="Comment" id="delete-section-modal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog   modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Do you want to delete this section</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Modal Content goes here -->
+
+                    <form id="delete_section_form" method="post" class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                        Don't Delete
+                    </button>
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Button Modal -->
     <div class="modal top fade" id="button-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
         data-mdb-backdrop="true" data-mdb-keyboard="true">
@@ -426,7 +497,10 @@ require_once "connect/db.php";
                         data-mdb-target="#text-modal">
                         Text
                     </button>
-
+                    <button type="button" class="btn btn-primary modal_button" form_type="comment"
+                        data-mdb-toggle="modal" data-mdb-target="#comment-modal">
+                        Comment
+                    </button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">

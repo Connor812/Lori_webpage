@@ -9,6 +9,53 @@ $page_num = $_GET['page_num'];
 echo $section_name . "<br>";
 echo $section_id . "<br>";
 
+
+// Error Handlers -------------------------------------------------------------------->
+
+// Checks for blank name
+if (!isset($_POST["section_name"])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=name_blank&page_num=" . $page_num);
+    exit;
+}
+
+// This checks to see if the input data names already exist in the database
+// if (isset($_POST['item_type']) && is_array($_POST['item_type'])) {
+//     $itemTypes = $_POST['item_type'];
+//     $itemTitles = $_POST['item_title'];
+//     $itemUserdataNames = str_replace('', '_', $_POST['item_userdata_name']);
+//     $placeholderTexts = $_POST['placeholder_text'];
+//     // Loop through the arrays
+//     for ($i = 0; $i < count($itemTypes); $i++) {
+//         $type = $itemTypes[$i];
+//         $title = $itemTitles[$i];
+//         $userdataName = str_replace(' ', '_', $itemUserdataNames[$i]);
+//         $placeholderText = !empty($placeholderTexts[$i]) ? $placeholderTexts[$i] : null;
+
+//         // Checks to see if any of the input fields were left blank
+//         if (empty($type) || empty($title) || empty($userdataName)) {
+//             header("Location: " . BASE_URL . "/admin_pages.php?error=input_blank&page_num=" . $page_num);
+//             exit;
+//         }
+
+//         $sql = "SELECT COUNT(*) AS row_count FROM user_input WHERE ?;";
+
+//         $stmt = $mysqli->prepare($sql);
+//         if ($stmt) {
+//             $stmt->bind_param("s", $itemUserdataNames[$i]);
+//             $stmt->execute();
+//             $result = $stmt->get_result();
+//             if ($result->num_rows > 0) {
+//                 header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
+//                 exit;
+//             }
+//         }
+//     }
+// } else {
+//     header("Location: " . BASE_URL . "/admin_pages.php?error=input_blank&page_num=" . $page_num);
+//     exit;
+// }
+
+// Starts updating the data base <---------------------------------------------------------------------------------------------------->
 // Updates the order_num to fit the new section 
 $sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
 
@@ -125,7 +172,7 @@ if ($result->num_rows > 0) {
             echo "Type: $type, Title: $title, Userdata Name: $userdataName, Placeholder Text: $placeholderText<br>";
 
             // Define the column type based on $type
-            $columnType = ($type === 'textarea') ? 'TEXT DEFAULT NULL' : 'BIT(1) DEFAULT 0';
+            $columnType = ($type === 'textarea') ? 'TEXT DEFAULT NULL' : 'BOOLEAN DEFAULT FALSE';
 
             // Construct SQL to add the column
             $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN $userdataName $columnType;";

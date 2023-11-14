@@ -1,320 +1,7 @@
 <?php
 
-require_once "connect/db.php";
-
-// Takes care of the header content--------------------------------------------------->
-function heading_section($heading_row)
+function get_page($page_num, $mysqli)
 {
-    echo "
-    <section style='width: 100%;' id='" . $heading_row['order_num'] . "'>
-        <h2 style='text-align: center;'>" . $heading_row['heading_content'] . "</h2>
-        <hr>
-    </section>
-            ";
-    echo add_button($heading_row['order_num']);
-    echo delete_button($heading_row['order_num']);
-}
-
-// Takes care of the click list content--------------------------------------------------->
-
-function click_list_section($click_list_row, $mysqli)
-{
-
-    echo "<div class='accordion'>
-<div class='accordion-item'>
-  <h2 class='accordion-header'>
-    <button
-      class='accordion-button collapsed'
-      type='button'
-      data-mdb-toggle='collapse'
-      data-mdb-target='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'
-      aria-expanded='true'
-      aria-controls='" . str_replace(' ', '_', $click_list_row['section_name']) . "'
-    >
-    " . $click_list_row['section_name'] . "
-    </button>
-  </h2>
-  <div id='" . str_replace(' ', '_', $click_list_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $click_list_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'>
-    <div class='accordion-body'>
-    " . get_click_list_items($click_list_row['click_list_id'], $mysqli) . "
-    </div>
-  </div>
-</div>
-</div>";
-
-    echo add_button($click_list_row['order_num']);
-    echo delete_button($click_list_row['order_num']);
-
-}
-
-// Takes care of the items inside of the click list --------------------------------------------------->
-
-function get_click_list_items($click_list_id, $mysqli)
-{
-    $content = ''; // Initialize an empty string to store the content
-
-    $sql = "SELECT
-    cl.id AS click_list_id,
-    cl.section_id AS click_list_section_id,
-    cli.id AS click_list_item_id,
-    cli.item_type AS click_list_item_type,
-    cli.item_title AS item_title,
-    cli.placeholder_text AS placeholder_text,
-    cli.item_userdata_name AS item_userdata_name
-FROM click_list AS cl
-LEFT JOIN click_list_items AS cli ON cl.id = cli.click_list_id
-WHERE cl.id = ?;";
-
-    $stmt = $mysqli->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("i", $click_list_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows === 0) {
-            echo "Failed to grab the click_list content <br>";
-            exit();
-        }
-
-        foreach ($result as $click_list_item) {
-            if ($click_list_item['click_list_item_type'] == 'checkbox') {
-                $content .= '<div class="form-check">
-                    <input name="' . $click_list_item['item_userdata_name'] . '" class="form-check-input" type="checkbox" value="1" id="defaultCheck1">
-                    <label class="form-check-label" for="defaultCheck1">' . $click_list_item['item_title'] . '</label>
-                </div>
-                <br>';
-            } elseif ($click_list_item['click_list_item_type'] == 'textarea') {
-                $content .= '<label for="comment">' . $click_list_item['item_title'] . '</label>
-                    <textarea name ="' . $click_list_item['item_userdata_name'] . '" class="form-control" rows="7" id="comment"
-                        placeholder="' . $click_list_item['placeholder_text'] . '"></textarea>
-                <br>';
-            }
-        }
-    } else {
-        echo "Prepare failed: " . $mysqli->error;
-        exit;
-    }
-
-    return $content; // Return the concatenated content after the loop 
-}
-
-// Takes care of the quote_section --------------------------------------------------->
-
-function quote_section($quote_row)
-{
-    echo '<h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"' . $quote_row["quote_content"] . '"</i></h5>';
-    echo add_button($quote_row['order_num']);
-    echo delete_button($quote_row['order_num']);
-}
-
-// Takes care of the byline_section --------------------------------------------------->
-
-function byline_section($byline_row)
-{
-    echo '<h5 id="' . $byline_row['section_name'] . '" style="padding: 0% 0%; text-align: center;"><b>' . $byline_row['byline_content'] . '</b> </h5>';
-    echo add_button($byline_row['order_num']);
-    echo delete_button($byline_row['order_num']);
-}
-
-// Takes care of the subheading_section --------------------------------------------------->
-
-function subheading_section($subheading_row)
-{
-    echo "<h4 class='d-flex justify-content-center' id='" . $subheading_row['section_name'] . "' style='padding: 10px;'><b>" . $subheading_row['subheading_content'] . "</b></h4>";
-    echo add_button($subheading_row['order_num']);
-    echo delete_button($subheading_row['order_num']);
-}
-
-// Takes care of the story_box_section --------------------------------------------------->
-
-function story_box_section($story_box_row, $mysqli)
-{
-
-    echo "
-    <div class='accordion'>
-        <div class='accordion-item'>
-        <h2 class='accordion-header'>
-            <button
-                class='accordion-button collapsed'
-                type='button'
-                data-mdb-toggle='collapse'
-                data-mdb-target='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'
-                aria-expanded='true'
-                aria-controls='" . str_replace(' ', '_', $story_box_row['section_name']) . "'
-            >
-            " . $story_box_row['section_name'] . "
-            </button>
-        </h2>
-        <div id='" . str_replace(' ', '_', $story_box_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $story_box_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'>
-            <div class='accordion-body'>
-                <textarea name='" . $story_box_row['story_box_userdata_name'] . "' class='form-control' rows='5' id='comment'
-                    placeholder='" . $story_box_row['placeholder_text'] . "'></textarea>
-                <br>
-            </div>
-        </div>
-    </div>
-    </div>";
-
-    echo add_button($story_box_row['order_num']);
-    echo delete_button($story_box_row['order_num']);
-}
-
-// Takes care of the video_section --------------------------------------------------->
-
-function video_section($video_row)
-{
-    echo '<section class="videobg d-flex justify-content-center">
-    <video width="80%" height="auto" poster="/videos/URposter.png" controls>
-        <source src="'
-        . $video_row['video_src'] . '" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</section>';
-
-    echo add_button($video_row['order_num']);
-}
-
-function image_section($image_row)
-{
-    echo '<div class="row p-3">
-    <div class="col-sm-8">
-      <h6>' . $image_row['image_text'] . '</h6>
-    </div>
-    <div class="col-sm-4">
-      <div><img src="' . $image_row['image_src'] . '" class="img-rounded image-reponsive" alt="' . $image_row['section_name'] . '" width="100%" height="auto">
-      </div>
-    </div>
-  </div>';
-
-    echo add_button($image_row['order_num']);
-    echo delete_button($image_row['order_num']);
-}
-
-// Handles displaying a bullet section
-
-function bullet_section($bullet_row, $mysqli)
-{
-
-    $section_name = $bullet_row['section_name'];
-    $bullet_id = $bullet_row['bullet_id'];
-
-
-    $sql = 'SELECT * FROM `bullet_point` WHERE bullet_id = ?';
-
-    $stmt = $mysqli->prepare($sql);
-
-    if ($stmt) {
-        // Bind the parameter
-        $stmt->bind_param("i", $bullet_id); // Assuming $bullet_id is the value you want to match
-
-        // Execute the prepared statement
-        $stmt->execute();
-
-        // Get the result set
-        $result = $stmt->get_result();
-
-        if ($result) {
-            // Start the bullet point list
-            echo $section_name;
-            echo '<ul>'; 
-            // Fetch data from the result set
-            while ($row = $result->fetch_assoc()) {
-                // Access data in $row
-                $bullet_content = $row['bullet_content'];
-                
-                echo '<li>' . $bullet_content . '</li>';
-
-            }
-            // End the bullet point list
-            echo '</ul>';
-            // Close the statement
-        } else {
-            echo "Error getting result set: " . $mysqli->error;
-            // Handle the error
-        }
-    } else {
-        echo "Prepare failed: " . $mysqli->error;
-        // Handle the error
-    }
-
-    echo add_button($bullet_row['order_num']);
-    echo delete_button($bullet_row['order_num']);
-
-}
-
-// Handles displaying a text section
-
-function text_section($text_row)
-{
-
-    echo '<section class="d-flex justify-content-center">
-
-        ' . $text_row['text_content'] . '
-
-</section>';
-
-echo add_button($text_row['order_num']);
-echo delete_button($text_row['order_num']);
-
-}
-
-// This handles the comment section
-function comment_section($comment_row) {
-    echo '<section>
-    <label for="' . $comment_row['section_name'] . '">' . $comment_row['section_name'] . '</label>
-    <textarea id="' . $comment_row['section_name'] .'" name="' . $comment_row['comment_userdata_name'] . '" class="form-control" rows="4" placeholder="' . $comment_row['comment_placeholder'] . '"></textarea>
-    </section>';
-    echo add_button($comment_row['order_num']);
-    echo delete_button($comment_row['order_num']);
-}
-
-// Function to add the button after each section to toggle the modal window to add new sections
-
-function add_button($id)
-{
-
-    $content = '
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="btn btn-primary add-section-btn" data-mdb-toggle="modal"
-                data-mdb-target="#button-modal" section_id="' . $id . '">+</button>
-            </div>
-        </div>
-    </div>';
-    return $content;
-}
-
-function delete_button($id) {
-    $content = '
-    <div class="container" method="post" ">
-        <div class="row">
-            <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="btn btn-danger delete-section-btn" data-mdb-toggle="modal"
-                data-mdb-target="#delete-section-modal" section_id="' . $id . '">Delete</button>
-            </div>
-        </div>
-    </div>
-    ';
-    return $content;
-}
-?>
-<?php
-// require_once 'admin-header.php';
-// call first button
-echo add_button(0);
-?>
-
-<main class="container-fluid">
-    <?php
-
-    $page_num = $_POST['selected_page'] ?? ($_GET['page_num'] ?? 1);
-
-    // If the add_page is selected then we don't want to query in anything because it will be a new page
-    if ($page_num == 'add_page') {
-        // exit;
-    }
 
     $sql = "SELECT
     jp.id AS journal_page_id,
@@ -387,12 +74,242 @@ ORDER BY jp.order_num ASC;";
                 }
             }
         } else {
-            echo "Query Error: " . mysqli_error($conn);
+            echo "Query Error: " . mysqli_error($mysqli);
         }
     }
-    ?>
+}
 
 
-    <?php
-    require_once 'admin_footer.php';
-    ?>
+
+
+
+function heading_section($heading_row)
+{
+    echo "
+    <section style='width: 100%;' id='" . $heading_row['order_num'] . "'>
+        <h2 style='text-align: center;'>" . $heading_row['heading_content'] . "</h2>
+        <hr>
+    </section>
+            ";
+}
+
+// Takes care of the click list content--------------------------------------------------->
+
+function click_list_section($click_list_row, $mysqli)
+{
+
+    echo "
+    <div class='accordion'>
+    <div class='accordion-item'>
+        <h2 class='accordion-header'>
+            <button
+                class='accordion-button collapsed'
+                type='button'
+                data-mdb-toggle='collapse'
+                data-mdb-target='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'
+                aria-expanded='true'
+                aria-controls='" . str_replace(' ', '_', $click_list_row['section_name']) . "'
+            >
+                <input class='form-check-input mb-2' type='checkbox' name='checkbox_name' value='checkbox_value'>
+                " . $click_list_row['section_name'] . "
+            </button>
+        </h2>
+        <div id='" . str_replace(' ', '_', $click_list_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $click_list_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'>
+            <div class='accordion-body'>
+                " . get_click_list_items($click_list_row['click_list_id'], $mysqli) . "
+            </div>
+        </div>
+    </div>
+</div>";
+}
+
+// Takes care of the items inside of the click list --------------------------------------------------->
+function get_click_list_items($click_list_id, $mysqli)
+{
+    $content = ''; // Initialize an empty string to store the content
+
+    $sql = "SELECT
+    cl.id AS click_list_id,
+    cl.section_id AS click_list_section_id,
+    cli.id AS click_list_item_id,
+    cli.item_type AS click_list_item_type,
+    cli.item_title AS item_title,
+    cli.placeholder_text AS placeholder_text,
+    cli.item_userdata_name AS item_userdata_name
+FROM click_list AS cl
+LEFT JOIN click_list_items AS cli ON cl.id = cli.click_list_id
+WHERE cl.id = ?;";
+
+    $stmt = $mysqli->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("i", $click_list_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            echo "Failed to grab the click_list content <br>";
+            exit();
+        }
+
+        foreach ($result as $click_list_item) {
+            if ($click_list_item['click_list_item_type'] == 'checkbox') {
+                $content .= '<div class="form-check">
+                    <input name="' . $click_list_item['item_userdata_name'] . '" class="form-check-input" type="checkbox" value="1" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">' . $click_list_item['item_title'] . '</label>
+                    <input type="hidden" name="' . $click_list_item['item_userdata_name'] .'_type" value="checkbox"> <!-- Add a hidden input for checkbox -->
+                </div>
+                <br>';
+            } elseif ($click_list_item['click_list_item_type'] == 'textarea') {
+                $content .= '<label for="comment">' . $click_list_item['item_title'] . '</label>
+                    <textarea name ="' . $click_list_item['item_userdata_name'] . '" class="form-control" rows="7" id="comment"
+                        placeholder="' . $click_list_item['placeholder_text'] . '"></textarea>
+                        <input type="hidden" name="' . $click_list_item['item_userdata_name'] .'_type" value="textarea"> <!-- Add a hidden input for checkbox -->
+                <br>';
+            }
+        }
+    } else {
+        echo "Prepare failed: " . $mysqli->error;
+        exit;
+    }
+    return $content; // Return the concatenated content after the loop 
+}
+
+// Takes care of the quote_section --------------------------------------------------->
+function quote_section($quote_row)
+{
+    echo '<h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"' . $quote_row["quote_content"] . '"</i></h5>';
+}
+
+// Takes care of the byline_section --------------------------------------------------->
+function byline_section($byline_row)
+{
+    echo '<h5 id="' . $byline_row['section_name'] . '" style="padding: 0% 0%; text-align: center;"><b>' . $byline_row['byline_content'] . '</b> </h5>';
+}
+
+// Takes care of the subheading_section --------------------------------------------------->
+
+function subheading_section($subheading_row)
+{
+    echo "<h4 class='d-flex justify-content-center' id='" . $subheading_row['section_name'] . "' style='padding: 10px;'><b>" . $subheading_row['subheading_content'] . "</b></h4>";
+}
+
+// Takes care of the story_box_section --------------------------------------------------->
+function story_box_section($story_box_row, $mysqli)
+{
+    echo "
+    <div class='accordion'>
+    <div class='accordion-item'>
+        <h2 class='accordion-header'>
+            <button
+                class='accordion-button collapsed'
+                type='button'
+                data-mdb-toggle='collapse'
+                data-mdb-target='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'
+                aria-expanded='true'
+                aria-controls='" . str_replace(' ', '_', $story_box_row['section_name']) . "'
+            >
+                <input class='form-check-input mb-2' type='checkbox' name='checkbox_name' value='checkbox_value'>
+                " . $story_box_row['section_name'] . "
+            </button>
+        </h2>
+        <div id='" . str_replace(' ', '_', $story_box_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $story_box_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'>
+            <div class='accordion-body'>
+                <textarea name='" . $story_box_row['story_box_userdata_name'] . "' class='form-control' rows='5' id='comment'
+                    placeholder='" . $story_box_row['placeholder_text'] . "'></textarea>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+    ";
+}
+
+// Takes care of the video_section --------------------------------------------------->
+function video_section($video_row)
+{
+    echo '<section class="videobg d-flex justify-content-center">
+    <video width="80%" height="auto" poster="/videos/URposter.png" controls>
+        <source src="'
+        . $video_row['video_src'] . '" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</section>';
+}
+
+// Handles displaying the image
+function image_section($image_row)
+{
+    echo '<div class="row p-3">
+    <div class="col-sm-8">
+      <h6>' . $image_row['image_text'] . '</h6>
+    </div>
+    <div class="col-sm-4">
+      <div><img src="' . $image_row['image_src'] . '" class="img-rounded image-reponsive" alt="' . $image_row['section_name'] . '" width="100%" height="auto">
+      </div>
+    </div>
+  </div>';
+}
+
+// Handles displaying a bullet section
+function bullet_section($bullet_row, $mysqli)
+{
+    $section_name = $bullet_row['section_name'];
+    $bullet_id = $bullet_row['bullet_id'];
+
+    $sql = 'SELECT * FROM `bullet_point` WHERE bullet_id = ?';
+
+    $stmt = $mysqli->prepare($sql);
+
+    if ($stmt) {
+        // Bind the parameter
+        $stmt->bind_param("i", $bullet_id); // Assuming $bullet_id is the value you want to match
+
+        // Execute the prepared statement
+        $stmt->execute();
+
+        // Get the result set
+        $result = $stmt->get_result();
+
+        if ($result) {
+            // Start the bullet point list
+            echo $section_name;
+            echo '<ul>';
+            // Fetch data from the result set
+            while ($row = $result->fetch_assoc()) {
+                // Access data in $row
+                $bullet_content = $row['bullet_content'];
+
+                echo '<li>' . $bullet_content . '</li>';
+
+            }
+            // End the bullet point list
+            echo '</ul>';
+            // Close the statement
+        } else {
+            echo "Error getting result set: " . $mysqli->error;
+            // Handle the error
+        }
+    } else {
+        echo "Prepare failed: " . $mysqli->error;
+        // Handle the error
+    }
+}
+
+// Handles displaying a text section
+function text_section($text_row)
+{
+    echo '<section class="d-flex justify-content-center">
+
+        ' . $text_row['text_content'] . '
+
+</section>';
+}
+
+// This handles the comment section
+function comment_section($comment_row) {
+    echo '<section>
+    <label for="' . $comment_row['section_name'] . '">' . $comment_row['section_name'] . '</label>
+    <textarea id="' . $comment_row['section_name'] .'" name="' . $comment_row['comment_userdata_name'] . '" class="form-control" rows="4" placeholder="' . $comment_row['comment_placeholder'] . '"></textarea>
+    </section>';
+}

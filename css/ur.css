@@ -53,43 +53,6 @@ body {
   margin: 20px;
 }
 
-.modal-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal-content {
-  background-color: white;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  text-align: center;
-}
-
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-
 /* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
   margin-bottom: 0;
@@ -203,8 +166,56 @@ ul.demo {
 
 }
 
+.journal-submit-btn {
+  position: fixed;
+  margin: 10px;
+  bottom: 0;
+  right: 0;
+  font-size: 22px !important;
+  border: none;
+  background-color: #0d6efd;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 7px;
+  transition: 300ms;
+  opacity: 100;
+}
+
+.journal-submit-btn:hover {
+  background-color: #0961e4;
+}
+
+.hide {
+  opacity: 0;
+  display: none;
+}
+
+/* Modal Container */
 .modal {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+  text-align: center;
+}
+
+/* Buttons */
+.modal-content button {
+  margin: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
