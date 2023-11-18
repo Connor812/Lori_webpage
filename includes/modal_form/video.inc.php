@@ -8,11 +8,40 @@ $section_name = $_POST['section_name'];
 $section_id = $_GET['section_id'];
 $video_src = 'videos/' . $_FILES['my_video']['name'];
 $page_num = $_GET['page_num'];
-echo $video_src . "<---- video soruce <br>";
 
+echo empty($section_name);
+
+
+// Error handler, checks to see if content is empty
+if (empty($section_name)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+} elseif (empty($_FILES['my_video']['name'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_video&page_num=" . $page_num);
+    exit;
+} elseif ($_FILES['my_video']['size'] > 100 * 1024 * 1024) {
+    // Check if the video size is greater than 100 MB
+    header("Location: " . BASE_URL . "/admin_pages.php?error=video_too_large&page_num=" . $page_num);
+    exit;
+} else {
+    $allowed_formats = ['mp4', 'avi', 'mov']; // Add more formats if needed
+    $uploaded_format = pathinfo($_FILES['my_video']['name'], PATHINFO_EXTENSION);
+
+    if (!in_array($uploaded_format, $allowed_formats)) {
+        // Check if the video format is not allowed
+        header("Location: " . BASE_URL . "/admin_pages.php?error=invalid_video_format&page_num=" . $page_num);
+        exit;
+    }
+}
 
 if (isset($_FILES['my_video'])) {
-    $uploadDir = '/Applications/XAMPP/xamppfiles/htdocs/lori/videos/';
+    $uploadDir = '/Applications/XAMPP/xamppfiles/htdocs/UR/videos/';
     $uploadFile = $uploadDir . basename($_FILES['my_video']['name']);
     echo $uploadFile . "<br>";
 

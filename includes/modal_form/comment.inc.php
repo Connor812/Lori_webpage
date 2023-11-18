@@ -2,6 +2,7 @@
 
 require_once "../../connect/db.php";
 require_once "../../config-url.php";
+require_once 'update_journal_page.php';
 
 echo "comment handler<br>";
 
@@ -20,32 +21,42 @@ echo $comment_userdata_name . "<br>";
 echo $comment_placeholder . "<br>";
 
 // Error handlers ---------------------------------------------------------------------------------------------------------------------------->
+// Error handler, checks to see if content is empty
+if (empty($comment_userdata_name) || empty($comment_placeholder) || empty($section_name)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+}
 
-
-
-
-
-
-// Update the order_num to fit the new section
-$sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
+// This checks to see if the userdata_name is already in the inputs table
+$sql = "SELECT COLUMN_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'user_input' 
+AND COLUMN_NAME = ?;";
 
 $stmt = $mysqli->prepare($sql);
-
 if ($stmt) {
-    $stmt->bind_param("i", $section_id);
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo "Update was successful. Affected rows: " . $stmt->affected_rows;
-        } else {
-            echo "No rows were updated.";
-        }
+    $stmt->bind_param("s", $comment_userdata_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    echo $row["COLUMN_NAME"] . ' <-- column name<br>';
+    if (!empty($row["COLUMN_NAME"])) {
+        echo "works for exist<br>";
+        header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
+        exit;
     } else {
-        echo "Execution failed: " . $stmt->error;
+        echo "Does not exist!";
     }
-    $stmt->close();
-} else {
-    echo "Prepare statement failed: " . $mysqli->error;
 }
+
+// Update the order_num to fit the new section
+update_journal_page($section_id, $page_num, $mysqli);
 
 // Need to add one to the section_id to place it in the new section
 $new_section_id = $section_id + 1;

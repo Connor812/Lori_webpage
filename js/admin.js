@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    console.log('admin.js')
+    console.log('admin.js');
 
     const buttons = document.querySelectorAll('.add-section-btn');
     // For each button add an event listener to grab the section_id from the button
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             const sectionId = button.getAttribute('section_id');
             console.log(sectionId);
-            // Set the section_id the the button-modal div
+            // Set the section_id the the button-modal div to grab when the type button is clicked
             const modalSection = document.getElementById('button-modal');
             modalSection.setAttribute('section_id', sectionId);
         });
@@ -70,15 +70,16 @@ document.addEventListener('DOMContentLoaded', function () {
             else if (formType == 'text') {
                 const textForm = document.getElementById('text_form');
                 textForm.setAttribute('action', `includes/modal_form/text.inc.php?section_id=${sectionId}&page_num=${page_num}`);
-            } 
+            }
             else if (formType == 'comment') {
                 const textForm = document.getElementById('comment_form');
                 textForm.setAttribute('action', `includes/modal_form/comment.inc.php?section_id=${sectionId}&page_num=${page_num}`);
-            } 
+            }
 
         });
     });
 
+    // This gets all the delete buttons and add an event listener to all of them
     const delete_btns = document.querySelectorAll('.delete-section-btn');
     delete_btns.forEach(delete_btn => {
         delete_btn.addEventListener('click', function (event) {
@@ -87,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const selectedElement = document.getElementById('selected_page');
             const page_num = selectedElement.value;
             const delete_section_form = document.getElementById('delete_section_form');
+            // This sets the action of the delete button to the delete modal so the delete_section.php file can handle it
             delete_section_form.setAttribute('action', `includes/delete_section.inc.php?section_id=${section_id}&page_num=${page_num}`);
         });
     });
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const click_list_input_container = document.getElementById('click_list_input_container');
     // Add a click event listener to each item
     const dropdownItems = document.querySelectorAll('.check_box_input');
-
+    // This will will add a section in the click list container depending on if the user selected the checkbox or text area
     dropdownItems.forEach(function (item) {
         item.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent the default link behavior
@@ -110,11 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const newItem = `
                 <div id="item_${numOfItems}">
                     <input type="hidden" name="item_type[]" value="checkbox"> <!-- Hidden field for the type -->
+                    <input type="hidden" name="placeholder_text[]" value=""> <!-- Hidden field for the type -->
                     <label class="d-flex justify-content-start">Check Box Title</label>
                     <input name="item_title[]" placeholder="Check Box Title/Question" type="text" class="form-control" />
                     <label class="d-flex justify-content-start">Short for of Title/Question</label>
                     <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control" />
-                    <input type="hidden" name="placeholder_text[]" value=""> <!-- Hidden field for the type -->
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
                 click_list_input_container.insertAdjacentHTML('beforeend', newItem);
@@ -141,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-
+    // This will add a bullet to the bullet modal so the user can add as many bullets as she wants
     const add_bullet_btn = document.getElementById('add_bullet_btn');
     const bullet_input_container = document.getElementById('bullet_input_container');
 
@@ -175,5 +177,42 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+    // This will add an event listener to all the add and delete buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
 
+    const deleteBtns = document.querySelectorAll('.delete-section-btn');
+
+    deleteBtns.forEach(deleteBtn => {
+        deleteBtn.addEventListener('mouseenter', (event) => {
+            event.preventDefault();
+            const section_id = deleteBtn.getAttribute('section_id');
+            const section = document.getElementById(section_id);
+            section.classList.add('delete-section');
+        });
+    });
+    deleteBtns.forEach(deleteBtn => {
+        deleteBtn.addEventListener('mouseout', (event) => {
+            event.preventDefault();
+            const section_id = deleteBtn.getAttribute('section_id');
+            const section = document.getElementById(section_id);
+            section.classList.remove('delete-section');
+        });
+    });
+
+    const addSectionBtns = document.querySelectorAll('.add-section-btn');
+
+    addSectionBtns.forEach(addBtn => {
+        addBtn.addEventListener('mouseover', (event) => {
+            event.preventDefault();
+            const section_id = addBtn.getAttribute('section_id');
+            const section = document.getElementById(`add${section_id}`);
+            section.classList.remove('hide');
+        });
+
+        addBtn.addEventListener('mouseout', (event) => {
+            event.preventDefault();
+            const section_id = addBtn.getAttribute('section_id');
+            const section = document.getElementById(`add${section_id}`);
+            section.classList.add('hide');
+        });
+    });
 });

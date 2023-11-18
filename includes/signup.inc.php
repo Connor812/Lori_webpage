@@ -7,6 +7,7 @@ $firstName = $_POST["first_name"];
 $lastName = $_POST["last_name"];
 $email = $_POST["email"];
 $pwd = $_POST["pwd"];
+$repeat_pwd = $_POST['repeat_pwd']; 
 
 //Make sure to delete for testing only
 echo "Username: " . $username;
@@ -14,7 +15,7 @@ echo "first name: " . $firstName;
 echo "second name: " . $lastName;
 echo "email: " . $email;
 echo "pwd: " . $pwd;
-
+echo "repeat_pwd: ". $repeat_pwd;
 
 // Error Handlers for the login form
 if (empty($username)) {
@@ -43,6 +44,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 // Check password length
 if (strlen($pwd) <= 3) {
     header("Location: ../signup.php?error=short_password");
+    exit;
+}
+
+// Checks to see if the pwd and the repeat pwd are the same
+if ($pwd != $repeat_pwd) {
+    header("Location: ../signup.php?error=passwords_dont_match");
     exit;
 }
 

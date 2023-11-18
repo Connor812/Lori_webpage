@@ -12,6 +12,18 @@ $page_num = $_GET['page_num'];
 echo $quote_content . "<br>";
 echo $section_id . "<br>";
 
+// Error handler, checks to see if content is empty
+if (empty($quote_content)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+}
+
 // Updates the order_num to fit the new section 
 $sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
 

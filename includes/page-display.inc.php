@@ -1,6 +1,6 @@
 <?php
 
-function get_page($page_num, $mysqli)
+function get_page($page_num, $user_id, $mysqli)
 {
 
     $sql = "SELECT
@@ -27,7 +27,10 @@ function get_page($page_num, $mysqli)
     i.image_text,
     cm.id AS comment_id, 
     cm.comment_userdata_name,
-    cm.comment_placeholder
+    cm.comment_placeholder,
+    bt.id AS bullet_id,
+    t.id AS text_id,
+    t.text_content
 FROM journal_page AS jp
 LEFT JOIN heading AS h ON jp.id = h.section_id
 LEFT JOIN quote AS q ON jp.id = q.section_id
@@ -38,6 +41,8 @@ LEFT JOIN click_list AS c ON jp.id = c.section_id
 LEFT JOIN subheading AS sh ON jp.id = sh.section_id
 LEFT JOIN image AS i ON jp.id = i.section_id
 LEFT JOIN comment AS cm ON jp.id = cm.section_id
+LEFT JOIN bullet AS bt ON jp.id = bt.section_id
+LEFT JOIN text AS t ON jp.id = t.section_id
 WHERE jp.page_num = ?
 ORDER BY jp.order_num ASC;";
 
@@ -52,13 +57,13 @@ ORDER BY jp.order_num ASC;";
                 if ($row['section_type'] == 'heading') {
                     heading_section($row);
                 } elseif ($row['section_type'] == 'click_list') {
-                    click_list_section($row, $mysqli);
+                    click_list_section($row, $user_id, $mysqli);
                 } elseif ($row['section_type'] == 'quote') {
                     quote_section($row);
                 } elseif ($row['section_type'] == 'byline') {
                     byline_section($row);
                 } elseif ($row['section_type'] == 'story_box') {
-                    story_box_section($row, $mysqli);
+                    story_box_section($row, $user_id, $mysqli);
                 } elseif ($row['section_type'] == 'video') {
                     video_section($row);
                 } elseif ($row['section_type'] == 'subheading') {
@@ -70,7 +75,7 @@ ORDER BY jp.order_num ASC;";
                 } elseif ($row['section_type'] == 'text') {
                     text_section($row);
                 } elseif ($row['section_type'] == 'comment') {
-                    comment_section($row);
+                    comment_section($row, $user_id, $mysqli);
                 }
             }
         } else {
@@ -78,10 +83,6 @@ ORDER BY jp.order_num ASC;";
         }
     }
 }
-
-
-
-
 
 function heading_section($heading_row)
 {
@@ -95,7 +96,7 @@ function heading_section($heading_row)
 
 // Takes care of the click list content--------------------------------------------------->
 
-function click_list_section($click_list_row, $mysqli)
+function click_list_section($click_list_row, $user_id, $mysqli)
 {
 
     echo "
@@ -116,7 +117,7 @@ function click_list_section($click_list_row, $mysqli)
         </h2>
         <div id='" . str_replace(' ', '_', $click_list_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $click_list_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'>
             <div class='accordion-body'>
-                " . get_click_list_items($click_list_row['click_list_id'], $mysqli) . "
+                " . get_click_list_items($click_list_row['click_list_id'], $user_id, $mysqli) . "
             </div>
         </div>
     </div>
@@ -124,7 +125,7 @@ function click_list_section($click_list_row, $mysqli)
 }
 
 // Takes care of the items inside of the click list --------------------------------------------------->
-function get_click_list_items($click_list_id, $mysqli)
+function get_click_list_items($click_list_id, $user_id, $mysqli)
 {
     $content = ''; // Initialize an empty string to store the content
 
@@ -153,18 +154,58 @@ WHERE cl.id = ?;";
         }
 
         foreach ($result as $click_list_item) {
-            if ($click_list_item['click_list_item_type'] == 'checkbox') {
-                $content .= '<div class="form-check">
-                    <input name="' . $click_list_item['item_userdata_name'] . '" class="form-check-input" type="checkbox" value="1" id="defaultCheck1">
-                    <label class="form-check-label" for="defaultCheck1">' . $click_list_item['item_title'] . '</label>
-                    <input type="hidden" name="' . $click_list_item['item_userdata_name'] .'_type" value="checkbox"> <!-- Add a hidden input for checkbox -->
-                </div>
-                <br>';
-            } elseif ($click_list_item['click_list_item_type'] == 'textarea') {
-                $content .= '<label for="comment">' . $click_list_item['item_title'] . '</label>
-                    <textarea name ="' . $click_list_item['item_userdata_name'] . '" class="form-control" rows="7" id="comment"
-                        placeholder="' . $click_list_item['placeholder_text'] . '"></textarea>
-                        <input type="hidden" name="' . $click_list_item['item_userdata_name'] .'_type" value="textarea"> <!-- Add a hidden input for checkbox -->
+            $item_userdata_name = $click_list_item['item_userdata_name'];
+            $item_title = $click_list_item['item_title'];
+            $placeholder_text = $click_list_item['placeholder_text'];
+            $item_type = $click_list_item['click_list_item_type'];
+
+            if ($item_type == 'checkbox') {
+                $sql = "SELECT $item_userdata_name FROM `user_input` WHERE user_id = ?;";
+
+                $stmt = $mysqli->prepare($sql);
+                if ($stmt) {
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+
+                        if ($row[$item_userdata_name] == 1) {
+                            $selected = 'checked';
+                        } else {
+                            $selected = '';
+                        }
+                    }
+                    $content .= '<div class="form-check">
+                        <input name="' . $item_userdata_name . '" class="form-check-input" type="checkbox" value="1" id="defaultCheck1" ' . $selected . '>
+                        <label class="form-check-label" for="defaultCheck1">' . $item_title . '</label>
+                        <input type="hidden" name="' . $item_userdata_name . '_type" value="checkbox"> <!-- Add a hidden input for checkbox -->
+                        </div>
+                        <br>';
+
+                }
+
+            } elseif ($item_type == 'textarea') {
+                $sql = "SELECT $item_userdata_name FROM `user_input` WHERE user_id = ?;";
+
+                $stmt = $mysqli->prepare($sql);
+                if ($stmt) {
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $user_data = $row[$item_userdata_name];
+                    } else {
+                        $user_data = "";
+                    }
+                }
+                $content .= '<label for="comment">' . $item_title . '</label>
+                    <textarea name ="' . $item_userdata_name . '" class="form-control" rows="7" id="comment"
+                        placeholder="' . $placeholder_text . '">' . $user_data . '</textarea>
+                        <input type="hidden" name="' . $item_userdata_name . '_type" value="textarea"> <!-- Add a hidden input for checkbox -->
                 <br>';
             }
         }
@@ -195,8 +236,29 @@ function subheading_section($subheading_row)
 }
 
 // Takes care of the story_box_section --------------------------------------------------->
-function story_box_section($story_box_row, $mysqli)
+function story_box_section($story_box_row, $user_id, $mysqli)
 {
+    $no_spaces_section_name = str_replace(' ', '_', $story_box_row['section_name']);
+    $section_name = $story_box_row['section_name'];
+    $story_box_userdata_name = $story_box_row['story_box_userdata_name'];
+    $placeholder_text = $story_box_row['placeholder_text'];
+
+    $sql = "SELECT $story_box_userdata_name FROM `user_input` WHERE user_id = ?;";
+
+    $stmt = $mysqli->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $user_data = $row[$story_box_userdata_name];
+        } else {
+            $user_data = "";
+        }
+    }
+
     echo "
     <div class='accordion'>
     <div class='accordion-item'>
@@ -205,18 +267,18 @@ function story_box_section($story_box_row, $mysqli)
                 class='accordion-button collapsed'
                 type='button'
                 data-mdb-toggle='collapse'
-                data-mdb-target='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'
+                data-mdb-target='#" . $no_spaces_section_name . "'
                 aria-expanded='true'
-                aria-controls='" . str_replace(' ', '_', $story_box_row['section_name']) . "'
+                aria-controls='" . $no_spaces_section_name . "'
             >
                 <input class='form-check-input mb-2' type='checkbox' name='checkbox_name' value='checkbox_value'>
-                " . $story_box_row['section_name'] . "
+                " . $section_name . "
             </button>
         </h2>
-        <div id='" . str_replace(' ', '_', $story_box_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $story_box_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $story_box_row['section_name']) . "'>
+        <div id='" . $no_spaces_section_name . "' class='accordion-collapse collapse' aria-labelledby='" . $no_spaces_section_name . "' data-mdb-parent='#" . $no_spaces_section_name . "'>
             <div class='accordion-body'>
-                <textarea name='" . $story_box_row['story_box_userdata_name'] . "' class='form-control' rows='5' id='comment'
-                    placeholder='" . $story_box_row['placeholder_text'] . "'></textarea>
+                <textarea name='" . $story_box_userdata_name . "' class='form-control' rows='5' id='comment'
+                    placeholder='" . $placeholder_text . "'>" . $user_data . "</textarea>
                 <br>
             </div>
         </div>
@@ -307,9 +369,31 @@ function text_section($text_row)
 }
 
 // This handles the comment section
-function comment_section($comment_row) {
-    echo '<section>
-    <label for="' . $comment_row['section_name'] . '">' . $comment_row['section_name'] . '</label>
-    <textarea id="' . $comment_row['section_name'] .'" name="' . $comment_row['comment_userdata_name'] . '" class="form-control" rows="4" placeholder="' . $comment_row['comment_placeholder'] . '"></textarea>
+function comment_section($comment_row, $user_id, $mysqli)
+{
+    $section_name = $comment_row['section_name'];
+    $comment_userdata_name = $comment_row['comment_userdata_name'];
+    $comment_placeholder = $comment_row['comment_placeholder'];
+
+    $sql = "SELECT $comment_userdata_name FROM `user_input` WHERE user_id = ?;";
+
+    $stmt = $mysqli->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $user_data = $row[$comment_userdata_name];
+        } else {
+            $user_data = "";
+        }
+    }
+
+    echo '
+    <section>
+        <label for="' . $section_name . '">' . $section_name . '</label>
+        <textarea id="' . $section_name . '" name="' . $comment_userdata_name . '" class="form-control" rows="4" placeholder="' . $comment_placeholder . '">' . $user_data . '</textarea>
     </section>';
 }

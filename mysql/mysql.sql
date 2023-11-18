@@ -26,7 +26,7 @@ CREATE TABLE permission (
 CREATE TABLE journal_page (
     id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
     section_type varchar(30) NOT NULL,
-    section_name varchar(50) NOT NULL,
+    section_name TEXT NOT NULL,
     order_num int(11) NOT NULL,
     page_num int(11) NOT NULL
 );
@@ -220,86 +220,7 @@ INSERT INTO `bullet_point`(`bullet_content`, `bullet_id`) VALUES
 -- Table for the user input ------------------------------------------------------------->
 
 CREATE TABLE user_input (
-    our_story TEXT DEFAULT NULL,
-    id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    my_concerns TEXT DEFAULT NULL,
-    respectful_communication BIT(1) DEFAULT 0,
-    silence BIT(1) DEFAULT 0,
-    profanity BIT(1) DEFAULT 0,
-    dealing_with_stress_comment TEXT DEFAULT NULL,
-    story_ending TEXT DEFAULT NULL,
-    former_our_story TEXT DEFAULT NULL,
-    former_partner_concerns TEXT DEFAULT NULL,
-    former_respectful_communication BIT(1) DEFAULT 0,
-    former_silence BIT(1) DEFAULT 0,
-    former_profanity BIT(1) DEFAULT 0,
-    former_dealing_with_stress_comment TEXT DEFAULT NULL,
-    former_story_ending TEXT DEFAULT NULL,
-    previous_partners TEXT DEFAULT NULL,
-    partner_family_dysfunctional TEXT DEFAULT NULL,
-    toxic_relationship TEXT DEFAULT NULL,
-    relationship_damage TEXT DEFAULT NULL,
-    relationship_self_esteem TEXT DEFAULT NULL,
-    relationship_isolation TEXT DEFAULT NULL,
-    relationship_basis TEXT DEFAULT NULL,
-    belittling TEXT DEFAULT NULL,
-    criticism TEXT DEFAULT NULL,
-    blamed TEXT DEFAULT NULL,
-    accused_of_cheating TEXT DEFAULT NULL,
-    partner_cheated TEXT DEFAULT NULL,
-    gave_in TEXT DEFAULT NULL,
-    abusive BIT(1) DEFAULT 0,
-    brandished_anger BIT(1) DEFAULT 0,
-    barraged_calls BIT(1) DEFAULT 0,
-    critical_of_clothes BIT(1) DEFAULT 0,
-    called_family BIT(1) DEFAULT 0,
-    damaged_property BIT(1) DEFAULT 0,
-    withheld_finances BIT(1) DEFAULT 0,
-    dissatisfying BIT(1) DEFAULT 0,
-    not_reciprocated BIT(1) DEFAULT 0,
-    comment_on_toxic_relationship TEXT DEFAULT NULL,
-    no_reciprocation BIT(1) DEFAULT 0,
-    no_attention BIT(1) DEFAULT 0,
-    felt_insecure BIT(1) DEFAULT 0,
-    more_intimacy BIT(1) DEFAULT 0,
-    more_one_on_one BIT(1) DEFAULT 0,
-    dissatisfying_comment TEXT DEFAULT NULL,
-    medical_issues TEXT DEFAULT NULL,
-    legal_issues TEXT DEFAULT NULL,
-    financial_issues TEXT DEFAULT NULL,
-    sexual_intimacy TEXT DEFAULT NULL,
-    family_income TEXT DEFAULT NULL,
-    feeling_stuck BIT(1) DEFAULT 0,
-    no_medical_physical_needs BIT(1) DEFAULT 0,
-    more_then_one_toxic_relationship BIT(1) DEFAULT 0,
-    returned BIT(1) DEFAULT 0,
-    repetitive_partners BIT(1) DEFAULT 0,
-    giving_all_resources BIT(1) DEFAULT 0,
-    professional_counselling TEXT DEFAULT NULL,
-    experienced_violence BIT(1) DEFAULT 0,
-    home_violence BIT(1) DEFAULT 0,
-    family_suicide BIT(1) DEFAULT 0,
-    death_of_parent BIT(1) DEFAULT 0,    
-    childhood_experiences_comment TEXT DEFAULT NULL,
-    substance_use BIT(1) DEFAULT 0,
-    mental_health BIT(1) DEFAULT 0,
-    instability BIT(1) DEFAULT 0,
-    moving_around BIT(1) DEFAULT 0,
-    family_in_jail BIT(1) DEFAULT 0,
-    mom_in_toxic_relationship BIT(1) DEFAULT 0,
-    prematurity BIT(1) DEFAULT 0,
-    adopted BIT(1) DEFAULT 0,
-    bullying BIT(1) DEFAULT 0,
-    teen_dating_violence BIT(1) DEFAULT 0,
-    community_violence BIT(1) DEFAULT 0,
-    other_trauma BIT(1) DEFAULT 0,
-    trauma_comment TEXT DEFAULT NULL,
-    why_do_i_keeping_doing_this TEXT DEFAULT NULL,
-    why_am_i_like_this TEXT DEFAULT NULL,
-    how_did_i_get_here TEXT DEFAULT NULL,
-    what_keeps_me TEXT DEFAULT NULL,
-    why_am_i_stuck TEXT DEFAULT NULL,
-    general_comment TEXT DEFAULT NULL,
+    
     user_id int(11) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -329,9 +250,12 @@ SELECT
     i.id AS image_id,
     i.image_src,
     i.image_text,
-    cm.id AS comment_id,  -- Add the comment_id and other relevant fields here
+    cm.id AS comment_id, 
     cm.comment_userdata_name,
-    cm.comment_placeholder
+    cm.comment_placeholder,
+    bt.id AS bullet_id,
+    t.id AS text_id,
+    t.text_content
 FROM journal_page AS jp
 LEFT JOIN heading AS h ON jp.id = h.section_id
 LEFT JOIN quote AS q ON jp.id = q.section_id
@@ -341,8 +265,10 @@ LEFT JOIN video AS v ON jp.id = v.section_id
 LEFT JOIN click_list AS c ON jp.id = c.section_id
 LEFT JOIN subheading AS sh ON jp.id = sh.section_id
 LEFT JOIN image AS i ON jp.id = i.section_id
-LEFT JOIN comment AS cm ON jp.id = cm.section_id  -- Add a LEFT JOIN for the comment table
-WHERE jp.page_num = ?  -- Filter by page_num = 1
+LEFT JOIN comment AS cm ON jp.id = cm.section_id
+LEFT JOIN bullet AS bt ON jp.id = bt.section_id
+LEFT JOIN text AS t ON jp.id = t.section_id
+WHERE jp.page_num = ?
 ORDER BY jp.order_num ASC;
 -- Query for getting the click_list items for the click list
 

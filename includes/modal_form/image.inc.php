@@ -10,8 +10,32 @@ $image_text = $_POST['image_text'];
 $page_num = $_GET['page_num'];
 echo $image_src . "<---- image source <br>";
 
+// Error handler, checks to see if content is empty
+if (empty($section_name) || empty($image_text)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+} elseif (empty($_FILES['my_image']['name'])) {
+    // Check if a video file is uploaded
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_image&page_num=" . $page_num);
+    exit;
+} else {
+    // Check if the uploaded file is an image
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']; // Add more types if needed
+
+    if (!in_array($_FILES['my_image']['type'], $allowedTypes)) {
+        header("Location: " . BASE_URL . "/admin_pages.php?error=invalid_image&page_num=" . $page_num);
+        exit;
+    }
+}
+
 if (isset($_FILES['my_image'])) {
-    $uploadDir = '/Applications/XAMPP/xamppfiles/htdocs/lori/images/'; // Path to the "images" directory
+    $uploadDir = '/Applications/XAMPP/xamppfiles/htdocs/UR/images/'; // Path to the "images" directory
     $uploadFile = $uploadDir . basename($_FILES['my_image']['name']);
     echo $uploadFile . "<br>";
 

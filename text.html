@@ -1,87 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        /* Modal Container */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
 
-        /* Modal Content */
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-        }
+<input type="checkbox" checked></input>
 
-        /* Buttons */
-        .modal-content button {
-            margin: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Trigger the modal -->
-<button onclick="openModal()">Show Modal</button>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <h2>Unsaved Changes</h2>
-    <p>You have unsaved changes. Do you want to stay on this page or leave?</p>
-    <button onclick="stayOnPage()">Stay on Page</button>
-    <button onclick="leaveWithUnsavedChanges()">Leave with Unsaved Changes</button>
-  </div>
-
-</div>
-
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.querySelector("button");
-
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// Function to close the modal and stay on the page
-function stayOnPage() {
-  modal.style.display = "none";
-  // Add your custom logic here for staying on the page
-}
-
-// Function to close the modal and leave with unsaved changes
-function leaveWithUnsavedChanges() {
-  modal.style.display = "none";
-  // Add your custom logic here for leaving with unsaved changes
-}
-
-// Function to close the modal if the user clicks outside the modal
-window.onclick = function(event) {
-  if (event.target === modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
 
 </body>
 </html>

@@ -32,7 +32,7 @@ if (isset($_GET['page_num'])) {
   if ($page_num > 0) {
 
     // Calls function in journal-display that displays all the pieces inside a page
-    get_page($page_num['page_num'], $mysqli);
+    get_page($page_num['page_num'], $user_id, $mysqli);
 
   } else {
     // ERROR
@@ -59,14 +59,13 @@ if (isset($_GET['page_num'])) {
   if ($page_num > 0) {
 
     // Calls function in journal-display that displays all the pieces inside a page
-    get_page($page_num['page_num'], $mysqli);
+    get_page($page_num['page_num'], $user_id, $mysqli);
 
   } else {
     // ERROR
     echo 'You have no permissions';
   }
 }
-
 
 // This gets the page numbers and displays the selections at the bottom of the page
 
@@ -87,7 +86,7 @@ if ($stmt) {
 $pages = $result->fetch_all(MYSQLI_ASSOC);
 
 if (count($pages) > 0) {
-  echo '<nav class="d-flex justify-content-center" aria-label="Page navigation example">
+  echo '<nav class="d-flex justify-content-center m-2" aria-label="Page navigation example">
   <ul class="pagination">';
   // Starts the page numbers
   $pageNum = 1;

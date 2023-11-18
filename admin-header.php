@@ -21,6 +21,7 @@ require_once 'config-url.php';
     <!-- MDB -->
     <link rel="stylesheet" href="css/mdb.min.css" />
     <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/admin.css" />
 </head>
 
 <body>

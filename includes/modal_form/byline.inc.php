@@ -2,6 +2,7 @@
 
 require_once '../../connect/db.php';
 require_once '../../config-url.php';
+require_once 'update_journal_page.php';
 
 echo "byline handler";
 
@@ -12,26 +13,22 @@ $page_num = $_GET['page_num'];
 echo $byline_content . "<br>";
 echo $section_id . "<br>";
 
-// Updates the order_num to fit the new section 
-$sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
-
-$stmt = $mysqli->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("i", $section_id);
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo "Update was successful. Affected rows: " . $stmt->affected_rows;
-        } else {
-            echo "No rows were updated.";
-        }
-    } else {
-        echo "Execution failed: " . $stmt->error;
-    }
-    $stmt->close();
-} else {
-    echo "Prepare statement failed: " . $mysqli->error;
+// Error handler, checks to see if content is empty
+if (empty($byline_content)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
 }
+
+
+// Updates the order_num to fit the new section 
+update_journal_page($section_id, $page_num, $mysqli);
+
 
 // Needs to be plus one to add it the the new section
 $new_section_id = $section_id + 1;

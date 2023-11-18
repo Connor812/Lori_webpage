@@ -1,0 +1,35 @@
+.section_container {
+    padding: 10px 10px 0px 10px;
+    margin: 5px;
+    border: 3px solid transparent;
+    transition: 200ms;
+}
+
+.delete-section {
+    border: 3px solid #dc3445;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000000;
+    background-color: #e8e8e8;
+}
+
+.add_section_line {
+    width: 100%;
+    background-color: rgb(179, 197, 253);
+    border: 3px solid #0d6efd;
+    border-radius: 5px;
+    font-size: 22px;
+    text-align: center;
+    overflow: hidden;
+    transition: width 200ms ease, transform 200ms ease;
+}
+
+.hide {
+    transform: scaleX(1); /* Scale in the x-axis to reveal the content from the center out */
+    transform-origin: left center; /* Change transform origin to left center for the center-out effect */
+    opacity: 0; /* Adjust this value to make it more or less transparent */
+    width: 0;
+}
+
+.container {
+    margin-top: 8px;
+}

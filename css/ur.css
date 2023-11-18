@@ -219,3 +219,8 @@ ul.demo {
   padding: 10px 20px;
   cursor: pointer;
 }
+
+.form-background {
+  background-color: rgba(0, 0, 0, 0.086);
+  box-shadow: 10px 8px 10px rgba(0, 0, 0, 0.1);
+}

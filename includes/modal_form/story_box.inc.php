@@ -14,6 +14,40 @@ echo $story_box_userdata_name . "<br>";
 echo $placeholder_text . "<br>";
 echo $section_id . "<br>";
 
+// Error handler, checks to see if content is empty
+if (empty($story_box_name) || empty($story_box_userdata_name) || empty($placeholder_text)) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
+    exit;
+} elseif ($section_id == '') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
+    exit;
+} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+}
+
+// This checks to see if the userdata_name is already in the inputs table
+$sql = "SELECT COLUMN_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'user_input' 
+AND COLUMN_NAME = ?;";
+
+$stmt = $mysqli->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("s", $story_box_userdata_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    echo $row["COLUMN_NAME"] . ' <-- column name<br>';
+    if (!empty($row["COLUMN_NAME"])) {
+        echo "works for exist<br>";
+        header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
+        exit;
+    } else {
+        echo "Does not exist!";
+    }
+}
+
 $sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
 
 $stmt = $mysqli->prepare($sql);
