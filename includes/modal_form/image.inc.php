@@ -137,6 +137,7 @@ if (isset($_FILES['my_image'])) {
         } else {
             echo "Upload failed.\n";
             echo "Error: " . $_FILES['my_image']['error'];
+            header("Location: " . BASE_URL . "/admin_pages.php?error=couldnt_move_file&page_num=" . $page_num);
         }
     } else {
         echo "Invalid file type or size. Please upload a valid image file (max size: 100MB).";

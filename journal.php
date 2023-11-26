@@ -10,7 +10,11 @@ require_once 'header.php';
 <div class="wrapper p-3">
     <!--welcome blurb-->
     <div class="container-fluid" style="padding: 0% 5%;">
-        <h3>Welcome <?php echo $_SESSION['username'];?>,</h3>
+        <h3>Welcome <?php  
+        if (isset($_SESSION['username'])) {
+        echo $_SESSION['username'] . ",";
+        }
+        ?></h3>
         <p>CONGRATULATIONS! You have taken an important step in your self-care. The commitment you are making to
             self-analysis will benefit many aspects of your life, particularly decision-making about relationships. UR
             is

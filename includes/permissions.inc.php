@@ -90,6 +90,6 @@ if (isset($_POST)) {
     }
 
     // Redirect to the admin_users.php page
-    header("Location: " . BASE_URL . "/admin_users.php?username=$username&user_id=$user_id");
+    header("Location: " . BASE_URL . "/admin_users.php?username=$username&user_id=$user_id&success=success");
     exit; // Make sure to exit after redirection
 }

@@ -116,7 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label class="d-flex justify-content-start">Check Box Title</label>
                     <input name="item_title[]" placeholder="Check Box Title/Question" type="text" class="form-control" />
                     <label class="d-flex justify-content-start">Short for of Title/Question</label>
-                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control" />
+                    <div id="error_${numOfItems}" class="error-message hide"></div>
+                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control item_userdata_name" error="error_${numOfItems}" pattern="[A-Za-z]+" onchange="changeInput(this)" />
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
                 click_list_input_container.insertAdjacentHTML('beforeend', newItem);
@@ -130,7 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label class="d-flex justify-content-start">Textarea Title</label>
                     <input name="item_title[]" placeholder="Textarea Title/Question" type="text" class="form-control" />
                     <label class="d-flex justify-content-start">Short for of Title/Question</label>
-                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control" />
+                    <div id="error_${numOfItems}" class="error-message hide"></div>
+                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control item_userdata_name" error="error_${numOfItems}" pattern="[A-Za-z]+" onchange="changeInput(this)"/>
                     <label class="d-flex justify-content-start">Placeholder text</label>
                     <input name="placeholder_text[]" placeholder="Examples/Explanation of question" type="text" class="form-control" />
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
@@ -139,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // This calls the query selector all to get the new delete buttons
                 getAllDeleteItemBtns();
             }
-
         });
     });
 
@@ -147,10 +148,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const add_bullet_btn = document.getElementById('add_bullet_btn');
     const bullet_input_container = document.getElementById('bullet_input_container');
 
-    add_bullet_btn.addEventListener('click', (event) => {
-        event.preventDefault();
-        const numOfItems = bullet_input_container.children.length;
-        const newBullet = `
+    if (add_bullet_btn) {
+        add_bullet_btn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const numOfItems = bullet_input_container.children.length;
+            const newBullet = `
         <div id=bullet_${numOfItems}>
             <label class="form-label">Bullet Content</label>
             <input name="bullet_content[]" type="text" class="form-control"
@@ -158,10 +160,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <button class="btn btn-danger delete_item_btn" value="bullet_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
         </div>
         `;
-        bullet_input_container.insertAdjacentHTML('beforeend', newBullet);
-        getAllDeleteItemBtns();
-    });
-
+            bullet_input_container.insertAdjacentHTML('beforeend', newBullet);
+            getAllDeleteItemBtns();
+        });
+    }
     // Function that will get all the delete item buttons, add an event listener to delete the item section if not needed
     function getAllDeleteItemBtns() {
         const deleteItemButtons = document.querySelectorAll('.delete_item_btn');
@@ -215,4 +217,54 @@ document.addEventListener('DOMContentLoaded', function () {
             section.classList.add('hide');
         });
     });
+
+    if (document.getElementById('floating-error-btn')) {
+        const floatingErrorBtn = document.getElementById('floating-error-btn');
+        floatingErrorBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const idOfErrorBox = floatingErrorBtn.value;
+            const errorBox = document.getElementById(idOfErrorBox);
+            errorBox.remove();
+        });
+    }
+
+    console.log(document.getElementById('floating-success-btn'));
+    if (document.getElementById('floating-success-btn')) {
+        const floatingSuccessBtn = document.getElementById('floating-success-btn');
+        floatingSuccessBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const idOfSuccessBox = floatingSuccessBtn.value;
+            const successBox = document.getElementById(idOfSuccessBox);
+            successBox.remove();
+        });
+    }
+
+
 });
+
+
+// This will check all the input forms for the click list items and make sure there are no special characters in the item_userdata_name section
+function changeInput(input) {
+    const inputString = input.value;
+    for (let i = 0; i < inputString.length; i++) {
+        const char = inputString[i];
+
+        // Check if the character is a letter (uppercase or lowercase) or a space
+        if (!((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char === ' ')) {
+            const error = input.getAttribute('error');
+            const errorContainer = document.getElementById(error);
+            errorContainer.innerText = "No Special Characters Please";
+            errorContainer.classList.remove('hide');
+            input.classList.add('error');
+            return false;  // Character is not valid
+        } else {
+            const error = input.getAttribute('error');
+            const errorContainer = document.getElementById(error);
+            errorContainer.innerText = "";
+            errorContainer.classList.add('hide');
+            input.classList.remove('error');
+        }
+    }
+
+    return true;  // All characters are valid
+}

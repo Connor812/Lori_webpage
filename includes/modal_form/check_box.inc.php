@@ -43,7 +43,7 @@ for ($i = 0; $i < count($item_types); $i++) {
     // Checks to see if any of the inputs are empty
     if (empty($type) || empty($title) || empty($userdata_name)) {
         echo "works for empty";
-        header("Location: " . BASE_URL . "/admin_pages.php?error=input_blank&page_num=" . $page_num);
+        header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
         exit;
     }
     // This checks to see if the userdata_name is already in the inputs table

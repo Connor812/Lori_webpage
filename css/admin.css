@@ -24,12 +24,93 @@
 }
 
 .hide {
-    transform: scaleX(1); /* Scale in the x-axis to reveal the content from the center out */
-    transform-origin: left center; /* Change transform origin to left center for the center-out effect */
-    opacity: 0; /* Adjust this value to make it more or less transparent */
+    transform: scaleX(1);
+    /* Scale in the x-axis to reveal the content from the center out */
+    transform-origin: left center;
+    /* Change transform origin to left center for the center-out effect */
+    opacity: 0;
+    /* Adjust this value to make it more or less transparent */
     width: 0;
 }
 
 .container {
     margin-top: 8px;
+}
+
+.error {
+    border: 1px solid red !important;
+}
+
+.error-message {
+    color: red;
+}
+
+.floating-error {
+    position: fixed;
+    right: 10;
+    top: 30;
+    width: fit-content;
+    background-color: #DC3545;
+    padding: 10px 50px;
+    border: 5px solid red;
+    border-radius: 20px;
+    color: #464646;
+    display: flex;
+    align-items: center;
+}
+
+.floating-error-btn {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    transition: 200ms;
+    padding: 2px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+}
+
+.floating-error-btn:hover {
+    background-color: red;
+}
+
+.floating-success {
+    position: fixed;
+    right: 10;
+    top: 30;
+    width: fit-content;
+    background-color: #4bdc35;
+    padding: 10px 50px;
+    border: 5px solid rgb(64, 255, 0);
+    border-radius: 20px;
+    color: #464646;
+    display: flex;
+    align-items: center;
+}
+
+.floating-success-btn {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    transition: 200ms;
+    padding: 2px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+}
+
+.floating-success-btn:hover {
+    background-color: #40ff00;
 }

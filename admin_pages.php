@@ -1,6 +1,7 @@
 <?php
 require_once 'admin-header.php';
 require_once "connect/db.php";
+require_once "includes/admin_errors.inc.php";
 ?>
 
 <div class="container-fluid border border-bottom border-dark p-3" style="background-color: white;">
@@ -435,10 +436,10 @@ require_once "connect/db.php";
                     <!-- Modal Content goes here -->
 
                     <form id="delete_section_form" method="post" class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                        Don't Delete
-                    </button>
-                    <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                            Don't Delete
+                        </button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
                     </form>
                 </div>
             </div>

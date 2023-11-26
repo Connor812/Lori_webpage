@@ -86,9 +86,12 @@ ORDER BY jp.order_num ASC;";
 
 function heading_section($heading_row)
 {
+    $heading_content = $heading_row["heading_content"];
+    $order_num = $heading_row["order_num"];
+
     echo "
-    <section style='width: 100%;' id='" . $heading_row['order_num'] . "'>
-        <h2 style='text-align: center;'>" . $heading_row['heading_content'] . "</h2>
+    <section class='section_container m-4' id='" . $order_num . "'>
+        <h2 style='text-align: center;'>" . $heading_content . "</h2>
         <hr>
     </section>
             ";
@@ -99,29 +102,32 @@ function heading_section($heading_row)
 function click_list_section($click_list_row, $user_id, $mysqli)
 {
 
-    echo "
-    <div class='accordion'>
-    <div class='accordion-item'>
-        <h2 class='accordion-header'>
-            <button
-                class='accordion-button collapsed'
-                type='button'
-                data-mdb-toggle='collapse'
-                data-mdb-target='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'
-                aria-expanded='true'
-                aria-controls='" . str_replace(' ', '_', $click_list_row['section_name']) . "'
-            >
-                <input class='form-check-input mb-2' type='checkbox' name='checkbox_name' value='checkbox_value'>
-                " . $click_list_row['section_name'] . "
-            </button>
-        </h2>
-        <div id='" . str_replace(' ', '_', $click_list_row['section_name']) . "' class='accordion-collapse collapse' aria-labelledby='" . str_replace(' ', '_', $click_list_row['section_name']) . "' data-mdb-parent='#" . str_replace(' ', '_', $click_list_row['section_name']) . "'>
-            <div class='accordion-body'>
-                " . get_click_list_items($click_list_row['click_list_id'], $user_id, $mysqli) . "
-            </div>
-        </div>
+    $section_name = $click_list_row["section_name"];
+    $click_list_id = $click_list_row['click_list_id'];
+    $order_num = $click_list_row["order_num"];
+    $label = "label_" . $order_num;
+
+    echo "<section class='accordion section_container' id='" . $order_num . "'>
+<div class='accordion-item'>
+  <h2 class='accordion-header'>
+    <button
+      class='accordion-button collapsed'
+      type='button'
+      data-mdb-toggle='collapse'
+      data-mdb-target='#" . $label . "'
+      aria-expanded='true'
+      aria-controls='" . $label . "'
+    >
+    " . $section_name . "
+    </button>
+  </h2>
+  <div id='" . $label . "' class='accordion-collapse collapse' aria-labelledby='" . $label . "' data-mdb-parent='#" . $label . "'>
+    <div class='accordion-body'>
+    " . get_click_list_items($click_list_id, $user_id, $mysqli) . "
     </div>
-</div>";
+  </div>
+</div>
+</section>";
 }
 
 // Takes care of the items inside of the click list --------------------------------------------------->
@@ -219,29 +225,42 @@ WHERE cl.id = ?;";
 // Takes care of the quote_section --------------------------------------------------->
 function quote_section($quote_row)
 {
-    echo '<h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"' . $quote_row["quote_content"] . '"</i></h5>';
+    $quote_content = $quote_row["quote_content"];
+    $order_num = $quote_row['order_num'];
+
+    echo '<section class="section_container m-3" id="' . $order_num . '"><h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"' . $quote_content . '"</i></h5></section>';
 }
 
 // Takes care of the byline_section --------------------------------------------------->
 function byline_section($byline_row)
 {
-    echo '<h5 id="' . $byline_row['section_name'] . '" style="padding: 0% 0%; text-align: center;"><b>' . $byline_row['byline_content'] . '</b> </h5>';
+    $section_name = $byline_row['section_name'];
+    $byline_content = $byline_row['byline_content'];
+    $order_num = $byline_row['order_num'];
+    echo '<section class="section_container m-3" id="' . $order_num . '"><h5 id="' . $section_name . '" style="padding: 0% 0%; text-align: center;"><b>' . $byline_content . '</b> </h5></section>';
 }
 
 // Takes care of the subheading_section --------------------------------------------------->
 
 function subheading_section($subheading_row)
 {
-    echo "<h4 class='d-flex justify-content-center' id='" . $subheading_row['section_name'] . "' style='padding: 10px;'><b>" . $subheading_row['subheading_content'] . "</b></h4>";
+    $section_name = $subheading_row['section_name'];
+    $subheading_content = $subheading_row['subheading_content'];
+    $order_num = $subheading_row['order_num'];
+
+    echo "<section id='" . $order_num . "' class='section_container'><h4 class='d-flex justify-content-center' id='" . $section_name . "' style='padding: 10px;'><b>" . $subheading_content . "</b></h4></section>";
+    echo add_button($order_num);
 }
 
 // Takes care of the story_box_section --------------------------------------------------->
 function story_box_section($story_box_row, $user_id, $mysqli)
 {
-    $no_spaces_section_name = str_replace(' ', '_', $story_box_row['section_name']);
     $section_name = $story_box_row['section_name'];
+    $section_name_no_spaces = str_replace(' ', '_', $story_box_row['section_name']);
     $story_box_userdata_name = $story_box_row['story_box_userdata_name'];
     $placeholder_text = $story_box_row['placeholder_text'];
+    $order_num = $story_box_row['order_num'];
+    $label = "label_" . $order_num;
 
     $sql = "SELECT $story_box_userdata_name FROM `user_input` WHERE user_id = ?;";
 
@@ -259,58 +278,66 @@ function story_box_section($story_box_row, $user_id, $mysqli)
         }
     }
 
-    echo "
-    <div class='accordion'>
-    <div class='accordion-item'>
-        <h2 class='accordion-header'>
-            <button
-                class='accordion-button collapsed'
-                type='button'
-                data-mdb-toggle='collapse'
-                data-mdb-target='#" . $no_spaces_section_name . "'
-                aria-expanded='true'
-                aria-controls='" . $no_spaces_section_name . "'
-            >
-                <input class='form-check-input mb-2' type='checkbox' name='checkbox_name' value='checkbox_value'>
-                " . $section_name . "
-            </button>
-        </h2>
-        <div id='" . $no_spaces_section_name . "' class='accordion-collapse collapse' aria-labelledby='" . $no_spaces_section_name . "' data-mdb-parent='#" . $no_spaces_section_name . "'>
-            <div class='accordion-body'>
-                <textarea name='" . $story_box_userdata_name . "' class='form-control' rows='5' id='comment'
-                    placeholder='" . $placeholder_text . "'>" . $user_data . "</textarea>
-                <br>
+    echo '
+    <section class="accordion section_container" id="' . $order_num . '">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-mdb-toggle="collapse"
+                    data-mdb-target="#' . $label . '"
+                    aria-expanded="true"
+                    aria-controls="' . $label . '"
+                >
+                ' . $section_name . '
+                </button>
+            </h2>
+            <div id="' . $label . '" class="accordion-collapse collapse" aria-labelledby="' . $label . '" data-mdb-parent="#' . $label . '">
+                <div class="accordion-body">
+                    <textarea name="' . $story_box_userdata_name . '" class="form-control" rows="5" id="comment"
+                        placeholder="' . $placeholder_text . '">' . $user_data . '</textarea>
+                    <br>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-    ";
+    </section>';
 }
 
 // Takes care of the video_section --------------------------------------------------->
 function video_section($video_row)
 {
-    echo '<section class="videobg d-flex justify-content-center">
-    <video width="80%" height="auto" poster="/videos/URposter.png" controls>
-        <source src="'
+    $video_src = $video_row['video_src'];
+    $order_num = $video_row['order_num'];
+    echo '
+    <section id="' . $order_num . '" class="videobg d-flex justify-content-center section_container">
+        <video width="80%" height="auto" poster="/videos/URposter.png" controls>
+            <source src="'
         . $video_row['video_src'] . '" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</section>';
+            Your browser does not support the video tag.
+        </video>
+    </section>';
 }
 
 // Handles displaying the image
 function image_section($image_row)
 {
-    echo '<div class="row p-3">
-    <div class="col-sm-8">
-      <h6>' . $image_row['image_text'] . '</h6>
-    </div>
-    <div class="col-sm-4">
-      <div><img src="' . $image_row['image_src'] . '" class="img-rounded image-reponsive" alt="' . $image_row['section_name'] . '" width="100%" height="auto">
-      </div>
-    </div>
-  </div>';
+    $section_name = $image_row['section_name'];
+    $image_src = $image_row['image_src'];
+    $order_num = $image_row['order_num'];
+    $image_text = $image_row['image_text'];
+
+    echo '
+    <section id="' . $order_num . '" class="row p-3 section_container">
+        <div class="col-sm-8">
+            <h6>' . $image_text . '</h6>
+        </div>
+        <div class="col-sm-4">
+            <div>
+                <img src="' . $image_src . '" class="img-rounded image-reponsive" alt="' . $section_name . '" width="100%" height="auto">
+            </div>
+        </div>
+  </section>';
 }
 
 // Handles displaying a bullet section
@@ -361,7 +388,7 @@ function bullet_section($bullet_row, $mysqli)
 // Handles displaying a text section
 function text_section($text_row)
 {
-    echo '<section class="d-flex justify-content-center">
+    echo '<section class="d-flex justify-content-center m-3">
 
         ' . $text_row['text_content'] . '
 
@@ -392,7 +419,7 @@ function comment_section($comment_row, $user_id, $mysqli)
     }
 
     echo '
-    <section>
+    <section class="mb-4">
         <label for="' . $section_name . '">' . $section_name . '</label>
         <textarea id="' . $section_name . '" name="' . $comment_userdata_name . '" class="form-control" rows="4" placeholder="' . $comment_placeholder . '">' . $user_data . '</textarea>
     </section>';
