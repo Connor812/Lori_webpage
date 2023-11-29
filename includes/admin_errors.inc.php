@@ -43,15 +43,20 @@ if (isset($_GET['error'])) {
         $message = "Error: Coudln't Move File. Please Try Again!";
     }
 
-    echo '<div class="floating-error" id="floating-error">
-            <button id="floating-error-btn" class="floating-error-btn" value="floating-error">&#x2716;</button>
-                ' . $message . '
-            </div>';
+    ?>
+    <div class="floating-error" id="floating-error">
+        <button id="floating-error-btn" class="floating-error-btn" value="floating-error">&#x2716;</button>
+        <?php echo $message ?>
+    </div>
+
+    <?php
 }
 
 if (isset($_GET['success'])) {
-    echo '<div class="floating-success" id="floating-success">
-                <button id="floating-success-btn" class="floating-success-btn" value="floating-success">&#x2716;</button>
-                You Have Successfully Change Permissions!
-            </div>';
+    ?>
+    <div class="floating-success" id="floating-success">
+        <button id="floating-success-btn" class="floating-success-btn" value="floating-success">&#x2716;</button>
+        You Have Successfully Change Permissions!
+    </div>
+    <?php
 }
