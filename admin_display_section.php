@@ -7,25 +7,31 @@ function heading_section($heading_row)
 {
     $heading_content = $heading_row["heading_content"];
     $order_num = $heading_row["order_num"];
+    $page_num = $heading_row["page_num"];
+    $section_type = $heading_row["section_type"];
 
-    echo "
-    <section class='section_container' style='width: 100%;' id='" . $order_num . "'>
-        <h2 style='text-align: center;'>" . $heading_content . "</h2>
+    ?>
+    <section class='section_container' style='width: 100%;' id='<?php echo $order_num ?>'>
+        <h2 style='text-align: center;'>
+            <?php echo $heading_content ?>
+        </h2>
         <hr>
     </section>
-            ";
-    echo add_button($order_num);
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Takes care of the click list content--------------------------------------------------->
 
 function click_list_section($click_list_row, $mysqli)
 {
-    
+
     $section_name = $click_list_row["section_name"];
     $click_list_id = $click_list_row['click_list_id'];
     $order_num = $click_list_row["order_num"];
     $label = "label_" . $order_num;
+    $page_num = $click_list_row["page_num"];
+    $section_type = $click_list_row["section_type"];
 
     echo "<section class='accordion section_container' id='" . $order_num . "'>
 <div class='accordion-item'>
@@ -49,7 +55,7 @@ function click_list_section($click_list_row, $mysqli)
 </div>
 </section>";
 
-    echo add_button($click_list_row['order_num']);
+    echo add_button($order_num, $page_num, $section_type);
 
 }
 
@@ -112,9 +118,17 @@ function quote_section($quote_row)
 
     $quote_content = $quote_row["quote_content"];
     $order_num = $quote_row['order_num'];
+    $page_num = $quote_row["page_num"];
+    $section_type = $quote_row["section_type"];
 
-    echo '<section class="section_container" id="' . $order_num . '"><h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"' . $quote_content . '"</i></h5></section>';
-    echo add_button($order_num);
+    ?>
+    <section class="section_container" id="<?php echo $order_num ?>">
+        <h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"
+                <?php echo $quote_content ?>"
+            </i></h5>
+    </section>
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Takes care of the byline_section --------------------------------------------------->
@@ -125,8 +139,16 @@ function byline_section($byline_row)
     $section_name = $byline_row['section_name'];
     $byline_content = $byline_row['byline_content'];
     $order_num = $byline_row['order_num'];
-    echo '<section class="section_container" id="' . $order_num . '"><h5 id="' . $section_name . '" style="padding: 0% 0%; text-align: center;"><b>' . $byline_content . '</b> </h5></section>';
-    echo add_button($order_num);
+    $page_num = $byline_row["page_num"];
+    $section_type = $byline_row["section_type"];
+    ?>
+    <section class="section_container" id="<?php $order_num ?>">
+        <h5 id="<?php $section_name ?>" style="padding: 0% 0%; text-align: center;"><b>
+                <?php $byline_content ?>
+            </b> </h5>
+    </section>
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Takes care of the subheading_section --------------------------------------------------->
@@ -137,9 +159,16 @@ function subheading_section($subheading_row)
     $section_name = $subheading_row['section_name'];
     $subheading_content = $subheading_row['subheading_content'];
     $order_num = $subheading_row['order_num'];
-
-    echo "<section id='" . $order_num . "' class='section_container'><h4 class='d-flex justify-content-center' id='" . $section_name . "' style='padding: 10px;'><b>" . $subheading_content . "</b></h4></section>";
-    echo add_button($order_num);
+    $page_num = $subheading_row["page_num"];
+    $section_type = $subheading_row["section_type"];
+    ?>
+    <section id='<?php echo $order_num ?>' class='section_container'>
+        <h4 class='d-flex justify-content-center' id='<?php echo $section_name ?>' style='padding: 10px;'><b>
+                <?php echo $subheading_content ?>
+            </b></h4>
+    </section>
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Takes care of the story_box_section --------------------------------------------------->
@@ -153,33 +182,31 @@ function story_box_section($story_box_row, $mysqli)
     $placeholder_text = $story_box_row['placeholder_text'];
     $order_num = $story_box_row['order_num'];
     $label = "label_" . $order_num;
+    $page_num = $story_box_row["page_num"];
+    $section_type = $story_box_row["section_type"];
 
-    echo '
-    <section class="accordion section_container" id="' . $order_num . '">
+    ?>
+    <section class="accordion section_container" id="<?php echo $order_num ?>">
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-mdb-toggle="collapse"
-                    data-mdb-target="#' . $label . '"
-                    aria-expanded="true"
-                    aria-controls="' . $label . '"
-                >
-                ' . $section_name . '
+                <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#<?php echo $label ?>" aria-expanded="true" aria-controls="<?php echo $label ?>">
+                    <?php echo $section_name ?>
                 </button>
             </h2>
-            <div id="' . $label . '" class="accordion-collapse collapse" aria-labelledby="' . $label . '" data-mdb-parent="#' . $label . '">
+            <div id="<?php echo $label ?>" class="accordion-collapse collapse" aria-labelledby="<?php echo $label ?>"
+                data-mdb-parent="#<?php echo $label ?>">
                 <div class="accordion-body">
-                    <textarea name="' . $story_box_userdata_name . '" class="form-control" rows="5" id="comment"
-                        placeholder="' . $placeholder_text . '"></textarea>
+                    <textarea name="<?php echo $story_box_userdata_name ?>" class="form-control" rows="5" id="comment"
+                        placeholder="<?php echo $placeholder_text ?>"></textarea>
                     <br>
                 </div>
             </div>
         </div>
-    </section>';
+    </section>
+    <?php
 
-    echo add_button($order_num);
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Takes care of the video_section --------------------------------------------------->
@@ -188,16 +215,20 @@ function video_section($video_row)
 {
     $video_src = $video_row['video_src'];
     $order_num = $video_row['order_num'];
-    echo '
-    <section id="' . $order_num . '" class="videobg d-flex justify-content-center section_container">
+    $page_num = $video_row["page_num"];
+    $section_type = $video_row["section_type"];
+
+    ?>
+    <section id="<?php echo $order_num ?>" class="videobg d-flex justify-content-center section_container">
         <video width="80%" height="auto" poster="/videos/URposter.png" controls>
-            <source src="'
-        . $video_row['video_src'] . '" type="video/mp4">
+            <source src="<?php echo $video_src ?>" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>';
+    </section>
 
-    echo add_button($order_num);
+    <?php
+
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 function image_section($image_row)
@@ -206,20 +237,26 @@ function image_section($image_row)
     $image_src = $image_row['image_src'];
     $order_num = $image_row['order_num'];
     $image_text = $image_row['image_text'];
+    $page_num = $image_row["page_num"];
+    $section_type = $image_row["section_type"];
 
-    echo '
-    <section id="' . $order_num . '" class="row p-3 section_container">
+    ?>
+    <section id="<?php echo $order_num ?>" class="row p-3 section_container">
         <div class="col-sm-8">
-            <h6>' . $image_text . '</h6>
+            <h6>
+                <?php echo $image_text ?>
+            </h6>
         </div>
         <div class="col-sm-4">
             <div>
-                <img src="' . $image_src . '" class="img-rounded image-reponsive" alt="' . $section_name . '" width="100%" height="auto">
+                <img src="<?php echo $image_src ?>" class="img-rounded image-reponsive" alt="<?php echo $section_name ?>"
+                    width="100%" height="auto">
             </div>
         </div>
-  </section>';
+    </section>
+    <?php
 
-    echo add_button($order_num);
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Handles displaying a bullet section
@@ -230,6 +267,8 @@ function bullet_section($bullet_row, $mysqli)
     $section_name = $bullet_row['section_name'];
     $bullet_id = $bullet_row['bullet_id'];
     $order_num = $bullet_row['order_num'];
+    $page_num = $bullet_row["page_num"];
+    $section_type = $bullet_row["section_type"];
 
     $sql = 'SELECT * FROM `bullet_point` WHERE bullet_id = ?';
 
@@ -247,7 +286,7 @@ function bullet_section($bullet_row, $mysqli)
 
         if ($result) {
             // Start the bullet point list
-            echo '<section id="' . $order_num .'" class="section_container"><ul>';
+            echo '<section id="' . $order_num . '" class="section_container"><ul>';
             echo $section_name;
             // Fetch data from the result set
             while ($row = $result->fetch_assoc()) {
@@ -269,7 +308,7 @@ function bullet_section($bullet_row, $mysqli)
         // Handle the error
     }
 
-    echo add_button($bullet_row['order_num']);
+    echo add_button($order_num, $page_num, $section_type);
 
 }
 
@@ -280,12 +319,17 @@ function text_section($text_row)
 
     $text_content = $text_row['text_content'];
     $order_num = $text_row['order_num'];
+    $page_num = $text_row["page_num"];
+    $section_type = $text_row["section_type"];
 
-    echo '
-    <section id="' . $order_num . '" class="d-flex justify-content-center section_container">
-        ' . $text_content . '
-    </section>';
-    echo add_button($order_num);
+    ?>
+
+    <section id="<?php echo $order_num ?>" class="d-flex justify-content-center section_container">
+        <?php echo $text_content ?>
+    </section>
+
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // This handles the comment section
@@ -296,45 +340,82 @@ function comment_section($comment_row)
     $comment_userdata_name = $comment_row['comment_userdata_name'];
     $placeholder_text = $comment_row['comment_placeholder'];
     $order_num = $comment_row['order_num'];
+    $page_num = $comment_row["page_num"];
+    $section_type = $comment_row["section_type"];
 
-    echo '
-    <section class="section_container" id="' . $order_num . '">
-        <label for="' . $section_name . '">' . $section_name . '</label>
-        <textarea id="' . $section_name . '" name="' . $comment_userdata_name . '" class="form-control" rows="4" placeholder="' . $placeholder_text . '"></textarea>
-    </section>';
-    echo add_button($order_num);
+    ?>
+    <section class="section_container" id="<?php echo $order_num ?>">
+        <label for="<?php echo $section_name ?>">
+            <?php echo $section_name ?>
+        </label>
+        <textarea id="<?php echo $section_name ?>" name="<?php echo $comment_userdata_name ?>" class="form-control" rows="4"
+            placeholder="<?php echo $placeholder_text ?>"></textarea>
+    </section>
+
+    <?php
+    echo add_button($order_num, $page_num, $section_type);
 }
 
 // Function to add the button after each section to toggle the modal window to add new sections
 
-function add_button($id)
+
+function add_button($id, $page_num, $section_type)
 {
 
-    $content = '
-    <div id="add' . $id . '" class="add_section_line hide"></div>
+    $page_name = "";
+
+    if ($section_type == "heading") {
+        $page_name = "heading";
+    } elseif (($section_type == "subheading")) {
+        $page_name = "subheading";
+    } elseif (($section_type == "quote")) {
+        $page_name = "quote";
+    } elseif (($section_type == "byline")) {
+        $page_name = "byline";
+    } elseif (($section_type == "video")) {
+        $page_name = "video";
+    } elseif (($section_type == "image")) {
+        $page_name = "image";
+    } elseif (($section_type == "comment")) {
+        $page_name = "comment";
+    } elseif (($section_type == "text")) {
+        $page_name = "text";
+    } elseif (($section_type == "click_list")) {
+        $page_name = "click_list";
+    } elseif (($section_type == "story_box")) {
+        $page_name = "story_box";
+    } elseif (($section_type == "bullet")) {
+        $page_name = "bullet";
+    }
+
+    ?>
+    <div id="add<?php echo $id; ?>" class="add_section_line hide"></div>
     <div class="container">
         <div class="row">
             <div class="col-12 text-center"> <!-- Centers the content horizontally -->
                 <button type="button" class="btn btn-primary add-section-btn" data-mdb-toggle="modal"
-                data-mdb-target="#button-modal" section_id="' . $id . '">Add</button>
+                    data-mdb-target="#button-modal" section_id="<?php echo $id; ?>">Add</button>
+                <a href="<?php echo BASE_URL ?>/admin_edit/edit_<?php echo $page_name ?>.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $id ?>"
+                    class="btn btn-success edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
                 <button type="button" class="btn btn-danger delete-section-btn" data-mdb-toggle="modal"
-                data-mdb-target="#delete-section-modal" section_id="' . $id . '">Delete</button>
+                    data-mdb-target="#delete-section-modal" section_id="<?php echo $id; ?>">Delete</button>
+
             </div>
         </div>
-    </div>';
-    return $content;
+    </div>
+    <?php
 }
 
 ?>
 <!-- This is the first button to add to a new section Section id=0 because it will add a new section to 1 if needed -->
 <div class="container">
-        <div class="row">
-            <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="btn btn-primary add-section-btn" data-mdb-toggle="modal"
+    <div class="row">
+        <div class="col-12 text-center"> <!-- Centers the content horizontally -->
+            <button type="button" class="btn btn-primary add-section-btn" data-mdb-toggle="modal"
                 data-mdb-target="#button-modal" section_id="0">Add</button>
-            </div>
         </div>
     </div>
+</div>
 <main class="container-fluid">
     <?php
 
@@ -347,6 +428,7 @@ function add_button($id)
 
     $sql = "SELECT
     jp.id AS journal_page_id,
+    jp.page_num,
     jp.section_type,
     jp.section_name,
     jp.order_num,
