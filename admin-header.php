@@ -1,6 +1,18 @@
 <?php
 require_once 'connect/db.php';
 require_once 'config-url.php';
+
+// Calculate the base URL
+$protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+$baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/UR/';
+
+// Define stylesheets
+$stylesheets = [
+    'mdb.min.css',
+    'bootstrap.css',
+    'admin.css',
+];
+
 ?>
 
 <!DOCTYPE html>
@@ -12,18 +24,20 @@ require_once 'config-url.php';
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>UR Admin</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="<?php echo $baseUrl; ?>img/mdb-favicon.ico" type="image/x-icon" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <!-- Google Fonts Roboto -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-    <!-- MDB -->
-    <link rel="stylesheet" href="css/mdb.min.css" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/admin.css" />
+    
+    <?php
+    // Output dynamic CSS links
+    foreach ($stylesheets as $stylesheet) {
+        echo '<link rel="stylesheet" href="' . $baseUrl . 'css/' . $stylesheet . '" />' . PHP_EOL;
+    }
+    ?>
 </head>
-
 <body>
 
     <!-- Navbar -->
@@ -41,7 +55,7 @@ require_once 'config-url.php';
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Navbar brand -->
                 <a class="navbar-brand mt-2 mt-lg-0" href="#">
-                    <img src="images/UR logo WHiteonclear.jpg" height="60" alt="MDB Logo" loading="lazy" />
+                    <img src="<?php echo BASE_URL ?>/images/UR logo WHiteonclear.jpg" height="60" alt="MDB Logo" loading="lazy" />
                 </a>
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
