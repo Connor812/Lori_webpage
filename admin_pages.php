@@ -452,7 +452,7 @@ require_once "includes/admin_errors.inc.php";
         <div class="modal-dialog   modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add a Text</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add a Section</h5>
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body d-flex flex-wrap justify-content-center gap-3">
@@ -507,7 +507,6 @@ require_once "includes/admin_errors.inc.php";
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
                         Close
                     </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -515,5 +514,5 @@ require_once "includes/admin_errors.inc.php";
 </div>
 
 <?php
-require_once 'admin2.php';
+require_once 'admin_display_section.php';
 ?>
