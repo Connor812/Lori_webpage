@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //  <----------------------- End Of Placing Section id on button modal --------------------------->
+
     // adds an event listener on each button to add a new section so that it can add an action to the form with the corresponding section id
     modalButtons = document.querySelectorAll('.modal_button');
     modalButtons.forEach(modalButton => {
@@ -79,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //  <----------------------- End Of Setting Action to Modal Form --------------------------->
+
     // This gets all the delete buttons and add an event listener to all of them
     const delete_btns = document.querySelectorAll('.delete-section-btn');
     delete_btns.forEach(delete_btn => {
@@ -93,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-
+    //  <----------------------- End Of Setting action to delete Form --------------------------->
 
     const click_list_input_container = document.getElementById('click_list_input_container');
     // Add a click event listener to each item
@@ -144,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //  <----------------------- End Of Add Click List Item Section --------------------------->
+
     // This will add a bullet to the bullet modal so the user can add as many bullets as she wants
     const add_bullet_btn = document.getElementById('add_bullet_btn');
     const bullet_input_container = document.getElementById('bullet_input_container');
@@ -164,6 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
             getAllDeleteItemBtns();
         });
     }
+
+    //  <----------------------- End Of Add Bullet Button --------------------------->
+
     // Function that will get all the delete item buttons, add an event listener to delete the item section if not needed
     function getAllDeleteItemBtns() {
         const deleteItemButtons = document.querySelectorAll('.delete_item_btn');
@@ -177,9 +186,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+    //  <----------------------- End Delete Item Button Event Listeners --------------------------->
 
-
-    // This will add an event listener to all the add and delete buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
+    // This will add an event listener to all the delete buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
 
     const deleteBtns = document.querySelectorAll('.delete-section-btn');
 
@@ -200,6 +209,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //  <----------------------- End Delete Button Event Listeners --------------------------->
+
+    // This will add an event listener to all the add buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
     const addSectionBtns = document.querySelectorAll('.add-section-btn');
 
     addSectionBtns.forEach(addBtn => {
@@ -218,6 +230,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    //  <----------------------- End Add Button Event Listeners --------------------------->
+
+// This will add an event listener to all the edit buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
+const editBtns = document.querySelectorAll('.edit-section-btn');
+
+    editBtns.forEach(editBtn => {
+        editBtn.addEventListener('mouseenter', (event) => {
+            event.preventDefault();
+            const section_id = editBtn.getAttribute('section_id');
+            const section = document.getElementById(section_id);
+            section.classList.add('edit-section');
+        });
+    });
+    editBtns.forEach(editBtn => {
+        editBtn.addEventListener('mouseout', (event) => {
+            event.preventDefault();
+            const section_id = editBtn.getAttribute('section_id');
+            const section = document.getElementById(section_id);
+            section.classList.remove('edit-section');
+        });
+    });
+
+    //  <----------------------- End Edit Button Event Listeners --------------------------->
+
+    // If There is the floating error or success handler, then add an event listener to the remove button, and remove the container once clicked
     if (document.getElementById('floating-error-btn')) {
         const floatingErrorBtn = document.getElementById('floating-error-btn');
         floatingErrorBtn.addEventListener('click', (event) => {
@@ -239,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-
+    //  <----------------------- End Of Floating error or success handlers --------------------------->
 });
 
 
@@ -268,3 +305,5 @@ function changeInput(input) {
 
     return true;  // All characters are valid
 }
+
+//  <----------------------- End Of Error Check for Special Characters in click list item username --------------------------->
