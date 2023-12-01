@@ -43,6 +43,8 @@ if (isset($_GET['error'])) {
         $message = "Error: Coudln't Move File. Please Try Again!";
     } elseif ($error == 'missing_section_params') {
         $message = "Error: Missing Parameters To Edit Section. Please Try Again!";
+    } elseif ($error == 'updated_same') {
+        $message = "Error: No Changes Were Made!";
     }
 
     ?>
@@ -55,10 +57,17 @@ if (isset($_GET['error'])) {
 }
 
 if (isset($_GET['success'])) {
+    $message;
+    $Success = $_GET['success'];
+    if ($Success == 'updated_success') {
+        $message = "Success: You Have Updated Your Section!";
+    } elseif ($Success == 'permission_updated') {
+        $message = "Success: You Have Successfully Change Permissions!";
+    }
     ?>
     <div class="floating-success" id="floating-success">
         <button id="floating-success-btn" class="floating-success-btn" value="floating-success">&#x2716;</button>
-        You Have Successfully Change Permissions!
+        <?php echo $message ?>
     </div>
     <?php
 }

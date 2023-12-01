@@ -36,10 +36,10 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
         // Check for success
         if ($stmt->affected_rows > 0) {
             echo "Update successful!";
-            header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success#$order_num");
+            header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success&page_num=$page_num&#$order_num");
         } else {
             echo "Update failed!";
-            header("Location: " . BASE_URL . "/admin_pages.php?error=error#$order_num");
+            header("Location: " . BASE_URL . "/admin_pages.php?error=updated_same&&page_num=$page_num#$order_num");
         }
 
         // Close the statement
