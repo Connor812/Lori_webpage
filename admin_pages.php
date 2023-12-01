@@ -2,6 +2,7 @@
 require_once 'admin-header.php';
 require_once "connect/db.php";
 require_once "includes/admin_errors.inc.php";
+require_once 'includes/display-sections.inc.php';
 ?>
 
 <div class="container-fluid border border-bottom border-dark p-3" style="background-color: white;">
@@ -514,5 +515,9 @@ require_once "includes/admin_errors.inc.php";
 </div>
 
 <?php
-require_once 'admin_display_section.php';
+    display_sections($selected_page, $mysqli, true);
+?>
+
+<?php
+require_once 'admin_footer.php';
 ?>
