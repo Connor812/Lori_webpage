@@ -60,10 +60,10 @@ $stylesheets = [
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_pages.php">Pages</a>
+                        <a class="nav-link" href="<?php echo BASE_URL ?>/admin_pages.php">Pages</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin_users.php">Users</a>
+                        <a class="nav-link" href="<?php echo BASE_URL ?>/admin_users.php">Users</a>
                     </li>
                 </ul>
                 <!-- Left links -->
