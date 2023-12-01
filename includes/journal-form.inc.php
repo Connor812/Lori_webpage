@@ -4,13 +4,14 @@ require_once "../connect/db.php";
 require_once "../config-url.php";
 
 $user_id = $_SESSION['user_id'];
+$page_num = $_GET["page_num"];
 
 if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
 $user_input = $_POST;
-// var_dump($user_input);
+var_dump($user_input);
 
 
 // Initialize an empty array to store the variables
@@ -83,7 +84,7 @@ foreach ($variables as $variable) {
                 if ($stmt->affected_rows > 0) {
                     // The update was successful
                     echo "Update successful!";
-                    header("Location: " . BASE_URL . "/journal.php?success=success");
+                    header("Location: " . BASE_URL . "/journal.php?success=success&page_num=$page_num");
 
                 } else {
                     // No rows were updated
@@ -103,7 +104,7 @@ foreach ($variables as $variable) {
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
                     echo "Update successful!";
-                    header("Location: " . BASE_URL . "/journal.php?success=success");
+                    header("Location: " . BASE_URL . "/journal.php?success=success&page_num=$page_num");
                 } else {
                     // No rows were updated
                     echo "No rows were updated.";
