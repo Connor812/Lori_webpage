@@ -18,7 +18,7 @@ if (isset($_GET['error'])) {
     $message;
     $error = $_GET['error'];
     if ($error == 'empty_input') {
-        $message = "Error:Cannot Leave Any Inputs Blank. Please Try Again!";
+        $message = "Error: Cannot Leave Any Inputs Blank. Please Try Again!";
     } elseif ($error == 'no_section_id') {
         $message = "Error: Couldn't Get Section ID. Please Try Again!";
     } elseif ($error == 'no_page_num') {
