@@ -65,71 +65,86 @@ if (isset($_GET['username'])) {
                 $page_nums = $row['num_pages'];
 
                 // This section will display the users information
-                echo '<div width="%100" class="d-flex justify-content-center m-3">
-                <div id="user_info" class="container row border border-dark border-2 rounded p-4">
-                    <div class="col d-flex flex-column gap-5">
-                        <div>
-                            <b>User Id:</b> ' . $user_id . '
-                        </div>    
-                        <div>
-                            <b>Username:</b> ' . $username . '
+                ?>
+                <div width="%100" class="d-flex justify-content-center m-3">
+                    <div id="user_info" class="container row border border-dark border-2 rounded p-4">
+                        <div class="col d-flex flex-column gap-5">
+                            <div>
+                                <b>User Id:</b>
+                                <?php echo $user_id ?>
+                            </div>
+                            <div>
+                                <b>Username:</b>
+                                <?php echo $username ?>
+                            </div>
+                            <div>
+                                <b>First Name:</b>
+                                <?php echo $first_name ?>
+                            </div>
+                            <div>
+                                <b>Last Name:</b>
+                                <?php echo $last_name ?>
+                            </div>
+                            <div>
+                                <b>Email:</b>
+                                <?php echo $email ?>
+                            </div>
+                            <div>
+                                <b> Registration Date:</b>
+                                <?php echo $registration_date ?>
+                            </div>
                         </div>
-                        <div>
-                            <b>First Name:</b> ' . $first_name . '
-                        </div>
-                        <div>
-                            <b>Last Name:</b>  ' . $last_name . '
-                        </div>
-                        <div>
-                            <b>Email:</b> ' . $email . '
-                        </div>
-                        <div>
-                            <b> Registration Date:</b> ' . $registration_date . '
-                        </div>
-                    </div>
-                    <div class="col">
-                        Permissions
-                        <form method="post" action="includes/permissions.inc.php?user_id=' . $user_id . '&username=' . $username . '">
-                            ';
-
-                // this right here will loop over all the pages to echo a check box
-                for ($i = 1; $i <= $page_nums; $i++) {
-
-                    // Query for if a user has permissions to write on a certain page
-                    $sql = 'SELECT * FROM permission WHERE user_id = ? AND page_num = ?;';
-
-                    $stmt = $mysqli->prepare($sql);
-
-                    if ($stmt) {
-                        $stmt->bind_param("ii", $user_id, $i);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        // If the user has permissions from the admin, we will display a checked box, if not, no check
-                        if ($result) {
-                            if ($result->num_rows > 0) {
-                                $checked = 'checked';
-                            } else {
+                        <div class="col">
+                            Permissions
+                            <form method="post"
+                                action="includes/permissions.inc.php?user_id=<?php echo $user_id ?>&username=<?php echo $username ?>">
+                                <?php
+                                // Initialize $checked variable before the loop
                                 $checked = '';
-                            }
-                        } else {
-                            echo "Prepare failed: " . $mysqli->error;
-                            exit;
-                        }
-                    }
-                    echo '
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="page_' . $i . '" value="' . $i . '" id="check_box_' . $i . '" ' . $checked . '/>
-                        <label class="form-check-label" for="check_box_' . $i . '">Page ' . $i . '</label>
-                        <a class="btn btn-primary" style="text-decoration: none; color: white;" href="' . BASE_URL . '/admin_users.php?username=' . $username . '&user_id=' . $user_id . '&page_num=' . $i . '">Open</a>
-                    </div>';
-                }
+                                // this right here will loop over all the pages to echo a check box
+                                for ($i = 1; $i <= $page_nums; $i++) {
 
-                echo '
-                <button type="submit" class="btn btn-primary">Change Permissions</button>
-                </form>
+                                    // Query for if a user has permissions to write on a certain page
+                                    $sql = 'SELECT * FROM permission WHERE user_id = ? AND page_num = ?;';
+
+                                    $stmt = $mysqli->prepare($sql);
+
+                                    if ($stmt) {
+                                        $stmt->bind_param("ii", $user_id, $i);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        // If the user has permissions from the admin, we will display a checked box, if not, no check
+                                        if ($result) {
+                                            if ($result->num_rows > 0) {
+                                                $checked = 'checked';
+                                            } else {
+                                                $checked = '';
+                                            }
+                                        } else {
+                                            echo "Prepare failed: " . $mysqli->error;
+                                            exit;
+                                        }
+                                    }
+                                    ?>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="page_<?php echo $i ?>"
+                                            value="<?php echo $i ?>" id="check_box_<?php echo $i ?>" <?php echo $checked ?> />
+                                        <label class="form-check-label" for="check_box_<?php echo $i ?>">Page
+                                            <?php echo $i ?>
+                                        </label>
+                                        <a class="btn btn-primary" style="text-decoration: none; color: white;"
+                                            href="<?php echo BASE_URL ?>/admin_users.php?username=<?php echo $username ?>&user_id=<?php echo $user_id ?>&page_num=<?php echo $i ?>">Open</a>
+                                    </div>
+                                    <?php
+                                }
+
+                                ?>
+                                <button type="submit" class="btn btn-primary">Change Permissions</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>';
+                <?php
             }
         } else {
             echo "No results found for the username: " . $username;
@@ -147,15 +162,25 @@ if (isset($_GET['username'])) {
 
 <?php
 
-    require_once 'includes/page-display.inc.php';
+require_once 'includes/display-sections.inc.php';
 
 if (isset($_GET['page_num'])) {
-    echo "<div class='container-fluid p-4'>
-            <div class='d-flex justify-content-center'>
-                <h1>" . $_GET['username'] ."</h1>
-            </div>";
-    get_page($_GET['page_num'], $_GET['user_id'], $mysqli);
-    echo "</div>";
+    $username = $_GET['username'];
+    $page_num = $_GET['page_num'];
+    $user_id = $_GET['user_id'];
+
+    ?>
+    <div class='container-fluid p-4'>
+        <div class='d-flex justify-content-center'>
+            <h1>
+                <?php echo $username ?>
+            </h1>
+        </div>
+        <?php
+        display_sections($page_num, $mysqli, false, $user_id);
+        ?>
+    </div>
+    <?php
 
 }
 
