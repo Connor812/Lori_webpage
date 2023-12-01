@@ -2,7 +2,7 @@
 
 require_once 'connect/db.php';
 require_once 'config-url.php';
-require_once 'includes/page-display.inc.php';
+require_once 'includes/display-sections.inc.php';
 
 $user_id = $_SESSION['user_id'];
 
@@ -32,7 +32,7 @@ if (isset($_GET['page_num'])) {
   if ($page_num > 0) {
 
     // Calls function in journal-display that displays all the pieces inside a page
-    get_page($page_num['page_num'], $user_id, $mysqli);
+    display_sections($page_num['page_num'], $mysqli, false,  $user_id);
 
   } else {
     // ERROR
@@ -59,7 +59,7 @@ if (isset($_GET['page_num'])) {
   if ($page_num > 0) {
 
     // Calls function in journal-display that displays all the pieces inside a page
-    get_page($page_num['page_num'], $user_id, $mysqli);
+    display_sections($page_num['page_num'], $mysqli, false, $user_id);
 
   } else {
     // ERROR
