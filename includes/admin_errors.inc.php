@@ -18,15 +18,15 @@ if (isset($_GET['error'])) {
     $message;
     $error = $_GET['error'];
     if ($error == 'empty_input') {
-        $message = "Cannot Leave Any Inputs Blank. Please Try Again!";
+        $message = "Error:Cannot Leave Any Inputs Blank. Please Try Again!";
     } elseif ($error == 'no_section_id') {
         $message = "Error: Couldn't Get Section ID. Please Try Again!";
     } elseif ($error == 'no_page_num') {
         $message = "Error: Couldn't Get Page Number. Please Try Again!";
     } elseif ($error == 'name_blank') {
-        $message = "You Cannot Leave The Name Blank. Please Try Again!";
+        $message = "Error: You Cannot Leave The Name Blank. Please Try Again!";
     } elseif ($error == 'needs_input') {
-        $message = "Click List Needs At Least 1 Item. Please Try Again!";
+        $message = "Error: Click List Needs At Least 1 Item. Please Try Again!";
     } elseif ($error == 'input_exists') {
         $message = "Error: Name Already Exists In The Data Base. Please Try Again!";
     } elseif ($error == 'no_image') {
@@ -41,6 +41,8 @@ if (isset($_GET['error'])) {
         $message = "Error: File Type Not Useable. Please Use mp4, avi, or mov!";
     } elseif ($error == 'couldnt_move_file') {
         $message = "Error: Coudln't Move File. Please Try Again!";
+    } elseif ($error == 'missing_section_params') {
+        $message = "Error: Missing Parameters To Edit Section. Please Try Again!";
     }
 
     ?>
