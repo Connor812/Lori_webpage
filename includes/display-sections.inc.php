@@ -90,7 +90,7 @@ ORDER BY jp.order_num ASC;";
 }
 
 // Takes care of the header content--------------------------------------------------->
-function heading_section($heading_row, $add_button)
+function heading_section($heading_row, $add_button = false)
 {
     $heading_content = $heading_row["heading_content"];
     $order_num = $heading_row["order_num"];
@@ -99,7 +99,7 @@ function heading_section($heading_row, $add_button)
 
     ?>
     <section class='section_container' style='width: 100%;' id='<?php echo $order_num ?>'>
-        <h2 style='text-align: center;'>
+        <h2 id="<?php echo $heading_content ?>" class="heading" style='text-align: center;'>
             <?php echo $heading_content ?>
         </h2>
         <hr>
