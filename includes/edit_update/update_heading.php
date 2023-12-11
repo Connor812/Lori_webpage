@@ -51,8 +51,3 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
     // Close the database connection
     $mysqli->close();
 }
-
-
-
-
-

@@ -289,7 +289,7 @@ function quote_section($quote_row, $add_button)
     echo $add_button ? add_button($order_num, $page_num, $section_type) : '';
 }
 
-// Takes care of the byline_section --------------------------------------------------->function byline_section($byline_row)
+// Takes care of the byline_section --------------------------------------------------->
 function byline_section($byline_row, $add_button)
 {
     $section_name = $byline_row['section_name'];
@@ -298,9 +298,9 @@ function byline_section($byline_row, $add_button)
     $page_num = $byline_row["page_num"];
     $section_type = $byline_row["section_type"];
     ?>
-    <section class="section_container" id="<?php $order_num ?>">
-        <h5 id="<?php $section_name ?>" style="padding: 0% 0%; text-align: center;"><b>
-                <?php $byline_content ?>
+    <section class="section_container" id="<?php echo $order_num ?>">
+        <h5 id="<?php echo $section_name ?>" style="padding: 0% 0%; text-align: center;"><b>
+                <?php echo $byline_content ?>
             </b> </h5>
     </section>
     <?php
@@ -318,7 +318,7 @@ function subheading_section($subheading_row, $add_button)
     $section_type = $subheading_row["section_type"];
     ?>
     <section id='<?php echo $order_num ?>' class='section_container'>
-        <h4 class='d-flex justify-content-center' id='<?php echo $section_name ?>' style='padding: 10px;'><b>
+        <h4 class='d-flex justify-content-center subheading' id='<?php echo $section_name ?>' style='padding: 10px;'><b>
                 <?php echo $subheading_content ?>
             </b></h4>
     </section>

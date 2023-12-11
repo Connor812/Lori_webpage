@@ -15,7 +15,6 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
     <div>
         <?php
 
-
         $page_num = $_GET["page_num"];
         $order_num = $_GET["order_num"];
         // This query will get all the header information
