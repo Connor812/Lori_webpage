@@ -496,7 +496,7 @@ function text_section($text_row, $add_button)
 
     ?>
 
-    <section id="<?php echo $order_num ?>" class="d-flex justify-content-center section_container">
+    <section id="<?php echo $order_num ?>" class="d-flex justify-content-center section_container text">
         <?php echo $text_content ?>
     </section>
 
@@ -583,13 +583,12 @@ function add_button($id, $page_num, $section_type)
     <div class="container">
         <div class="row">
             <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="btn btn-primary add-section-btn" data-mdb-toggle="modal"
+                <button type="button" class="add-section-btn" data-mdb-toggle="modal"
                     data-mdb-target="#button-modal" section_id="<?php echo $id; ?>">Add</button>
                 <a href="<?php echo BASE_URL ?>/admin_edit/edit_<?php echo $page_name ?>.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $id ?>"
-                    class="btn btn-success edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
-                <button type="button" class="btn btn-danger delete-section-btn" data-mdb-toggle="modal"
+                    class="edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
+                <button type="button" class="delete-section-btn" data-mdb-toggle="modal"
                     data-mdb-target="#delete-section-modal" section_id="<?php echo $id; ?>">Delete</button>
-
             </div>
         </div>
     </div>

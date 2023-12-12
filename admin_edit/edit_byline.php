@@ -57,7 +57,7 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
         action="../includes/edit_update/update_byline.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $order_num ?>">
         <div class="edit-form-content">
             <h2>Edit Text</h2>
-            <textarea name="byline_content" id="quote_input" class="edit-input" placeholder="Please Enter Text"
+            <textarea name="byline_content" id="byline_input" class="edit-input" placeholder="Please Enter Text"
                 rows="7" value=""><?php echo $row["byline_content"] ?></textarea>
             <button type="submit" class="btn btn-primary update">Update</button>
         </div>

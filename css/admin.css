@@ -164,3 +164,34 @@ hr {
 .update {
     width: 100px;
 }
+
+.edit-section-btn, .add-section-btn, .delete-section-btn {
+    background: none;
+    border: none
+}
+
+.add-section-btn {
+    color: blue;
+    text-decoration: underline;
+}
+
+.add-section-btn:hover {
+    color: rgb(2, 0, 113);
+}
+
+.delete-section-btn {
+    color: rgb(255, 0, 0);
+    text-decoration: underline;
+}
+
+.delete-section-btn:hover {
+    color: rgb(113, 0, 0);
+}
+
+.edit-section-btn {
+    color: green;
+}
+
+.edit-section-btn:hover {
+    color: rgb(0, 85, 0);
+}
