@@ -281,7 +281,7 @@ function quote_section($quote_row, $add_button)
 
     ?>
     <section class="section_container" id="<?php echo $order_num ?>">
-        <h5 class="px-5" style="padding: 0% 0%; text-align: center;"><i>"
+        <h5 class="px-5 quote" style="padding: 0% 0%; text-align: center;"><i>"
                 <?php echo $quote_content ?>"
             </i></h5>
     </section>
@@ -299,7 +299,7 @@ function byline_section($byline_row, $add_button)
     $section_type = $byline_row["section_type"];
     ?>
     <section class="section_container" id="<?php echo $order_num ?>">
-        <h5 id="<?php echo $section_name ?>" style="padding: 0% 0%; text-align: center;"><b>
+        <h5 class="byline" id="<?php echo $section_name ?>" style="padding: 0% 0%; text-align: center;"><b>
                 <?php echo $byline_content ?>
             </b> </h5>
     </section>

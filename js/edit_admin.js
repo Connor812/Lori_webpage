@@ -29,3 +29,33 @@ if (document.querySelector(".subheading")) {
         });
     }
 }
+
+if (document.querySelector(".quote")) {
+    const displayQuote = document.querySelector(".quote");
+    const quoteInput = document.getElementById("quote_input");
+
+    if (displayQuote) {
+        quoteInput.addEventListener("input", function (event) {
+            event.preventDefault();
+
+            const input = quoteInput.value;
+            console.log(input); 
+            displayQuote.innerHTML = input;
+        });
+    }
+}
+
+if (document.querySelector(".byline")) {
+    const displayByline = document.querySelector(".byline");
+    const bylineInput = document.getElementById("byline_input");
+
+    if (displayByline) {
+        bylineInput.addEventListener("input", function (event) {
+            event.preventDefault();
+
+            const input = bylineInput.value;
+            console.log(input);
+            displayByline.innerHTML = input;
+        });
+    }
+}
