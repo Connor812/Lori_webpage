@@ -63,6 +63,8 @@ if (isset($_GET['success'])) {
         $message = "Success: You Have Updated Your Section!";
     } elseif ($Success == 'permission_updated') {
         $message = "Success: You Have Successfully Change Permissions!";
+    } elseif ($Success == 'deleted_section') {
+        $message = "Success: You Have Successfully Deleted A Section!";
     }
     ?>
     <div class="floating-success" id="floating-success">
