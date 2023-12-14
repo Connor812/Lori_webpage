@@ -83,6 +83,8 @@ if (document.querySelector(".text")) {
     }
 }
 
+// This is for editing the story box
+
 if (document.querySelector(".story_box")) {
     const displayStoryboxTitle = document.querySelector(".story_box");
     const storyboxTitleInput = document.getElementById("section_name");
@@ -103,6 +105,8 @@ if (document.querySelector(".story_box")) {
         displayStoryboxPlaceholdertext.placeholder = input;
     });
 }
+
+// This is for editing the comment section
 
 if (document.querySelector(".comment_input")) {
 
@@ -126,6 +130,41 @@ if (document.querySelector(".comment_input")) {
         displayCommentPlaceholderText.placeholder = input;
 
     });
+}
 
+// This is for editing the video section
 
+document.getElementById('customFile').addEventListener('change', function () {
+    updateVideo();
+});
+
+function updateVideo() {
+    var input = document.getElementById('customFile');
+    var video = document.querySelector('.video');
+
+    var file = input.files[0];
+
+    if (file) {
+        // Check if the file type is video
+        if (file.type.startsWith('video/')) {
+            // Check if the file size is within the limit (40MB)
+            var maxSizeBytes = 40 * 1024 * 1024; // 40MB in bytes
+            if (file.size <= maxSizeBytes) {
+                try {
+                    var objectURL = URL.createObjectURL(file);
+                    video.src = objectURL;
+                } catch (error) {
+                    console.error('Error updating video:', error.message);
+                    alert('An error occurred while updating the video. Please try again.');
+                    input.value = '';  // Clear the selected file
+                }
+            } else {
+                alert('The file size exceeds the limit of 40MB. Please upload a smaller video file.');
+                input.value = '';  // Clear the selected file
+            }
+        } else {
+            alert('Please upload a valid video file.');
+            input.value = '';  // Clear the selected file
+        }
+    }
 }
