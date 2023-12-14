@@ -45,6 +45,8 @@ if (isset($_GET['error'])) {
         $message = "Error: Missing Parameters To Edit Section. Please Try Again!";
     } elseif ($error == 'updated_same') {
         $message = "Error: No Changes Were Made!";
+    } elseif ($error == 'update_failed') {
+        $message = "Error: No Changes Were Made!";
     }
 
     ?>
