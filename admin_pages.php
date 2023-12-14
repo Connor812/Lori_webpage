@@ -335,7 +335,7 @@ require_once 'includes/display-sections.inc.php';
                 <div class="modal-body">
                     <!-- Modal Content goes here -->
 
-                    <form id="bullet_form">
+                    <form id="bullet_form" method="post">
                         <label class="form-label">Bullet List Name</label>
                         <input name="section_name" type="text" class="form-control"
                             placeholder="Chose a name for the Bullet List" />
