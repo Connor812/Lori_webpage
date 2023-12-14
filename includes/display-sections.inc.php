@@ -419,14 +419,12 @@ function image_section($image_row, $add_button)
 
     ?>
     <section id="<?php echo $order_num ?>" class="row p-3 section_container">
-        <div class="col-sm-8">
-            <h6>
-                <?php echo $image_text ?>
-            </h6>
+        <div class="col-sm-8 image_text" style="display: flex; flex-direction: column; justify-content: space-between; word-wrap: break-word;">
+            <?php echo $image_text ?>
         </div>
         <div class="col-sm-4">
             <div>
-                <img src="<?php echo $image_src ?>" class="img-rounded image-reponsive" alt="<?php echo $section_name ?>"
+                <img src="<?php echo BASE_URL . "/" . $image_src ?>" class="img-rounded image-responsive image" alt="<?php echo $section_name ?>"
                     width="100%" height="auto">
             </div>
         </div>
@@ -523,8 +521,8 @@ function comment_section($comment_row, $mysqli, $add_button, $user_id = false)
         <label class="comment_title" for="<?php echo $section_name ?>">
             <?php echo $section_name ?>
         </label>
-        <textarea id="<?php echo $section_name ?>" name="<?php echo $comment_userdata_name ?>" class="form-control comment_input" rows="4"
-            placeholder="<?php echo $placeholder_text ?>"><?php
+        <textarea id="<?php echo $section_name ?>" name="<?php echo $comment_userdata_name ?>"
+            class="form-control comment_input" rows="4" placeholder="<?php echo $placeholder_text ?>"><?php
                if (is_numeric($user_id)) {
                    echo get_comment_userdata($user_id, $comment_userdata_name, $mysqli);
                } ?></textarea>
@@ -585,8 +583,8 @@ function add_button($id, $page_num, $section_type)
     <div class="container">
         <div class="row">
             <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="add-section-btn" data-mdb-toggle="modal"
-                    data-mdb-target="#button-modal" section_id="<?php echo $id; ?>">Add</button>
+                <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
+                    section_id="<?php echo $id; ?>">Add</button>
                 <a href="<?php echo BASE_URL ?>/admin_edit/edit_<?php echo $page_name ?>.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $id ?>"
                     class="edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
                 <button type="button" class="delete-section-btn" data-mdb-toggle="modal"
