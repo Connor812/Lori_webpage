@@ -342,7 +342,7 @@ function story_box_section($story_box_row, $mysqli, $add_button, $user_id = fals
     <section class="accordion section_container" id="<?php echo $order_num ?>">
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                <button class="accordion-button collapsed story_box" type="button" data-mdb-toggle="collapse"
                     data-mdb-target="#<?php echo $label ?>" aria-expanded="true" aria-controls="<?php echo $label ?>">
                     <?php echo $section_name ?>
                 </button>
