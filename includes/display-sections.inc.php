@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . "/../config-url.php");
+
 function display_sections($page_num, $mysqli, $add_button = false, $user_id = false)
 {
 
@@ -394,8 +396,8 @@ function video_section($video_row, $add_button)
 
     ?>
     <section id="<?php echo $order_num ?>" class="videobg d-flex justify-content-center section_container">
-        <video width="80%" height="auto" poster="/videos/URposter.png" controls>
-            <source src="<?php echo $video_src ?>" type="video/mp4">
+        <video class="video" width="80%" height="auto" poster="/videos/URposter.png" controls>
+            <source src="<?php echo BASE_URL . "/" . $video_src ?>" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>
