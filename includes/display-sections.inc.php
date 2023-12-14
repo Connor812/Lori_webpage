@@ -505,7 +505,7 @@ function text_section($text_row, $add_button)
 }
 
 // This handles the comment section
-function comment_section($comment_row, $mysqli, $add_button, $user_id)
+function comment_section($comment_row, $mysqli, $add_button, $user_id = false)
 {
     $section_name = $comment_row['section_name'];
     $comment_userdata_name = $comment_row['comment_userdata_name'];
@@ -518,10 +518,10 @@ function comment_section($comment_row, $mysqli, $add_button, $user_id)
 
     ?>
     <section class="section_container" id="<?php echo $order_num ?>">
-        <label for="<?php echo $section_name ?>">
+        <label class="comment_title" for="<?php echo $section_name ?>">
             <?php echo $section_name ?>
         </label>
-        <textarea id="<?php echo $section_name ?>" name="<?php echo $comment_userdata_name ?>" class="form-control" rows="4"
+        <textarea id="<?php echo $section_name ?>" name="<?php echo $comment_userdata_name ?>" class="form-control comment_input" rows="4"
             placeholder="<?php echo $placeholder_text ?>"><?php
                if (is_numeric($user_id)) {
                    echo get_comment_userdata($user_id, $comment_userdata_name, $mysqli);
