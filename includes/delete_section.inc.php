@@ -19,7 +19,7 @@ if ($stmt) {
     // Check if the delete operation was successful
     if ($stmt->affected_rows > 0) {
         echo "Delete successful!";
-        header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+        header("Location: " . BASE_URL . "/admin_pages.php?success=deleted_section&page_num=" . $page_num);
     } else {
         echo "No rows deleted. Check your conditions.";
     }
