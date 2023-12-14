@@ -82,3 +82,27 @@ if (document.querySelector(".text")) {
         });
     }
 }
+
+if (document.querySelector(".story_box")) {
+    const displayStoryboxTitle = document.querySelector(".story_box");
+    const storyboxTitleInput = document.getElementById("section_name");
+    const displayStoryboxPlaceholdertext = document.getElementById("comment");
+    const storyboxPlaceholderInput = document.getElementById("placeholder_text");
+
+    storyboxTitleInput.addEventListener("input", function (event) {
+        event.preventDefault();
+
+        const input = storyboxTitleInput.value;
+        displayStoryboxTitle.innerHTML = input;
+    });
+
+    storyboxPlaceholderInput.addEventListener("input", function (event) {
+        event.preventDefault();
+
+        const input = storyboxPlaceholderInput.value;
+        displayStoryboxPlaceholdertext.placeholder = input;
+    });
+
+
+
+}
