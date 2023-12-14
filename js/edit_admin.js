@@ -43,7 +43,7 @@ if (document.querySelector(".quote")) {
             event.preventDefault();
 
             const input = quoteInput.value;
-            console.log(input); 
+            console.log(input);
             displayQuote.innerHTML = input;
         });
     }
@@ -102,7 +102,30 @@ if (document.querySelector(".story_box")) {
         const input = storyboxPlaceholderInput.value;
         displayStoryboxPlaceholdertext.placeholder = input;
     });
+}
 
+if (document.querySelector(".comment_input")) {
+
+    const displayCommentTitle = document.querySelector(".comment_title");
+    const commentTitleInput = document.getElementById("section_name");
+    const displayCommentPlaceholderText = document.querySelector(".comment_input");
+    const commentPlaceholderInput = document.getElementById("comment_placeholder");
+
+    commentTitleInput.addEventListener("input", function (event) {
+        event.preventDefault();
+
+        const input = commentTitleInput.value;
+        displayCommentTitle.innerHTML = input;
+
+    });
+
+    commentPlaceholderInput.addEventListener("input", function (event) {
+        event.preventDefault();
+
+        const input = commentPlaceholderInput.value;
+        displayCommentPlaceholderText.placeholder = input;
+
+    });
 
 
 }
