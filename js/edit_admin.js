@@ -134,9 +134,11 @@ if (document.querySelector(".comment_input")) {
 
 // This is for editing the video section
 
-document.getElementById('customFile').addEventListener('change', function () {
-    updateVideo();
-});
+if (document.querySelector(".video")) {
+    document.getElementById('customFile').addEventListener('change', function () {
+        updateVideo();
+    });
+}
 
 function updateVideo() {
     var input = document.getElementById('customFile');
@@ -164,6 +166,51 @@ function updateVideo() {
             }
         } else {
             alert('Please upload a valid video file.');
+            input.value = '';  // Clear the selected file
+        }
+    }
+}
+
+// This is for editing the image section
+
+if (document.querySelector(".image")) {
+    document.getElementById('customFile').addEventListener('change', function () {
+        updateImage();
+    });
+
+    const displayImageText = document.querySelector(".image_text");
+    const imageTextInput = document.getElementById("image_text");
+
+    imageTextInput.addEventListener("input", function (event) {
+        event.preventDefault();
+
+        const input = imageTextInput.value;
+
+        displayImageText.innerHTML = input;
+        
+    });
+
+}
+
+function updateImage() {
+    var input = document.getElementById('customFile');
+    var image = document.querySelector('.image');
+
+    var file = input.files[0];
+
+    if (file) {
+        // Check if the file type is an image
+        if (file.type.startsWith('image/')) {
+            try {
+                var objectURL = URL.createObjectURL(file);
+                image.src = objectURL;
+            } catch (error) {
+                console.error('Error updating image:', error.message);
+                alert('An error occurred while updating the image. Please try again.');
+                input.value = '';  // Clear the selected file
+            }
+        } else {
+            alert('Please upload a valid image file.');
             input.value = '';  // Clear the selected file
         }
     }
