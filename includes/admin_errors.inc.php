@@ -69,6 +69,10 @@ if (isset($_GET['success'])) {
         $message = "Success: You Have Successfully Deleted A Section!";
     } elseif ($Success == 'successfully_added_section') {
         $message = "Success: You Have Successfully Added A Section!";
+    } elseif ($Success == 'updated_page_name') {
+        $message = "Success: You Have Successfully Updated The Page Name!";
+    } elseif ($Success == 'created_page_name') {
+        $message = "Success: You Have Successfully Created The Page Name!";
     }
     ?>
     <div class="floating-success" id="floating-success">
