@@ -31,6 +31,15 @@ CREATE TABLE journal_page (
     page_num int(11) NOT NULL
 );
 
+CREATE INDEX idx_page_num ON journal_page (page_num);
+
+CREATE TABLE page_name (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    page_name VARCHAR(255) NOT NULL,
+    page_num INT(11) NOT NULL,
+    FOREIGN KEY (page_num) REFERENCES journal_page(page_num) ON DELETE CASCADE
+);
+
 CREATE TABLE heading (
     id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
     heading_content TEXT NOT NULL,
