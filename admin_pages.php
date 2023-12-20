@@ -10,63 +10,154 @@ require_once 'includes/display-sections.inc.php';
     <div class="row">
         <div class="col-sm-6">
             <form method='post' action='<?php echo BASE_URL . "/admin_pages.php" ?>'>
-
                 <div class="input-group mb-3">
                     <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
                     <select class="form-select" name="selected_page" id="selected_page"
                         aria-label="Example select with button addon">
                         <option value="add_page">Add Page...</option>
                         <?php
-                        // Check $_POST for selected_page
-                        $selected_page = isset($_POST['selected_page']) ? $_POST['selected_page'] : null;
 
-                        if ($selected_page == 'add_page') {
-                            $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
+                        $selected_page = "";
+                        $inputValue = "";
+
+                        // Function to get the maximum page number
+                        function getMaxPageNum($mysqli)
+                        {
+                            $sql = "SELECT MAX(page_num) AS max_page_num FROM journal_page;";
                             $result = mysqli_query($mysqli, $sql);
 
                             if ($result) {
                                 $row = mysqli_fetch_assoc($result);
-                                $page_nums = $row['num_pages'] + 1;
-                                for ($i = 1; $i <= $page_nums; $i++) {
-                                    $selected = ($page_nums == $i) ? 'selected' : ''; // Check if the option should be selected
-                                    echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
-                                }
+                                return $row['max_page_num'];
                             } else {
-                                echo "Query Error: " . mysqli_error($mysqli);
+                                return false;
                             }
-                        } else {
+                        }
 
-                            // If not found in $_POST, check $_GET for page_num
-                            if (isset($_POST['selected_page'])) {
-                                $selected_page = $_POST['selected_page'];
-                            } elseif (isset($_GET['page_num'])) {
-                                $selected_page = $_GET['page_num'];
-                            } else {
-                                $selected_page = 1;
-                            }
+                        // Function to get the page name based on page number
+                        function getPageName($mysqli, $pageNum)
+                        {
+                            $sql = "SELECT * FROM page_name WHERE page_num = ?";
+                            $stmt = $mysqli->prepare($sql);
 
-                            // You can now use $selected_page as the selected value
-                            $sql = 'SELECT COUNT(DISTINCT page_num) AS num_pages FROM journal_page;';
-                            $result = mysqli_query($mysqli, $sql);
+                            if ($stmt) {
+                                $stmt->bind_param("i", $pageNum);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
 
-                            if ($result) {
-                                $row = mysqli_fetch_assoc($result);
-                                $page_nums = $row['num_pages'];
-                                if ($page_nums == 0) {
-                                    // Handle the case where there are no pages
-                                    echo '<option value="1" selected>Page 1</option>';
+                                if ($result && ($row = $result->fetch_assoc())) {
+                                    return $row['page_name'];
                                 } else {
-                                    for ($i = 1; $i <= $page_nums; $i++) {
-                                        $selected = ($selected_page == $i) ? 'selected' : ''; // Check if the option should be selected
-                                        echo '<option value="' . $i . '" ' . $selected . '>Page ' . $i . '</option>';
+                                    return false;
+                                }
+
+                            } else {
+                                return false;
+                            }
+                        }
+
+                        // First check if theres a get for page_num or post for selected_page
+                        
+                        if (empty($_POST["selected_page"]) && empty($_GET["page_num"])) {
+                            $selected_page = 1;
+                            $maxPageNum = getMaxPageNum($mysqli);
+                            $page_num = $selected_page;
+                            if ($maxPageNum !== false) {
+                                for ($i = 1; $i <= $maxPageNum; $i++) {
+                                    $selected = ($selected_page == $i) ? "selected" : "";
+                                    $pageName = getPageName($mysqli, $i);
+                                    if ($selected_page == $i) {
+                                        echo "works";
+                                        $inputValue = $pageName;
                                     }
+                                    $optionValue = $pageName ? $pageName : "Page " . $i;
+
+                                    echo "<option value='$i' $selected>$optionValue</option>";
                                 }
                             } else {
-                                echo "Query Error: " . mysqli_error($mysqli);
+                                echo "Error getting max page number.";
+                            }
+                        } elseif (isset($_POST["selected_page"])) {
+
+                            if ($_POST["selected_page"] == "add_page") {
+                                $selected_page = $_POST["selected_page"];
+                                $maxPageNum = getMaxPageNum($mysqli) + 1;
+                                $page_num = $maxPageNum;
+                                if ($maxPageNum !== false) {
+                                    for ($i = 1; $i <= $maxPageNum; $i++) {
+                                        $selected = ($maxPageNum == $i) ? "selected" : "";
+                                        $pageName = getPageName($mysqli, $i);
+                                        if ($selected_page == $i) {
+                                            echo "works";
+                                            $inputValue = $pageName;
+                                        }
+                                        $optionValue = $pageName ? $pageName : "Page " . $i;
+
+                                        echo "<option value='$i' $selected data-input-value='$inputValue'>$optionValue</option>";
+                                    }
+                                } else {
+                                    echo "Error getting max page number.";
+                                }
+                            } else {
+                                $selected_page = $_POST["selected_page"];
+                                $maxPageNum = getMaxPageNum($mysqli);
+                                $page_num = $selected_page;
+                                if ($maxPageNum !== false) {
+                                    for ($i = 1; $i <= $maxPageNum; $i++) {
+                                        $selected = ($selected_page == $i) ? "selected" : "";
+                                        $pageName = getPageName($mysqli, $i);
+                                        if ($selected_page == $i) {
+                                            echo "works";
+                                            $inputValue = $pageName;
+                                        }
+                                        $optionValue = $pageName ? $pageName : "Page " . $i;
+
+                                        echo "<option value='$i' $selected>$optionValue</option>";
+                                    }
+                                } else {
+                                    echo "Error getting max page number.";
+                                }
+                            }
+                        } elseif (isset($_GET["page_num"])) {
+                            $selected_page = $_GET["page_num"];
+                            $maxPageNum = getMaxPageNum($mysqli);
+                            $page_num = $selected_page;
+                            echo $page_num;
+                            echo $maxPageNum;
+
+                            if ($page_num > $maxPageNum) {
+                                $maxPageNum = $maxPageNum + 1;
+                            }
+
+                            echo $maxPageNum;
+                            if ($maxPageNum !== false) {
+                                for ($i = 1; $i <= $maxPageNum; $i++) {
+                                    $selected = ($selected_page == $i) ? "selected" : "";
+                                    $pageName = getPageName($mysqli, $i);
+                                    if ($selected_page == $i) {
+                                        echo "works";
+                                        $inputValue = $pageName;
+                                    }
+                                    $optionValue = $pageName ? $pageName : "Page " . $i;
+
+                                    echo "<option value='$i' $selected>$optionValue</option>";
+                                }
+                            } else {
+                                echo "Error getting max page number.";
                             }
                         }
                         ?>
                     </select>
+                </div>
+            </form>
+            <form action="includes/update-page-name.inc.php" method="post">
+                <div class="input-group mb-3">
+                    <button class="btn btn-primary" type="submit" id="update-page-name">Update Page
+                        Name</button>
+                    <input name="page_name" type="text" class="form-control" placeholder="Enter Page Name"
+                        value="<?php echo $inputValue; ?>" aria-label="Example text with button addon"
+                        aria-describedby="button-addon1">
+                    <input type="hidden" name="page_num" value="<?php echo $page_num ?>">
                 </div>
             </form>
         </div>
@@ -513,9 +604,13 @@ require_once 'includes/display-sections.inc.php';
         </div>
     </div>
 </div>
-
+<div style="width: 100%; display: flex; justify-content: center;">
+    <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
+        section_id="0">Add</button>
+</div>
 <?php
-    display_sections($selected_page, $mysqli, true);
+
+display_sections($selected_page, $mysqli, true);
 ?>
 
 <?php
