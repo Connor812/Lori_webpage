@@ -8,7 +8,7 @@ require_once "includes/admin_errors.inc.php";
     <div class="dropdown">
         <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-mdb-toggle="dropdown"
             aria-expanded="false">
-            Dropdown button
+            Chose a User
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <?php
@@ -185,8 +185,6 @@ if (isset($_GET['page_num'])) {
 }
 
 ?>
-
-
 
 <?php
 require_once 'admin_footer.php';
