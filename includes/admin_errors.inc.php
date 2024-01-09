@@ -75,6 +75,8 @@ if (isset($_GET['error'])) {
         $message = "Error: Passwords Don't Match! Please Try Again.";
     } elseif ($error == 'failed_adding_comment') {
         $message = "Error: Failed To Add Comment! Please Try Again.";
+    } elseif ($error == 'failed_delete_page') {
+        $message = "Error: Failed To Delete Page! Please Try Again.";
     }
 
 
@@ -128,6 +130,8 @@ if (isset($_GET['success'])) {
         $message = "Successfully Updated Username!";
     } elseif ($Success == 'updated_password') {
         $message = "Successfully Updated Password!";
+    } elseif ($Success == 'deleted_page') {
+        $message = "Successfully Deleted Page!";
     } 
     ?>
     <div class="floating-success" id="floating-success">
