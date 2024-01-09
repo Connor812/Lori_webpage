@@ -19,7 +19,7 @@ if ($stmt) {
 
     } else {
         // echo "No rows deleted. Check your conditions.";
-
+        header("Location: " . BASE_URL . "/admin_pages.php?error=deleted_section_failed&page_num=" . $page_num);
     }
 } else {
     // Handle the case where the statement preparation failed
@@ -39,7 +39,7 @@ if ($stmt) {
             header("Location: " . BASE_URL . "/admin_pages.php?success=deleted_section&page_num=" . $page_num);
         } else {
             // echo "No rows were updated.";
-            header("Location: " . BASE_URL . "/admin_pages.php?error=deleted_section_failed&page_num=" . $page_num);
+            header("Location: " . BASE_URL . "/admin_pages.php?success=deleted_section&page_num=" . $page_num);
         }
     } else {
         echo "Execution failed: " . $stmt->error;
