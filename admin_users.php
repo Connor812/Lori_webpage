@@ -2,6 +2,13 @@
 require_once "admin-header.php";
 require_once "config-url.php";
 require_once "includes/admin_errors.inc.php";
+
+if (!isset($_SESSION["admin_username"])) {
+    header("Location: " . BASE_URL . "admin.php");
+    exit;
+}
+
+
 ?>
 
 <div class="d-flex justify-content-start p-3 gap-2">
