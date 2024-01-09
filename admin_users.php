@@ -3,11 +3,11 @@ require_once "admin-header.php";
 require_once "config-url.php";
 require_once "includes/admin_errors.inc.php";
 
+// This checks to see if you are logged in as a admin or not
 if (!isset($_SESSION["admin_username"])) {
     header("Location: " . BASE_URL . "admin.php");
     exit;
 }
-
 
 ?>
 
@@ -76,6 +76,7 @@ if (isset($_GET['username'])) {
                 <div width="%100" class="d-flex justify-content-center m-3">
                     <div id="user_info" class="container row border border-dark border-2 rounded p-4">
                         <div class="col d-flex flex-column gap-5">
+                            <h3>User Info</h3>
                             <div>
                                 <b>User Id:</b>
                                 <?php echo $user_id ?>
@@ -102,7 +103,7 @@ if (isset($_GET['username'])) {
                             </div>
                         </div>
                         <div class="col">
-                            Permissions
+                            <h3>Permissions</h3>
                             <form method="post"
                                 action="includes/permissions.inc.php?user_id=<?php echo $user_id ?>&username=<?php echo $username ?>">
                                 <?php
@@ -133,14 +134,42 @@ if (isset($_GET['username'])) {
                                         }
                                     }
                                     ?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="page_<?php echo $i ?>"
-                                            value="<?php echo $i ?>" id="check_box_<?php echo $i ?>" <?php echo $checked ?> />
-                                        <label class="form-check-label" for="check_box_<?php echo $i ?>">Page
-                                            <?php echo $i ?>
-                                        </label>
-                                        <a class="btn btn-primary" style="text-decoration: none; color: white;"
-                                            href="<?php echo BASE_URL ?>/admin_users.php?username=<?php echo $username ?>&user_id=<?php echo $user_id ?>&page_num=<?php echo $i ?>">Open</a>
+                                    <div class="form-check d-flex justify-content-between">
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" name="page_<?php echo $i ?>"
+                                                value="<?php echo $i ?>" id="check_box_<?php echo $i ?>" <?php echo $checked ?> />
+                                            <label class="form-check-label" for="check_box_<?php echo $i ?>">
+                                                <?php
+
+                                                $sql = "SELECT page_name FROM page_name WHERE page_num = ?;";
+
+                                                $stmt = $mysqli->prepare($sql);
+
+                                                if ($stmt) {
+                                                    $stmt->bind_param("i", $i);
+                                                    $stmt->execute();
+                                                    $stmt->store_result();
+
+                                                    if ($stmt->num_rows > 0) {
+                                                        // Fetch the result
+                                                        $stmt->bind_result($page_name);
+                                                        $stmt->fetch();
+                                                        echo $page_name;
+                                                    } else {
+                                                        echo "Page $i";
+                                                    }
+
+                                                } else {
+                                                    echo "Prepare failed: " . $mysqli->error;
+                                                }
+
+                                                ?>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <a class="btn btn-primary" style="text-decoration: none; color: white;"
+                                                href="<?php echo BASE_URL ?>/admin_users.php?username=<?php echo $username ?>&user_id=<?php echo $user_id ?>&page_num=<?php echo $i ?>">Open</a>
+                                        </div>
                                     </div>
                                     <?php
                                 }
@@ -163,7 +192,13 @@ if (isset($_GET['username'])) {
     }
 
 } else {
-    echo 'No user selected';
+    ?>
+
+    <div style="width: 100%; height: 80vh;" class="d-flex justify-content-center align-items-center">
+        <h1>No User Selected</h1>
+    </div>
+
+    <?php
 }
 ?>
 
