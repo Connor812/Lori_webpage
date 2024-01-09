@@ -97,6 +97,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // This will get the delete page button.
+    if (document.getElementById('delete-page-btn')) {
+        const delete_page_btn = document.getElementById('delete-page-btn');
+        delete_page_btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            const page_num = delete_page_btn.getAttribute('page_num');
+            const delete_page_form = document.getElementById('delete_page_form');
+            // This sets the action of the delete button to the delete modal so the delete_section.php file can handle it
+            delete_page_form.setAttribute('action', `includes/delete_page.inc.php?page_num=${page_num}`);
+        });
+    }
+
     //  <----------------------- End Of Setting action to delete Form --------------------------->
 
     const click_list_input_container = document.getElementById('click_list_input_container');
@@ -232,8 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //  <----------------------- End Add Button Event Listeners --------------------------->
 
-// This will add an event listener to all the edit buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
-const editBtns = document.querySelectorAll('.edit-section-btn');
+    // This will add an event listener to all the edit buttons to add a hover event listener so that when hovered, it will show the section she will add, delete or edit
+    const editBtns = document.querySelectorAll('.edit-section-btn');
 
     editBtns.forEach(editBtn => {
         editBtn.addEventListener('mouseenter', (event) => {
