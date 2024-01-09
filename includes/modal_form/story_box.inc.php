@@ -17,7 +17,7 @@ if (empty($story_box_name) || empty($story_box_userdata_name) || empty($placehol
 } elseif ($section_id == '') {
     header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
     exit;
-} elseif (empty($page_num) || !isset($_GET['page_num'])) {
+} elseif (empty($page_num) || !isset($_GET['page_num']) || $_GET['page_num'] == "add_page") {
     header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
     exit;
 }

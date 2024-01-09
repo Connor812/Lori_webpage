@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $page_num = isset($_GET['page_num']) ? intval($_GET['page_num']) : 0;
 
     // Validate section_id and page_num (you may add more validation as needed)
-    if ($section_id <= 0 || $page_num <= 0) {
+    if ($section_id <= 0 || $page_num <= 0 || $page_num == 'add_page') {
         header("Location: " . BASE_URL . "/admin_pages.php?error=invalid_pagenum");
         exit;
     }

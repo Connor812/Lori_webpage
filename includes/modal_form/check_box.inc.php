@@ -19,6 +19,11 @@ if (empty($_POST["section_name"])) {
     exit;
 }
 
+if (empty($page_num) || !isset($_GET['page_num']) || $page_num == 'add_page') {
+    header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
+    exit;
+}
+
 $item_types = $_POST['item_type'];
 $placeholder_texts = $_POST['placeholder_text'];
 $item_titles = $_POST['item_title'];
