@@ -3,6 +3,7 @@ require_once 'admin-header.php';
 require_once "connect/db.php";
 require_once "includes/admin_errors.inc.php";
 require_once 'includes/display-sections.inc.php';
+require_once "config-url.php";
 
 if (!isset($_SESSION["admin_username"])) {
     header("Location: " . BASE_URL . "admin.php");
@@ -166,6 +167,23 @@ if (!isset($_SESSION["admin_username"])) {
                     <input type="hidden" name="page_num" value="<?php echo $page_num ?>">
                 </div>
             </form>
+        </div>
+        <div class="col-sm-6">
+            <center>
+                <?php
+                if (!isset($_GET["preview"])) { ?>
+                    <a href="<?php echo BASE_URL . "admin_pages.php?page_num=$page_num&preview=true"; ?>"><button
+                            class="btn btn-primary">Preview Page</button></a>
+                    <?php
+                } else {
+                    ?>
+                    <a href="<?php echo BASE_URL . "admin_pages.php?page_num=$page_num"; ?>"><button
+                            class="btn btn-primary">Edit Page</button></a>
+                    <?php
+                }
+                ?>
+                <button class="btn btn-danger">Delete Page</button>
+            </center>
         </div>
     </div>
 
@@ -610,13 +628,22 @@ if (!isset($_SESSION["admin_username"])) {
         </div>
     </div>
 </div>
-<div style="width: 100%; display: flex; justify-content: center;">
-    <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
-        section_id="0">Add</button>
-</div>
-<?php
 
-display_sections($selected_page, $mysqli, true);
+
+
+
+<?php
+if (isset($_GET["preview"]) && $_GET["preview"] == true) {
+    display_sections($selected_page, $mysqli, false);
+} else {
+    ?>
+    <div style="width: 100%; display: flex; justify-content: center;">
+        <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
+            section_id="0">Add</button>
+    </div>
+    <?php
+    display_sections($selected_page, $mysqli, true);
+}
 ?>
 
 <?php
