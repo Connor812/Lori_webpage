@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_input = $_POST;
-var_dump($user_input);
+// var_dump($user_input);
 
 
 // Initialize an empty array to store the variables
@@ -61,9 +61,9 @@ foreach ($variables as $variable) {
         $params = 'ii';
     }
 
-    echo $variable['key'] . "<br>";
-    echo $variable['value'] . "<br>";
-    echo $variable['type'] . "<br>";
+    // echo $variable['key'] . "<br>";
+    // echo $variable['value'] . "<br>";
+    // echo $variable['type'] . "<br>";
 
     $sql = "SELECT user_id FROM `user_input` WHERE user_id = ?;";
     $stmt = $mysqli->prepare($sql);
@@ -82,18 +82,18 @@ foreach ($variables as $variable) {
                 $stmt->bind_param($params, $user_input, $user_id);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
-                    // The update was successful
-                    echo "Update successful!";
-                    header("Location: " . BASE_URL . "/journal.php?success=success&page_num=$page_num");
-
-                } else {
                     // No rows were updated
-                    echo "No rows were updated.";
+                    // echo "No rows were updated.";
+                    header("Location: " . BASE_URL . "/journal.php?error=error_sending_user_info&page_num=$page_num");
+                } else {
+                    // The update was successful
+                    // echo "Update successful!";
+                    header("Location: " . BASE_URL . "/journal.php?success=success&page_num=$page_num");
                 }
-
             } else {
                 // Error in preparing the statement
-                echo "Error in preparing the statement.";
+                // echo "Error in preparing the statement.";
+                header("Location: " . BASE_URL . "/journal.php?error=error_sending_user_info&page_num=$page_num");
             }
         } else {
             $sql = "INSERT INTO `user_input` ($user_input_name, `user_id`) VALUES (?, ?);";
@@ -103,7 +103,7 @@ foreach ($variables as $variable) {
                 $stmt->bind_param($params, $user_input, $user_id);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {
-                    echo "Update successful!";
+                    // echo "Update successful!";
                     header("Location: " . BASE_URL . "/journal.php?success=success&page_num=$page_num");
                 } else {
                     // No rows were updated
@@ -112,5 +112,4 @@ foreach ($variables as $variable) {
             }
         }
     }
-
 }

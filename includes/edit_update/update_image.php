@@ -9,7 +9,7 @@ if (!$page_num || !$order_num) {
     exit;
 }
 
-$targetDirectory = 'images/'; // Adjust the path as needed
+$targetDirectory = '../../images/'; // Adjust the path as needed
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -42,10 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Check for success
         if ($stmt->affected_rows > 0) {
-            echo "Update successful!";
+            // echo "Update successful!";
             header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success&page_num=$page_num&order_num=$order_num");
         } else {
-            echo "Update failed!";
+            // echo "Update failed!";
             header("Location: " . BASE_URL . "/admin_pages.php?error=update_failed&page_num=$page_num&order_num=$order_num");
         }
 

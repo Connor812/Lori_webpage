@@ -2,15 +2,11 @@
 
 require_once '../../connect/db.php';
 require_once '../../config-url.php';
-
-echo "quote handler";
+require_once 'update_journal_page.php';
 
 $quote_content = $_POST['quote_content'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
-
-echo $quote_content . "<br>";
-echo $section_id . "<br>";
 
 // Error handler, checks to see if content is empty
 if (empty($quote_content)) {
@@ -25,25 +21,7 @@ if (empty($quote_content)) {
 }
 
 // Updates the order_num to fit the new section 
-$sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
-
-$stmt = $mysqli->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("i", $section_id);
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo "Update was successful. Affected rows: " . $stmt->affected_rows;
-        } else {
-            echo "No rows were updated.";
-        }
-    } else {
-        echo "Execution failed: " . $stmt->error;
-    }
-    $stmt->close();
-} else {
-    echo "Prepare statement failed: " . $mysqli->error;
-}
+update_journal_page($section_id, $page_num, $mysqli);
 
 // Needs to be plus one to add it the the new section
 $new_section_id = $section_id + 1;
@@ -58,9 +36,9 @@ if ($stmt) {
     // Execute the statement
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
+            // echo "New section added!";
         } else {
-            echo "Error adding section";
+            // echo "Error adding section";
         }
     } else {
         // Handle execution error
@@ -83,7 +61,6 @@ if ($result->num_rows > 0) {
     // Fetch the result
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
     $sql = "INSERT INTO `quote`(`quote_content`, `section_id`) VALUES (?, ?);";
     $stmt = $mysqli->prepare($sql);
 
@@ -94,10 +71,11 @@ if ($result->num_rows > 0) {
         // Execute the statement
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "New section added!";
-                header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                // echo "New section added!";
+                header("Location: " . BASE_URL . "/admin_pages.php?success=added_quote&page_num=$page_num#$section_id");
             } else {
-                echo "Error adding section";
+                header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_quote&page_num=" . $page_num);
+                // echo "Error adding section";
             }
         } else {
             // Handle execution error

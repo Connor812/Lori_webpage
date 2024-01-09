@@ -14,13 +14,13 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
 } elseif (empty($video["name"])) {
     echo "error empty input";
     echo $video . "<----";
-    // header("Location: " . BASE_URL . "/admin_edit/edit_video.php?error=empty_input&page_num=$page_num&order_num=$order_num");
+    header("Location: " . BASE_URL . "/admin_edit/edit_video.php?error=empty_input&page_num=$page_num&order_num=$order_num");
 } else {
     // Include necessary files and initialize database connection
     require_once '../../connect/db.php';
 
     // Define the target directory to save the videos
-    $targetDirectory = '/Applications/XAMPP/xamppfiles/htdocs/UR/videos/';
+    $targetDirectory = '../../videos/';
 
     // Get the file information
     $fileName = basename($video["name"]);
@@ -30,7 +30,7 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
     // Check if it's a valid video file
     $allowedFormats = array('mp4', 'avi', 'mov'); // Add more formats if needed
     if (!in_array(strtolower($fileType), $allowedFormats)) {
-        echo "error invalid format";
+        // echo "error invalid format";
         header("Location: " . BASE_URL . "/admin_edit/edit_video.php?error=invalid_format&page_num=$page_num&order_num=$order_num");
         exit;
     }
@@ -38,7 +38,7 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
     // Check if the file size is over 100MB
     $maxFileSize = 100 * 1024 * 1024; // 100MB in bytes
     if ($video["size"] > $maxFileSize) {
-        echo "error file too large";
+        // echo "error file too large";
         header("Location: " . BASE_URL . "/admin_edit/edit_video.php?error=file_too_large&page_num=$page_num&order_num=$order_num");
         exit;
     }
@@ -60,10 +60,10 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
 
             // Check for success
             if ($stmt->affected_rows > 0) {
-                echo "Update successful!";
+                // echo "Update successful!";
                 header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success&page_num=$page_num&order_num=$order_num");
             } else {
-                echo "Update failed!";
+                // echo "Update failed!";
                 header("Location: " . BASE_URL . "/admin_pages.php?error=updated_same&page_num=$page_num&order_num=$order_num");
             }
 

@@ -4,27 +4,18 @@ require_once '../../connect/db.php';
 require_once '../../config-url.php';
 require_once 'update_journal_page.php';
 
-echo "heading handler <br>";
-
 $heading_content = $_POST['heading_content'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
 
-echo $heading_content . "<br>";
-echo $section_id . "<br>";
-echo $page_num . "<br>";
-
 // Error handler, checks to see if content is empty
 if (empty($heading_content)) {
-    echo "works";
     header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
     exit;
 } elseif ($section_id == '') {
-    echo "works";
     header("Location: " . BASE_URL . "/admin_pages.php?error=no_section_id&page_num=" . $page_num);
     exit;
 } elseif (empty($page_num) || !isset($_GET['page_num'])) {
-    echo "works";
     header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
     exit;
 }
@@ -45,7 +36,6 @@ if ($stmt) {
     // Execute the statement
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
 
             // Proceed to the next step
             $sql = "SELECT MAX(id) FROM journal_page;";
@@ -55,7 +45,6 @@ if ($stmt) {
                 // Fetch the result
                 $row = $result->fetch_assoc();
                 $latestID = $row['MAX(id)'];
-                echo $latestID . " <-latest id<br>";
                 $sql = "INSERT INTO `heading`(`heading_content`, `section_id`) VALUES (?, ?);";
                 $stmt = $mysqli->prepare($sql);
 
@@ -66,10 +55,11 @@ if ($stmt) {
                     // Execute the statement
                     if ($stmt->execute()) {
                         if ($stmt->affected_rows > 0) {
-                            echo "New section added!";
-                            header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                            // echo "New section added!";
+                            header("Location: " . BASE_URL . "/admin_pages.php?success=added_heading&page_num=$page_num#$section_id");
                         } else {
-                            echo "Error adding section";
+                            header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_heading&page_num=" . $page_num);
+                            // echo "Error adding section";
                         }
                     } else {
                         // Handle execution error

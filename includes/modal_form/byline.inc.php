@@ -1,17 +1,11 @@
 <?php
-
 require_once '../../connect/db.php';
 require_once '../../config-url.php';
 require_once 'update_journal_page.php';
 
-echo "byline handler";
-
 $byline_content = $_POST['byline_content'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
-
-echo $byline_content . "<br>";
-echo $section_id . "<br>";
 
 // Error handler, checks to see if content is empty
 if (empty($byline_content)) {
@@ -25,10 +19,8 @@ if (empty($byline_content)) {
     exit;
 }
 
-
 // Updates the order_num to fit the new section 
 update_journal_page($section_id, $page_num, $mysqli);
-
 
 // Needs to be plus one to add it the the new section
 $new_section_id = $section_id + 1;
@@ -43,9 +35,9 @@ if ($stmt) {
     // Execute the statement
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
+            // echo "New section added!";
         } else {
-            echo "Error adding section";
+            // echo "Error adding section";
         }
     } else {
         // Handle execution error
@@ -68,7 +60,6 @@ if ($result->num_rows > 0) {
     // Fetch the result
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
     $sql = "INSERT INTO `byline`(`byline_content`, `section_id`) VALUES (?, ?);";
     $stmt = $mysqli->prepare($sql);
 
@@ -79,10 +70,11 @@ if ($result->num_rows > 0) {
         // Execute the statement
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "New section added!";
-                header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                // echo "New section added!";
+                header("Location: " . BASE_URL . "/admin_pages.php?success=added_byline&page_num=$page_num");
             } else {
-                echo "Error adding section";
+                header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_byline&page_num=$page_num");
+                // echo "Error adding section";
             }
         } else {
             // Handle execution error

@@ -7,17 +7,14 @@ require_once 'update_journal_page.php';
 $section_name = $_POST['section_name'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
-echo $section_name . "<br>";
-echo $section_id . "<br>";
-echo $page_num . "<br>";
 
-print_r($_POST) . "<br>";
+// print_r($_POST) . "<br>";
 
 // Error Handlers -------------------------------------------------------------------->
 
 // Checks for blank name
 if (empty($_POST["section_name"])) {
-    echo "section name empty";
+    // echo "section name empty";
     header("Location: " . BASE_URL . "/admin_pages.php?error=name_blank&page_num=" . $page_num);
     exit;
 }
@@ -28,7 +25,7 @@ $item_titles = $_POST['item_title'];
 $item_userdata_names = $_POST['item_userdata_name'];
 
 if (empty($item_types)) {
-    echo "section input empty";
+    // echo "section input empty";
     header("Location: " . BASE_URL . "/admin_pages.php?error=needs_input&page_num=" . $page_num);
     exit;
 }
@@ -42,7 +39,7 @@ for ($i = 0; $i < count($item_types); $i++) {
 
     // Checks to see if any of the inputs are empty
     if (empty($type) || empty($title) || empty($userdata_name)) {
-        echo "works for empty";
+        // echo "works for empty";
         header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
         exit;
     }
@@ -58,13 +55,12 @@ for ($i = 0; $i < count($item_types); $i++) {
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
-        echo $row["COLUMN_NAME"] . ' <-- column name<br>';
         if (!empty($row["COLUMN_NAME"])) {
-            echo "works for exist<br>";
+            // echo "works for exist<br>";
             header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
             exit;
         } else {
-            echo "Does not exist!";
+            // echo "Does not exist!";
         }
     }
 }
@@ -86,9 +82,11 @@ if ($stmt) {
     // Execute the statement
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
+            // echo "New section added!";
         } else {
-            echo "Error adding section";
+            // echo "Error adding section";
+            header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_check_box&page_num=" . $page_num);
+            exit;
         }
     } else {
         // Handle execution error
@@ -110,7 +108,6 @@ if ($result->num_rows > 0) {
     // Fetch the result
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
     $sql = "INSERT INTO `click_list`(`section_id`) VALUES (?);";
     $stmt = $mysqli->prepare($sql);
 
@@ -121,9 +118,11 @@ if ($result->num_rows > 0) {
         // Execute the statement
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "New section added!";
+                // echo "New section added!";
             } else {
-                echo "Error adding section";
+                // echo "Error adding section";
+                header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_check_box&page_num=" . $page_num);
+                exit;
             }
         } else {
             // Handle execution error
@@ -148,7 +147,6 @@ if ($result->num_rows > 0) {
     // Fetch the result
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
 
     // Check if the arrays exist and are not empty
     if (isset($_POST['item_type']) && is_array($_POST['item_type'])) {
@@ -165,7 +163,7 @@ if ($result->num_rows > 0) {
             $placeholderText = !empty($placeholderTexts[$i]) ? $placeholderTexts[$i] : null;
 
             // Process the data
-            echo "Type: $type, Title: $title, Userdata Name: $userdataName, Placeholder Text: $placeholderText<br>";
+            // echo "Type: $type, Title: $title, Userdata Name: $userdataName, Placeholder Text: $placeholderText<br>";
 
             // Define the column type based on $type
             $columnType = ($type === 'textarea') ? 'TEXT DEFAULT NULL' : 'BOOLEAN DEFAULT FALSE';
@@ -175,9 +173,11 @@ if ($result->num_rows > 0) {
 
             // Prepare and execute the SQL statement to add the column
             if ($mysqli->query($sqlAddColumn)) {
-                echo "New column added!";
+                // echo "New column added!";
             } else {
-                echo "Error adding column: " . $mysqli->error;
+                // echo "Error adding column: " . $mysqli->error;
+                header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_check_box&page_num=" . $page_num);
+                exit;
             }
 
             $sql = "INSERT INTO `click_list_items`(`item_type`, `item_title`, `placeholder_text`, `item_userdata_name`, `click_list_id`) VALUES (?, ?, ?, ?, ?)";
@@ -190,10 +190,11 @@ if ($result->num_rows > 0) {
                 // Execute the statement
                 if ($stmt->execute()) {
                     if ($stmt->affected_rows > 0) {
-                        echo "New section added!";
-                        header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                        // echo "New section added!";
+                        header("Location: " . BASE_URL . "/admin_pages.php?success=added_click_list&page_num=$page_num");
                     } else {
-                        echo "Error adding section";
+                        // echo "Error adding section";
+                        header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_check_box&page_num=" . $page_num);
                     }
                 } else {
                     // Handle execution error

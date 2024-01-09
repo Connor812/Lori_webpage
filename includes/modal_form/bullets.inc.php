@@ -1,5 +1,6 @@
 <?php
 require_once("../../config-url.php");
+require_once("../../connect/db.php");
 require_once 'update_journal_page.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -7,11 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $section_id = isset($_GET['section_id']) ? intval($_GET['section_id']) : 0;
     $page_num = isset($_GET['page_num']) ? intval($_GET['page_num']) : 0;
 
-echo $section_id . "<----";
-
     // Validate section_id and page_num (you may add more validation as needed)
     if ($section_id <= 0 || $page_num <= 0) {
-        echo "Invalid section_id or page_num";
+        header("Location: " . BASE_URL . "/admin_pages.php?error=invalid_pagenum");
         exit;
     }
 
@@ -20,7 +19,7 @@ echo $section_id . "<----";
 
     // Validate the bullet list name (you may add more validation as needed)
     if (empty($bulletListName)) {
-        echo "Bullet list name is required";
+        header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input");
         exit;
     }
 
@@ -31,12 +30,12 @@ echo $section_id . "<----";
     require_once '../../connect/db.php';
 
     // Start a transaction
-// Updates the order_num to fit the new section 
+    $mysqli->begin_transaction();
+
+    // Updates the order_num to fit the new section 
     update_journal_page($section_id, $page_num, $mysqli);
 
     $new_section_id = $section_id + 1;
-
-    $mysqli->begin_transaction();
 
     try {
         // Insert section information into journal_page
@@ -69,12 +68,12 @@ echo $section_id . "<----";
         // If everything is successful, commit the transaction
         $mysqli->commit();
 
-        echo "Data inserted successfully!";
-        header("Location: " . BASE_URL . "/admin_pages.php?success=successfully_added_section");
+        header("Location: " . BASE_URL . "/admin_pages.php?success=added_bullets&page_num=$page_num#$section_id");
     } catch (Exception $e) {
         // If there's an error, roll back the transaction
         $mysqli->rollback();
-        echo "Error: " . $e->getMessage();
+        // echo "Error: " . $e->getMessage();
+        header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_bullets&page_num=$page_num");
     } finally {
         // Close the statement and database connection
         if (isset($stmt)) {

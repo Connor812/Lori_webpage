@@ -419,13 +419,14 @@ function image_section($image_row, $add_button)
 
     ?>
     <section id="<?php echo $order_num ?>" class="row p-3 section_container">
-        <div class="col-sm-8 image_text" style="display: flex; flex-direction: column; justify-content: space-between; word-wrap: break-word;">
+        <div class="col-sm-8 image_text"
+            style="display: flex; flex-direction: column; justify-content: space-between; word-wrap: break-word;">
             <?php echo $image_text ?>
         </div>
         <div class="col-sm-4">
             <div>
-                <img src="<?php echo BASE_URL . "/" . $image_src ?>" class="img-rounded image-responsive image" alt="<?php echo $section_name ?>"
-                    width="100%" height="auto">
+                <img src="<?php echo BASE_URL . "/" . $image_src ?>" class="img-rounded image-responsive image"
+                    alt="<?php echo $section_name ?>" width="100%" height="auto">
             </div>
         </div>
     </section>
@@ -580,17 +581,13 @@ function add_button($id, $page_num, $section_type)
 
     ?>
     <div id="add<?php echo $id; ?>" class="add_section_line hide"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center"> <!-- Centers the content horizontally -->
-                <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
-                    section_id="<?php echo $id; ?>">Add</button>
-                <a href="<?php echo BASE_URL ?>/admin_edit/edit_<?php echo $page_name ?>.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $id ?>"
-                    class="edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
-                <button type="button" class="delete-section-btn" data-mdb-toggle="modal"
-                    data-mdb-target="#delete-section-modal" section_id="<?php echo $id; ?>">Delete</button>
-            </div>
-        </div>
+    <div class="action-btn-container">
+        <button type="button" class="add-section-btn" data-mdb-toggle="modal" data-mdb-target="#button-modal"
+            section_id="<?php echo $id; ?>">Add</button>
+        <a href="<?php echo BASE_URL ?>/admin_edit/edit_<?php echo $page_name ?>.php?page_num=<?php echo $page_num ?>&order_num=<?php echo $id ?>"
+            class="edit-section-btn" section_id="<?php echo $id; ?>">Edit</a>
+        <button type="button" class="delete-section-btn" data-mdb-toggle="modal" data-mdb-target="#delete-section-modal"
+            section_id="<?php echo $id; ?>">Delete</button>
     </div>
     <?php
-}
+} 

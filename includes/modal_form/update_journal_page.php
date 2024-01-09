@@ -12,9 +12,9 @@ function update_journal_page($section_id, $page_num, $mysqli)
         $stmt->bind_param("ii", $section_id, $page_num);
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "Update was successful. Affected rows: " . $stmt->affected_rows;
+                // echo "Update was successful. Affected rows: " . $stmt->affected_rows;
             } else {
-                echo "No rows were updated.";
+                // echo "No rows were updated.";
             }
         } else {
             echo "Execution failed: " . $stmt->error;

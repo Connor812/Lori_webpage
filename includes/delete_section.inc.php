@@ -6,9 +6,6 @@ require_once '../config-url.php';
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
 
-echo $section_id . "<br>";
-echo $page_num . "<br>";
-
 $sql = "DELETE FROM `journal_page` WHERE order_num = ? AND page_num = ?;";
 
 $stmt = $mysqli->prepare($sql);
@@ -18,10 +15,11 @@ if ($stmt) {
     $stmt->execute();
     // Check if the delete operation was successful
     if ($stmt->affected_rows > 0) {
-        echo "Delete successful!";
-        header("Location: " . BASE_URL . "/admin_pages.php?success=deleted_section&page_num=" . $page_num);
+        // echo "Delete successful!";
+
     } else {
-        echo "No rows deleted. Check your conditions.";
+        // echo "No rows deleted. Check your conditions.";
+
     }
 } else {
     // Handle the case where the statement preparation failed
@@ -37,9 +35,11 @@ if ($stmt) {
     $stmt->bind_param("ii", $section_id, $page_num);
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "Update was successful. Affected rows: " . $stmt->affected_rows;
+            // echo "Update was successful. Affected rows: " . $stmt->affected_rows;
+            header("Location: " . BASE_URL . "/admin_pages.php?success=deleted_section&page_num=" . $page_num);
         } else {
-            echo "No rows were updated.";
+            // echo "No rows were updated.";
+            header("Location: " . BASE_URL . "/admin_pages.php?error=deleted_section_failed&page_num=" . $page_num);
         }
     } else {
         echo "Execution failed: " . $stmt->error;

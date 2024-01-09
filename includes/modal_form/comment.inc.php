@@ -4,8 +4,6 @@ require_once "../../connect/db.php";
 require_once "../../config-url.php";
 require_once 'update_journal_page.php';
 
-echo "comment handler<br>";
-
 // Get input data from POST and GET
 $section_name = $_POST['section_name'];
 $section_id = $_GET['section_id'];
@@ -14,11 +12,11 @@ $comment_userdata_name = str_replace(' ', '_', $_POST['comment_userdata_name']);
 $comment_placeholder = $_POST['comment_placeholder'];
 
 // Output for debugging
-echo $section_name . "<br>";
-echo $section_id . "<br>";
-echo $page_num . "<br>";
-echo $comment_userdata_name . "<br>";
-echo $comment_placeholder . "<br>";
+// echo $section_name . "<br>";
+// echo $section_id . "<br>";
+// echo $page_num . "<br>";
+// echo $comment_userdata_name . "<br>";
+// echo $comment_placeholder . "<br>";
 
 // Error handlers ---------------------------------------------------------------------------------------------------------------------------->
 // Error handler, checks to see if content is empty
@@ -45,13 +43,11 @@ if ($stmt) {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    echo $row["COLUMN_NAME"] . ' <-- column name<br>';
     if (!empty($row["COLUMN_NAME"])) {
-        echo "works for exist<br>";
         header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
         exit;
     } else {
-        echo "Does not exist!";
+        // echo "Does not exist!";
     }
 }
 
@@ -69,9 +65,10 @@ if ($stmt) {
     $stmt->bind_param("sii", $section_name, $new_section_id, $page_num);
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
+            // echo "New section added!";
         } else {
-            echo "Error adding section";
+            // echo "Error adding section";
+            header("Location: " . BASE_URL . "/admin_pages.php?error=failed_adding_comment&page_num=" . $page_num);
         }
     } else {
         echo "Error executing the statement: " . $stmt->error;
@@ -88,14 +85,14 @@ $result = $mysqli->query($sql);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
 
     // Add a new column to the user_input table
     $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN $comment_userdata_name TEXT DEFAULT NULL;";
     if ($mysqli->query($sqlAddColumn)) {
-        echo "New column added!";
+        // echo "New column added!";
     } else {
-        echo "Error adding column: " . $mysqli->error;
+        // echo "Error adding column: " . $mysqli->error;
+        header("Location: " . BASE_URL . "/admin_pages.php?error=failed_adding_comment&page_num=" . $page_num);
     }
 
     // Insert data into the comment table
@@ -106,10 +103,11 @@ if ($result->num_rows > 0) {
         $stmt->bind_param("ssi", $comment_userdata_name, $comment_placeholder, $latestID);
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "New section added!";
-                header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                // echo "New section added!";
+                header("Location: " . BASE_URL . "/admin_pages.php?success=added_comment&page_num=$page_num#$section_id");
             } else {
-                echo "Error adding section";
+                // echo "Error adding section";
+                header("Location: " . BASE_URL . "/admin_pages.php?error=failed_adding_comment&page_num=$page_num");
             }
         } else {
             echo "Error executing the statement: " . $stmt->error;

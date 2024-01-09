@@ -2,17 +2,13 @@
 
 require_once '../../connect/db.php';
 require_once '../../config-url.php';
+require_once 'update_journal_page.php';
 
 $story_box_name = $_POST['story_box_name'];
 $story_box_userdata_name = str_replace(' ', '_', $_POST['story_box_userdata_name']);
 $placeholder_text = $_POST['placeholder_text'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
-
-echo $story_box_name . "<br>";
-echo $story_box_userdata_name . "<br>";
-echo $placeholder_text . "<br>";
-echo $section_id . "<br>";
 
 // Error handler, checks to see if content is empty
 if (empty($story_box_name) || empty($story_box_userdata_name) || empty($placeholder_text)) {
@@ -38,35 +34,17 @@ if ($stmt) {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    echo $row["COLUMN_NAME"] . ' <-- column name<br>';
     if (!empty($row["COLUMN_NAME"])) {
-        echo "works for exist<br>";
+        // echo "works for exist<br>";
         header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
         exit;
     } else {
-        echo "Does not exist!";
+        // echo "Does not exist!";
     }
 }
 
-$sql = "UPDATE journal_page SET order_num = order_num + 1 WHERE order_num > ?;";
-
-$stmt = $mysqli->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("i", $section_id);
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo "Update was successful. Affected rows: " . $stmt->affected_rows;
-        } else {
-            echo "No rows were updated.";
-        }
-    } else {
-        echo "Execution failed: " . $stmt->error;
-    }
-    $stmt->close();
-} else {
-    echo "Prepare statement failed: " . $mysqli->error;
-}
+// Updates the order_num to fit the new section 
+update_journal_page($section_id, $page_num, $mysqli);
 
 // Needs to be plus one to add it the the new section
 $new_section_id = $section_id + 1;
@@ -81,9 +59,11 @@ if ($stmt) {
     // Execute the statement
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            echo "New section added!";
+            // echo "New section added!";
         } else {
-            echo "Error adding section";
+            // echo "Error adding section";
+            header("Location: " . BASE_URL . "/admin_pages.php?error=could_not_generate_user_input&page_num=$page_num");
+            exit;
         }
     } else {
         // Handle execution error
@@ -100,7 +80,7 @@ if ($stmt) {
 $sql = "ALTER TABLE user_input ADD COLUMN " . $story_box_userdata_name . " TEXT DEFAULT NULL";
 
 if ($mysqli->query($sql)) {
-    echo "New column added!";
+    // echo "New column added!";
 } else {
     echo "Error adding column: " . $mysqli->error;
 }
@@ -113,7 +93,6 @@ if ($result->num_rows > 0) {
     // Fetch the result
     $row = $result->fetch_assoc();
     $latestID = $row['MAX(id)'];
-    echo $latestID . " <-lastest id<br>";
     $sql = "INSERT INTO `story_box`(`story_box_userdata_name`, `placeholder_text`, `section_id`) VALUES (?, ?, ?);";
     $stmt = $mysqli->prepare($sql);
 
@@ -124,10 +103,11 @@ if ($result->num_rows > 0) {
         // Execute the statement
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                echo "New section added!";
-                header("Location: " . BASE_URL . "/admin_pages.php?page_num=" . $page_num);
+                // echo "New section added!";
+                header("Location: " . BASE_URL . "/admin_pages.php?success=added_story_box&page_num=$page_num#$section_id");
             } else {
-                echo "Error adding section";
+                // echo "Error adding section";
+                header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_story_box&page_num=$page_num");
             }
         } else {
             // Handle execution error

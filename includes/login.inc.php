@@ -6,7 +6,7 @@ require_once "../config-url.php";
 $username = $_POST["username"];
 $pwd = $_POST["pwd"];
 
-echo "Username: " . $username . " Password: " . $pwd; //Make sure to delete for testing only
+// echo "Username: " . $username . " Password: " . $pwd;
 
 // Error Handlers for the login form
 if (empty($username)) {

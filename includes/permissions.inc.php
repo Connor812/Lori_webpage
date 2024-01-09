@@ -63,9 +63,9 @@ if (isset($_POST)) {
                     die("Error executing the statement: " . $stmt->error);
                 }
 
-                echo "Permission deleted for Page $page_num.<br>";
+                // echo "Permission deleted for Page $page_num.<br>";
             } else {
-                echo "Permission exists for Page $page_num.<br>";
+                // echo "Permission exists for Page $page_num.<br>";
             }
         } else {
             // The combination does not exist, so insert it if it's true
@@ -84,7 +84,7 @@ if (isset($_POST)) {
                     die("Error executing the statement: " . $stmt->error);
                 }
 
-                echo "Permission inserted for Page $page_num.<br>";
+                // echo "Permission inserted for Page $page_num.<br>";
             }
         }
     }

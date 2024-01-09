@@ -7,15 +7,15 @@ $firstName = $_POST["first_name"];
 $lastName = $_POST["last_name"];
 $email = $_POST["email"];
 $pwd = $_POST["pwd"];
-$repeat_pwd = $_POST['repeat_pwd']; 
+$repeat_pwd = $_POST['repeat_pwd'];
 
 //Make sure to delete for testing only
-echo "Username: " . $username;
-echo "first name: " . $firstName;
-echo "second name: " . $lastName;
-echo "email: " . $email;
-echo "pwd: " . $pwd;
-echo "repeat_pwd: ". $repeat_pwd;
+// echo "Username: " . $username;
+// echo "first name: " . $firstName;
+// echo "second name: " . $lastName;
+// echo "email: " . $email;
+// echo "pwd: " . $pwd;
+// echo "repeat_pwd: ". $repeat_pwd;
 
 // Error Handlers for the login form
 if (empty($username)) {
