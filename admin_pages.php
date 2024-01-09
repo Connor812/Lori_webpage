@@ -182,7 +182,8 @@ if (!isset($_SESSION["admin_username"])) {
                     <?php
                 }
                 ?>
-                <button class="btn btn-danger">Delete Page</button>
+                <button id="delete-page-btn" class="btn btn-danger modal_button" type="button" page_num="<?php echo $page_num ?>"
+                        data-mdb-toggle="modal" data-mdb-target="#delete-page-modal">Delete Page</button>
             </center>
         </div>
     </div>
@@ -201,7 +202,7 @@ if (!isset($_SESSION["admin_username"])) {
                     <!-- Modal Content goes here -->
                     <form id="heading_form" method="post">
                         <h5 class="d-flex justify-content-start">Heading Text</h5>
-                        <input name="heading_content" placeholder="Heading Text" type="text" class="form-control" />
+                        <input name="heading_content" placeholder="Heading Text" type="text" class="form-control" autocomplete="off" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
@@ -539,7 +540,7 @@ if (!isset($_SESSION["admin_username"])) {
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Delete Section Confirmation Modal -->
     <div class="modal top fade" add-type="Comment" id="delete-section-modal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
         <div class="modal-dialog   modal-dialog-centered">
@@ -552,6 +553,29 @@ if (!isset($_SESSION["admin_username"])) {
                     <!-- Modal Content goes here -->
 
                     <form id="delete_section_form" method="post" class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                            Don't Delete
+                        </button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Page Confirmation Modal -->
+    <div class="modal top fade" add-type="Comment" id="delete-page-modal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true">
+        <div class="modal-dialog   modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Do you want to delete this Page</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Modal Content goes here -->
+
+                    <form id="delete_page_form" method="post" class="d-flex justify-content-center">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
                             Don't Delete
                         </button>
