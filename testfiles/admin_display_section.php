@@ -1,6 +1,7 @@
 <?php
 
 require_once "connect/db.php";
+require_once "config-url.php";
 
 // Takes care of the header content--------------------------------------------------->
 function heading_section($heading_row)
@@ -292,7 +293,7 @@ function video_section($video_row)
 
     ?>
     <section id="<?php echo $order_num ?>" class="videobg d-flex justify-content-center section_container">
-        <video width="80%" height="auto" poster="/videos/URposter.png" controls>
+        <video width="80%" height="auto" poster="<?php echo BASE_URL; ?>videos/URposter.png" controls>
             <source src="<?php echo $video_src ?>" type="video/mp4">
             Your browser does not support the video tag.
         </video>
