@@ -25,12 +25,12 @@ if ($stmt) {
 
     // Check if the update was successful
     if ($stmt->affected_rows > 0) {
-        echo "Username updated successfully.";
+        // echo "Username updated successfully.";
         $_SESSION["admin_username"] = $new_username;
         header("Location: " . BASE_URL . "admin_change_pwd.php?success=updated_username");
         exit;
     } else {
-        echo "No rows were updated. The username may not exist or the new and old usernames are the same.";
+        // echo "No rows were updated. The username may not exist or the new and old usernames are the same.";
         header("Location: " . BASE_URL . "admin_change_pwd.php?error=failed_update_username");
     }
 
