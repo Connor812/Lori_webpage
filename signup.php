@@ -2,52 +2,58 @@
 require_once 'header.php';
 ?>
 <div class="d-flex justify-content-center align-items-center container" style="height: 700px;">
-    <form action="includes/signup.inc.php" method="post" class="form-horizontal col-md-6 col-md-offset-3 border border-2 p-5 rounded form-background">
+    <form action="includes/signup.inc.php" method="post"
+        class="form-horizontal col-md-6 col-md-offset-3 border border-2 p-5 rounded form-background">
         <!-- Title -->
         <div class="form-group text-center">
             <h1>Signup</h1>
         </div>
         <?php
-        $param = $_GET['error'];
+
+        $param = '';
+
+        if (!empty($_GET['error'])) {
+            $param = $_GET['error'];
+        }
 
         if ($param == 'empty_username') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
                     Cannot Leave Username Empty!
                 </div>';
         } elseif ($param == 'empty_pwd') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Cannot Leave Password Empty!
             </div>';
         } elseif ($param == 'empty_first_name') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Cannot Leave First Name Empty!
             </div>';
         } elseif ($param == 'empty_last_name') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Cannot Leave Last Name Empty!
             </div>';
         } elseif ($param == 'empty_email') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Cannot Leave email Empty!
             </div>';
         } elseif ($param == 'invalid_email') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Must be Valid Email!
             </div>';
         } elseif ($param == 'short_password') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Password must be more then 3 characters!
             </div>';
         } elseif ($param == 'username_exists') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Username already exists, please try another one!
             </div>';
         } elseif ($param == 'failed_to_create_user') {
-            echo '<div style="background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
+            echo '<div style="background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;">
             Username already exists, please try another one!
             </div>';
         } elseif ($param == 'passwords_dont_match') {
-            echo "<div style='background-color: #E57373; color: white; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;'>
+            echo "<div style='background-color: #E57373; color: #464646; padding: 10px; border: 3px solid red; border-radius: 5px; text-align: center;'>
             The passwords don't match, please try again.
             </div>";
         }
@@ -80,8 +86,8 @@ require_once 'header.php';
                 placeholder="Re-enter password">
         </div>
         <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary mt-3">Sign up</button>
-    </div>
+            <button type="submit" class="btn btn-primary mt-3">Sign up</button>
+        </div>
     </form>
 </div>
 
