@@ -3,6 +3,12 @@ require_once 'admin-header.php';
 require_once "connect/db.php";
 require_once "includes/admin_errors.inc.php";
 require_once 'includes/display-sections.inc.php';
+
+if (!isset($_SESSION["admin_username"])) {
+    header("Location: " . BASE_URL . "admin.php");
+    exit;
+}
+
 ?>
 
 <div class="container-fluid border border-bottom border-dark p-3" style="background-color: white;">
