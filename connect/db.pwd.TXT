@@ -1,0 +1,34 @@
+<?php
+$servername = "sql5c0f.megasqlservers.com";
+$username = "ul_loriholste698934";
+$password = "Lori007$";
+$dbname = "ul_loriholste698934";
+// Create connection
+$mysqli = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+} else {
+    // echo "Connected successfully!";
+}
+
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "loridb";
+// Create connection
+$mysqli = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+} else {
+    echo "Connected successfully!";
+}
+
+
+define('BASE_URL', 'https://localhost/UR/');
+
+define('BASE_URL', 'http://loriholstein.com/');
