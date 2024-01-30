@@ -3,7 +3,6 @@ require_once "admin-header.php";
 require_once "config-url.php";
 require_once "includes/admin_errors.inc.php";
 
-// This checks to see if you are logged in as a admin or not
 if (!isset($_SESSION["admin_username"])) {
     header("Location: " . BASE_URL . "admin.php");
     exit;

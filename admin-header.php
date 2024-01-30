@@ -1,8 +1,8 @@
 <?php
 require_once 'config-url.php';
-require_once 'connect/db.php';
-
 session_start();
+
+require_once 'connect/db.php';
 
 // Calculate the base URL
 $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
@@ -73,7 +73,7 @@ $stylesheets = [
                             <a class="nav-link" href="<?php echo BASE_URL ?>/admin_users.php">Users</a>
                         </li>
 
-                    <?php
+                        <?php
                     }
                     ?>
                     <?php

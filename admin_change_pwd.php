@@ -1,17 +1,13 @@
 <?php
 
 require_once("config-url.php");
-
-session_start();
+require_once("admin-header.php");
+require_once("includes/admin_errors.inc.php");
 
 if (!isset($_SESSION["admin_username"])) {
     header("Location: " . BASE_URL . "admin.php");
     exit;
 }
-
-require_once("admin-header.php");
-require_once("includes/admin_errors.inc.php");
-
 ?>
 
 <div class=admin-change-form-wrapper>

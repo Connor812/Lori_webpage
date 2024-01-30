@@ -34,7 +34,7 @@ try {
 
     // Deleting the page from journal_page
 
-    $sql = "DELETE FROM `journal_page` WHERE page_num = ?";
+    $sql = "DELETE FROM `journal_page` WHERE page_num = ?;";
 
     $stmt = $mysqli->prepare($sql);
 
