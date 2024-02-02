@@ -1,14 +1,17 @@
 <?php
+
+require_once "config-url.php";
+session_start();
+
+if (!isset($_SESSION["admin_username"])) {
+    header("Location: " . BASE_URL . "admin.php?error=access_denied");
+    exit;
+}
+
 require_once 'admin-header.php';
 require_once "connect/db.php";
 require_once "includes/admin_errors.inc.php";
 require_once 'includes/display-sections.inc.php';
-require_once "config-url.php";
-
-if (!isset($_SESSION["admin_username"])) {
-    header("Location: " . BASE_URL . "admin.php");
-    exit;
-}
 
 ?>
 
@@ -16,7 +19,7 @@ if (!isset($_SESSION["admin_username"])) {
 
     <div class="row">
         <div class="col-sm-6">
-            <form method='post' action='<?php echo BASE_URL . "/admin_pages.php" ?>'>
+            <form method='post' action='<?php echo BASE_URL . "admin_pages.php" ?>'>
                 <div class="input-group mb-3">
                     <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
                     <select class="form-select" name="selected_page" id="selected_page"
@@ -182,8 +185,9 @@ if (!isset($_SESSION["admin_username"])) {
                     <?php
                 }
                 ?>
-                <button id="delete-page-btn" class="btn btn-danger modal_button" type="button" page_num="<?php echo $page_num ?>"
-                        data-mdb-toggle="modal" data-mdb-target="#delete-page-modal">Delete Page</button>
+                <button id="delete-page-btn" class="btn btn-danger modal_button" type="button"
+                    page_num="<?php echo $page_num ?>" data-mdb-toggle="modal"
+                    data-mdb-target="#delete-page-modal">Delete Page</button>
             </center>
         </div>
     </div>
@@ -202,7 +206,8 @@ if (!isset($_SESSION["admin_username"])) {
                     <!-- Modal Content goes here -->
                     <form id="heading_form" method="post">
                         <h5 class="d-flex justify-content-start">Heading Text</h5>
-                        <input name="heading_content" placeholder="Heading Text" type="text" class="form-control" autocomplete="off" />
+                        <input name="heading_content" placeholder="Heading Text" type="text" class="form-control"
+                            autocomplete="off" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">

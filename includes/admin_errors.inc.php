@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 if (isset($_GET['error'])) {
     $message;
     $error = $_GET['error'];
@@ -77,6 +75,8 @@ if (isset($_GET['error'])) {
         $message = "Error: Failed To Add Comment! Please Try Again.";
     } elseif ($error == 'failed_delete_page') {
         $message = "Error: Failed To Delete Page! Please Try Again.";
+    } elseif ($error == 'access_denied') {
+        $message = "Error: You Don't Have Permissions To Access This Page.";
     }
 
 

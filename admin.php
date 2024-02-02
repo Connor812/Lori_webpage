@@ -14,14 +14,14 @@
 
     require_once("admin-header.php");
     require_once("includes/admin_errors.inc.php");
+    require_once 'config-url.php';
 
     session_start();
-
-    require_once 'config-url.php';
 
     if (isset($_SESSION['admin_username'])) {
         header("Location: " . BASE_URL . "admin_pages.php");
     }
+
     ?>
 
     <form class="admin-login-form" action="includes/admin_login.inc.php" method="post">

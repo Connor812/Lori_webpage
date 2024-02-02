@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validate section_id and page_num (you may add more validation as needed)
     if ($section_id <= 0 || $page_num <= 0 || $page_num == 'add_page') {
-        header("Location: " . BASE_URL . "/admin_pages.php?error=invalid_pagenum");
+        header("Location: " . BASE_URL . "admin_pages.php?error=invalid_pagenum");
         exit;
     }
 
@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validate the bullet list name (you may add more validation as needed)
     if (empty($bulletListName)) {
-        header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input");
+        header("Location: " . BASE_URL . "admin_pages.php?error=empty_input");
         exit;
     }
 
@@ -68,12 +68,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // If everything is successful, commit the transaction
         $mysqli->commit();
 
-        header("Location: " . BASE_URL . "/admin_pages.php?success=added_bullets&page_num=$page_num#$section_id");
+        header("Location: " . BASE_URL . "admin_pages.php?success=added_bullets&page_num=$page_num#$section_id");
     } catch (Exception $e) {
         // If there's an error, roll back the transaction
         $mysqli->rollback();
         // echo "Error: " . $e->getMessage();
-        header("Location: " . BASE_URL . "/admin_pages.php?error=error_adding_bullets&page_num=$page_num");
+        header("Location: " . BASE_URL . "admin_pages.php?error=error_adding_bullets&page_num=$page_num");
     } finally {
         // Close the statement and database connection
         if (isset($stmt)) {

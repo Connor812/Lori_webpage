@@ -5,9 +5,10 @@ require_once("admin-header.php");
 require_once("includes/admin_errors.inc.php");
 
 if (!isset($_SESSION["admin_username"])) {
-    header("Location: " . BASE_URL . "admin.php");
+    header("Location: " . BASE_URL . "admin.php?error=access_denied");
     exit;
 }
+
 ?>
 
 <div class=admin-change-form-wrapper>

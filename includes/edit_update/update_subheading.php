@@ -8,7 +8,7 @@ $order_num = $_GET["order_num"];
 
 if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
     echo "error no page_num";
-    header("Location: " . BASE_URL . "/admin_pages.php?error=missing_section_params");
+    header("Location: " . BASE_URL . "admin_pages.php?error=missing_section_params");
 } elseif (empty($subheading_content)) {
     echo "error empty input";
     header("Location: " . BASE_URL . "/admin_edit/edit_subheading.php?error=empty_input&page_num=$page_num&order_num=$order_num");
@@ -35,11 +35,13 @@ if (!isset($_GET["page_num"]) || !isset($_GET["order_num"])) {
 
         // Check for success
         if ($stmt->affected_rows > 0) {
-            echo "Update successful!";
-            header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success&page_num=$page_num&#$order_num");
+            header("Location: " . BASE_URL . "admin_pages.php?success=updated_success&page_num=$page_num&#$order_num");
+            $stmt->close();
+            exit;
         } else {
-            echo "Update failed!";
-            header("Location: " . BASE_URL . "/admin_pages.php?error=updated_same&page_num=$page_num#$order_num");
+            header("Location: " . BASE_URL . "admin_pages.php?error=updated_same&page_num=$page_num#$order_num");
+            $stmt->close();
+            exit;
         }
 
         // Close the statement

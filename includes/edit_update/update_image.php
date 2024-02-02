@@ -43,10 +43,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Check for success
         if ($stmt->affected_rows > 0) {
             // echo "Update successful!";
-            header("Location: " . BASE_URL . "/admin_pages.php?success=updated_success&page_num=$page_num&order_num=$order_num");
+            header("Location: " . BASE_URL . "admin_pages.php?success=updated_success&page_num=$page_num&order_num=$order_num");
+            $stmt->close();
+            exit;
         } else {
             // echo "Update failed!";
-            header("Location: " . BASE_URL . "/admin_pages.php?error=update_failed&page_num=$page_num&order_num=$order_num");
+            header("Location: " . BASE_URL . "admin_pages.php?error=update_failed&page_num=$page_num&order_num=$order_num");
+            $stmt->close();
+            exit;
         }
 
         // Close the statement
