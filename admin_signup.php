@@ -2,8 +2,8 @@
 
 require_once("connect/db.php");
 
-$username = "Lori";
-$pwd = "Lori007$";
+$username = "Connor";
+$pwd = "123456";
 
 // Your SQL query to insert the admin into the 'admin' table
 // Hashing the password

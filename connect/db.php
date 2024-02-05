@@ -1,8 +1,8 @@
 <?php
-$servername = "sql5c0f.megasqlservers.com";
-$username = "loriholste698934";
-$password = "Lori007$";
-$dbname = "ul_loriholste698934";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "loridb";
 // Create connection
 $mysqli = new mysqli($servername, $username, $password, $dbname);
 
@@ -10,5 +10,5 @@ $mysqli = new mysqli($servername, $username, $password, $dbname);
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 } else {
-    // echo "Connected successfully!";
+    echo "Connected successfully!";
 }
