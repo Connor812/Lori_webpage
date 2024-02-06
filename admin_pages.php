@@ -522,9 +522,6 @@ require_once 'includes/display-sections.inc.php';
                         <label class="form-label">What do you want the user to comment on</label>
                         <input name="section_name" type="text" class="form-control"
                             placeholder="Please give a brief description of the question you are asking" />
-                        <label class="form-label">Short form for the question</label>
-                        <input name="comment_userdata_name" type="text" class="form-control"
-                            placeholder="Please give short form name for this question" />
                         <label class="form-label">Comment Description</label>
                         <textarea name="comment_placeholder" type="text" class="form-control"
                             placeholder="Please explain/examples of the question you are asking"></textarea>
