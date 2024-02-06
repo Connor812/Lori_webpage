@@ -77,6 +77,22 @@ if (isset($_GET['error'])) {
         $message = "Error: Failed To Delete Page! Please Try Again.";
     } elseif ($error == 'access_denied') {
         $message = "Error: You Don't Have Permissions To Access This Page.";
+    } elseif ($error == 'failed_prepare_statement') {
+        $message = "Error: Error Getting Information From Data Base. Please Try Again.";
+    } elseif ($error == 'failed_update_bullet') {
+        $message = "Error: Failed To Update Bullet Points. Please Try Again.";
+    } elseif ($error == 'invalid_request_method') {
+        $message = "Error: Invalid Request Method. Please Try Again.";
+    } elseif ($error == 'failed_update_permissions') {
+        $message = "Error: Failed To Update Permissions. Please Try Again.";
+    } elseif ($error == 'failed_user_search') {
+        $message = "Error: Failed To Get The Users. Please Try Again.";
+    } elseif ($error == 'permission_check_failed') {
+        $message = "Error: Failed To Check If The Permission Exists. Please Try Again.";
+    } elseif ($error == 'no_users') {
+        $message = "Error: No Users. Please Try Again.";
+    } elseif ($error == 'failed_to_update_initial_page') {
+        $message = "Error: Failed To Update Initial Page. Please Try Again.";
     }
 
 
@@ -132,6 +148,12 @@ if (isset($_GET['success'])) {
         $message = "Successfully Updated Password!";
     } elseif ($Success == 'deleted_page') {
         $message = "Successfully Deleted Page!";
+    } elseif ($Success == 'updated_bullet') {
+        $message = "Successfully Updated Bullet Points!";
+    } elseif ($Success == 'updated_all_permissions') {
+        $message = "Successfully Updated All Users Permissions!";
+    } elseif ($Success == 'updated_initial_page') {
+        $message = "Successfully Updated The Initial Page!";
     } 
     ?>
     <div class="floating-success" id="floating-success">
