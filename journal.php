@@ -87,12 +87,11 @@ require_once 'header.php';
             </div>
         </div>
     </div>
-
-
     <?php
     if (isset($_SESSION['user_id'])) {
         ?>
-        <form class="container-fluid p-4" id="journal-form" method="post" action="includes/journal-form.inc.php?page_num=<?php echo $_GET['page_num']; ?>">
+        <form class="container-fluid p-4" id="journal-form" method="post"
+            action="includes/journal-form.inc.php?page_num=<?php echo $_GET['page_num']; ?>">
             <?php
             require_once 'journal-form.php';
             ?>
