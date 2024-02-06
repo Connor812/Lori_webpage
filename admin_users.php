@@ -8,7 +8,160 @@ if (!isset($_SESSION["admin_username"])) {
     exit;
 }
 
+
+function get_page_name($mysqli)
+{
+    $sql = "SELECT * FROM `initial_page` WHERE id = 1;";
+
+    $result = mysqli_query($mysqli, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $page_num = $row["page_num"];
+
+
+            $sqlGetName = "SELECT page_name FROM `page_name` WHERE page_num = ?;";
+            $stmtGetName = $mysqli->prepare($sqlGetName);
+
+            if (!$stmtGetName) {
+
+                return "Error Getting Initial Page";
+            }
+
+            $stmtGetName->bind_param("i", $page_num);
+
+            // ? checks to see if the execute fails
+            if (!$stmtGetName->execute()) {
+                $stmtGetName->close();
+                return "Error Getting Initial Page";
+            }
+
+            // * Gets the Result
+            $resultGetName = $stmtGetName->get_result();
+
+            if ($resultGetName->num_rows > 0) {
+
+                while ($rowGetName = $resultGetName->fetch_assoc()) {
+                    return $rowGetName["page_name"];
+                }
+            } else {
+                // ! No data found
+                return "Error Getting Initial Page";
+            }
+        }
+    } else {
+        // ! No data found
+        return "Error Getting Initial Page";
+    }
+}
+
 ?>
+
+<div class="row justify-content-center permissions-container" style="width: 100%;">
+    <form method="post" action="includes/initial_page.inc.php" class="change-permissions-container col-3">
+
+        <h3 class="text-start">Chose Users Initial Page <br>
+            Current Page:
+            <?php echo get_page_name($mysqli) ?>
+        </h3>
+
+        <select name="page_num" class="btn btn-warning form-select" aria-label="Default select example">
+            <option selected disabled>Chose A Page</option>
+            <?php
+            $sql = "SELECT * FROM `page_name`;";
+
+            $result = mysqli_query($mysqli, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    // * Your Code here
+                    ?>
+                    <option value="<?php echo $row["page_num"] ?>">
+                        <?php echo $row["page_name"] ?>
+                    </option>
+
+                    <?php
+                }
+            } else {
+                // ! No data found
+                ?>
+                <option disabled>Couldn't Find Pages</option>
+                <?php
+            }
+            ?>
+        </select>
+
+        <button class="btn btn-primary" type="submit">Update Permissions For All Users</button>
+
+    </form>
+    <form method="post" action="includes/update_all_permissions.inc.php" class="change-permissions-container col-3">
+
+        <h3 class="text-start">Give Permissions To All Users</h3>
+
+        <select name="page_num" class="btn btn-success form-select" aria-label="Default select example">
+            <option selected disabled>Chose A Page</option>
+            <?php
+            $sql = "SELECT * FROM `page_name`;";
+
+            $result = mysqli_query($mysqli, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    // * Your Code here
+                    ?>
+                    <option value="<?php echo $row["page_num"] ?>">
+                        <?php echo $row["page_name"] ?>
+                    </option>
+
+                    <?php
+                }
+            } else {
+                // ! No data found
+                ?>
+                <option disabled>Couldn't Find Pages</option>
+                <?php
+            }
+            ?>
+        </select>
+
+        <button class="btn btn-primary" type="submit">Update Permissions For All Users</button>
+
+    </form>
+    <form action="includes/delete_permissions.inc.php" method="post" class="change-permissions-container col-3">
+        <h3 class="text-start">Remove Permissions For All Users</h3>
+
+        <select name="page_num" class="btn btn-danger form-select" aria-label="Default select example">
+            <option selected disabled>Chose A Page</option>
+            <?php
+            $sql = "SELECT * FROM `page_name`;";
+
+            $result = mysqli_query($mysqli, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    // * Your Code here
+                    ?>
+
+                    <option value="<?php echo $row["page_num"] ?>">
+                        <?php echo $row["page_name"] ?>
+                    </option>
+
+                    <?php
+                }
+            } else {
+                // ! No data found
+                ?>
+                <option disabled>Couldn't Find Pages</option>
+                <?php
+            }
+            ?>
+        </select>
+
+        <button class="btn btn-primary">Update Permissions For All Users</button>
+    </form>
+</div>
+
+
 
 <div class="d-flex justify-content-start p-3 gap-2">
     <div class="dropdown">
