@@ -3,13 +3,14 @@
 require_once "../../connect/db.php";
 require_once "../../config-url.php";
 require_once 'update_journal_page.php';
+require_once("../get_column_count.php");
 
 // Get input data from POST and GET
 $section_name = $_POST['section_name'];
 $section_id = $_GET['section_id'];
 $page_num = $_GET['page_num'];
-$comment_userdata_name = str_replace(' ', '_', $_POST['comment_userdata_name']);
 $comment_placeholder = $_POST['comment_placeholder'];
+$column_count = get_column_count($mysqli);
 
 // Output for debugging
 // echo $section_name . "<br>";
@@ -20,7 +21,7 @@ $comment_placeholder = $_POST['comment_placeholder'];
 
 // Error handlers ---------------------------------------------------------------------------------------------------------------------------->
 // Error handler, checks to see if content is empty
-if (empty($comment_userdata_name) || empty($comment_placeholder) || empty($section_name)) {
+if (empty($comment_placeholder) || empty($section_name)) {
     header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
     exit;
 } elseif ($section_id == '') {
@@ -29,26 +30,6 @@ if (empty($comment_userdata_name) || empty($comment_placeholder) || empty($secti
 } elseif (empty($page_num) || !isset($_GET['page_num']) || $_GET['page_num'] == "add_page") {
     header("Location: " . BASE_URL . "/admin_pages.php?error=no_page_num");
     exit;
-}
-
-// This checks to see if the userdata_name is already in the inputs table
-$sql = "SELECT COLUMN_NAME 
-FROM INFORMATION_SCHEMA.COLUMNS 
-WHERE TABLE_NAME = 'user_input' 
-AND COLUMN_NAME = ?;";
-
-$stmt = $mysqli->prepare($sql);
-if ($stmt) {
-    $stmt->bind_param("s", $comment_userdata_name);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    if (!empty($row["COLUMN_NAME"])) {
-        header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
-        exit;
-    } else {
-        // echo "Does not exist!";
-    }
 }
 
 // Update the order_num to fit the new section
@@ -87,7 +68,7 @@ if ($result->num_rows > 0) {
     $latestID = $row['MAX(id)'];
 
     // Add a new column to the user_input table
-    $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN $comment_userdata_name TEXT DEFAULT NULL;";
+    $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN `$column_count` TEXT DEFAULT NULL;";
     if ($mysqli->query($sqlAddColumn)) {
         // echo "New column added!";
     } else {
@@ -100,7 +81,7 @@ if ($result->num_rows > 0) {
     $stmt = $mysqli->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("ssi", $comment_userdata_name, $comment_placeholder, $latestID);
+        $stmt->bind_param("ssi", $column_count, $comment_placeholder, $latestID);
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
                 // echo "New section added!";
