@@ -53,51 +53,148 @@ if ($pwd != $repeat_pwd) {
     exit;
 }
 
-// Check if username Exists
-$sql = "SELECT username FROM users WHERE username = ?;";
+$mysqli->begin_transaction();
 
-$stmt = $mysqli->prepare($sql);
+try {
+    // Check if username Exists
+    $sql = "SELECT username FROM users WHERE username = ?;";
 
-if ($stmt) {
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt = $mysqli->prepare($sql);
 
-    if (!$result) {
-        echo "Query failed: (" . $stmt->errno . ") " . $stmt->error;
+    if ($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if (!$result) {
+            echo "Query failed: (" . $stmt->errno . ") " . $stmt->error;
+            exit;
+        }
+
+        if ($result->num_rows > 0) {
+            header("Location: ../signup.php?error=username_exists");
+            $mysqli->rollback();
+            exit;
+        }
+        $stmt->close();
+    } else {
+        echo "Prepare failed: " . $mysqli->error;
         exit;
     }
 
-    if ($result->num_rows > 0) {
-        header("Location: ../signup.php?error=username_exists");
-        exit;
+    // Create new user in data base
+
+    // Hashing the password
+    $hashedPwd = password_hash($pwd, PASSWORD_BCRYPT);
+
+    $sql = "INSERT INTO `users`(`username`, `email`, `password`, `first_name`, `last_name`) VALUES (?, ?, ?, ?, ?);";
+
+    $stmt = $mysqli->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("sssss", $username, $email, $hashedPwd, $firstName, $lastName);
+        if ($stmt->execute()) {
+            // Query executed successfully
+            $sql = "SELECT * FROM `initial_page` WHERE id = 1;";
+
+            $result = mysqli_query($mysqli, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+
+                    $page_num = $row["page_num"];
+
+                    $user_id = get_username($username, $mysqli);
+
+                    // Insert statement
+                    $sql = "INSERT INTO `permission` (`user_id`, `page_num`) VALUES (?, ?);";
+
+                    $stmt = $mysqli->prepare($sql);
+
+                    if (!$stmt) {
+                        header("Location: ../signup.php?error=failed_to_create_user");
+                        $mysqli->rollback();
+                        $stmt->close();
+                        exit;
+                    }
+
+                    // Bind parameters to the prepared statement
+                    $stmt->bind_param("ss", $user_id, $page_num);
+
+                    // Execute the statement
+                    if ($stmt->execute()) {
+                        // Insertion successful
+                        header("Location: ../login.php?message=successful_signup");
+                        $mysqli->commit();
+                        $stmt->close();
+                        exit;
+                    } else {
+                        // Insertion failed
+                        header("Location: ../signup.php?error=failed_to_create_user");
+                        $mysqli->rollback();
+                        $stmt->close();
+                        exit;
+                    }
+                }
+            } else {
+                // ! No data found
+                header("Location: ../signup.php?error=failed_to_create_user");
+                $mysqli->rollback();
+                $stmt->close();
+                exit;
+            }
+
+        } else {
+            header("Location: ../signup.php?error=failed_to_create_user");
+            $mysqli->rollback();
+            $stmt->close();
+            exit;
+        }
+        $stmt->close();
+    } else {
+        header("Location: ../signup.php?error=prepare_statement_failed");
+        $mysqli->rollback();
+        return;
     }
-    $stmt->close();
-} else {
-    echo "Prepare failed: " . $mysqli->error;
+} catch (Exception $err) {
+    header("Location: ../signup.php?error=$err");
+    $mysqli->rollback();
     exit;
 }
 
-// Create new user in data base
+function get_username($username, $mysqli)
+{
+    $sql = "SELECT id FROM `users` WHERE username = ?;";
+    $stmt = $mysqli->prepare($sql);
 
-// Hashing the password
-$hashedPwd = password_hash($pwd, PASSWORD_BCRYPT);
-
-$sql = "INSERT INTO `users`(`username`, `email`, `password`, `first_name`, `last_name`) VALUES (?, ?, ?, ?, ?);";
-
-$stmt = $mysqli->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("sssss", $username, $email, $hashedPwd, $firstName, $lastName);
-    if ($stmt->execute()) {
-        // Query executed successfully
-        header("Location: ../login.php?message=successful_signup");
-    } else {
+    if (!$stmt) {
+        // ! Handle the case where the prepared statement could not be created
         header("Location: ../signup.php?error=failed_to_create_user");
         exit;
     }
-    $stmt->close();
-} else {
-    echo "Prepare failed: " . $mysqli->error;
-    return;
+
+    $stmt->bind_param("s", $username);
+
+    // ? checks to see if the execute fails
+    if (!$stmt->execute()) {
+        header("Location: ../signup.php?error=failed_to_create_user");
+        $stmt->close();
+        exit;
+    }
+
+    // * Gets the Result
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // * Your Code here
+            return $row["id"];
+        }
+    } else {
+        // ! No data found
+        header("Location: ../signup.php?error=no_username_found");
+        $mysqli->rollback();
+        $stmt->close();
+        exit;
+    }
 }
