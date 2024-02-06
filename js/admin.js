@@ -131,9 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="hidden" name="placeholder_text[]" value=""> <!-- Hidden field for the type -->
                     <label class="d-flex justify-content-start">Check Box Title</label>
                     <input name="item_title[]" placeholder="Check Box Title/Question" type="text" class="form-control" />
-                    <label class="d-flex justify-content-start">Short for of Title/Question</label>
-                    <div id="error_${numOfItems}" class="error-message hide"></div>
-                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control item_userdata_name" error="error_${numOfItems}" pattern="[A-Za-z]+" onchange="changeInput(this)" />
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
                 click_list_input_container.insertAdjacentHTML('beforeend', newItem);
@@ -146,9 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input type="hidden" name="item_type[]" value="textarea"> <!-- Hidden field for the type -->
                     <label class="d-flex justify-content-start">Textarea Title</label>
                     <input name="item_title[]" placeholder="Textarea Title/Question" type="text" class="form-control" />
-                    <label class="d-flex justify-content-start">Short for of Title/Question</label>
-                    <div id="error_${numOfItems}" class="error-message hide"></div>
-                    <input name="item_userdata_name[]" placeholder="Short form of the title/question to short the user input" type="text" class="form-control item_userdata_name" error="error_${numOfItems}" pattern="[A-Za-z]+" onchange="changeInput(this)"/>
                     <label class="d-flex justify-content-start">Placeholder text</label>
                     <input name="placeholder_text[]" placeholder="Examples/Explanation of question" type="text" class="form-control" />
                     <button class="btn btn-danger delete_item_btn" value="item_${numOfItems}"><i class="fas fa-trash-alt"></i></button>
