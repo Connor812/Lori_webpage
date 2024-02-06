@@ -126,7 +126,7 @@ function click_list_section($click_list_row, $mysqli, $add_button, $user_id = fa
     <section class='accordion section_container' id='<?php echo $order_num ?>'>
         <div class='accordion-item'>
             <h2 class='accordion-header'>
-                <button class='accordion-button collapsed' type='button' data-mdb-toggle='collapse'
+                <button class='accordion-button collapsed checkbox-btn' type='button' data-mdb-toggle='collapse'
                     data-mdb-target='#<?php echo $label ?>' aria-expanded='true' aria-controls='<?php echo $label ?>'>
                     <?php echo $section_name ?>
                 </button>
@@ -182,13 +182,11 @@ WHERE cl.id = ?;";
             $item_type = $click_list_item['click_list_item_type'];
 
             if ($item_type == 'checkbox') {
-
-
                 ?>
                 <div class="form-check">
                     <input type="hidden" name="<?php echo $item_userdata_name ?>" value="0">
                     <!-- Hidden input for unchecked checkbox -->
-                    <input name="<?php echo $item_userdata_name ?>" class="form-check-input" type="checkbox" value="1"
+                    <input name="<?php echo $item_userdata_name ?>" class="form-check-input checkbox" type="checkbox" value="1"
                         id="defaultCheck1" <?php
                         if (is_numeric($user_id)) {
                             echo get_click_list_user_input($item_type, $item_userdata_name, $user_id, $mysqli);
@@ -211,7 +209,7 @@ WHERE cl.id = ?;";
                     <label for="comment">
                         <?php echo $item_title ?>
                     </label>
-                    <textarea name="<?php echo $item_userdata_name ?>" class="form-control" rows="7" id="comment"
+                    <textarea name="<?php echo $item_userdata_name ?>" class="form-control textarea" rows="7" id="comment"
                         placeholder="<?php echo $placeholder_text ?>"><?php if (is_numeric($user_id)) {
                                echo get_click_list_user_input($item_type, $item_userdata_name, $user_id, $mysqli);
                            } ?></textarea>
