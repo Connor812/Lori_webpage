@@ -93,8 +93,9 @@ if (isset($_GET['error'])) {
         $message = "Error: No Users. Please Try Again.";
     } elseif ($error == 'failed_to_update_initial_page') {
         $message = "Error: Failed To Update Initial Page. Please Try Again.";
+    } elseif ($error == 'failed_deleted_permissions') {
+        $message = "Error: Failed To Delete All Permissions. Please Try Again.";
     }
-
 
     ?>
     <div class="floating-error" id="floating-error">
@@ -154,6 +155,8 @@ if (isset($_GET['success'])) {
         $message = "Successfully Updated All Users Permissions!";
     } elseif ($Success == 'updated_initial_page') {
         $message = "Successfully Updated The Initial Page!";
+    } elseif ($Success == 'deleted_permissions') {
+        $message = "Successfully Deleted Permissions From All Users!";
     } 
     ?>
     <div class="floating-success" id="floating-success">
