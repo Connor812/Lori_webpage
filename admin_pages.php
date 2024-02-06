@@ -317,13 +317,9 @@ require_once 'includes/display-sections.inc.php';
                         <label class="d-flex justify-content-start">Story Box Title</label>
                         <input name="story_box_name" placeholder="Story Box Title/Question" type="text"
                             class="form-control" />
-                        <label class="d-flex justify-content-start">User Data Name</label>
-                        <input name="story_box_userdata_name" placeholder="Short form of question/title" type="text"
-                            class="form-control" />
                         <label class="d-flex justify-content-start">Placeholder Text</label>
                         <input name="placeholder_text" placeholder="Examples or a description of the story box"
                             type="text" class="form-control" />
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
