@@ -3,6 +3,7 @@
 require_once '../../connect/db.php';
 require_once '../../config-url.php';
 require_once 'update_journal_page.php';
+require_once("../get_column_count.php");
 
 $section_name = $_POST['section_name'];
 $section_id = $_GET['section_id'];
@@ -27,7 +28,6 @@ if (empty($page_num) || !isset($_GET['page_num']) || $page_num == 'add_page') {
 $item_types = $_POST['item_type'];
 $placeholder_texts = $_POST['placeholder_text'];
 $item_titles = $_POST['item_title'];
-$item_userdata_names = $_POST['item_userdata_name'];
 
 if (empty($item_types)) {
     // echo "section input empty";
@@ -40,33 +40,12 @@ for ($i = 0; $i < count($item_types); $i++) {
     $type = $item_types[$i];
     $placeholder_text = $placeholder_texts[$i];
     $title = $item_titles[$i];
-    $userdata_name = str_replace(' ', '_', $item_userdata_names[$i]);
 
     // Checks to see if any of the inputs are empty
-    if (empty($type) || empty($title) || empty($userdata_name)) {
+    if (empty($type) || empty($title)) {
         // echo "works for empty";
         header("Location: " . BASE_URL . "/admin_pages.php?error=empty_input&page_num=" . $page_num);
         exit;
-    }
-    // This checks to see if the userdata_name is already in the inputs table
-    $sql = "SELECT COLUMN_NAME 
-    FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_NAME = 'user_input' 
-    AND COLUMN_NAME = ?;";
-
-    $stmt = $mysqli->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("s", $userdata_name);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        if (!empty($row["COLUMN_NAME"])) {
-            // echo "works for exist<br>";
-            header("Location: " . BASE_URL . "/admin_pages.php?error=input_exists&page_num=" . $page_num);
-            exit;
-        } else {
-            // echo "Does not exist!";
-        }
     }
 }
 
@@ -157,24 +136,22 @@ if ($result->num_rows > 0) {
     if (isset($_POST['item_type']) && is_array($_POST['item_type'])) {
         $itemTypes = $_POST['item_type'];
         $itemTitles = $_POST['item_title'];
-        $itemUserdataNames = str_replace('', '_', $_POST['item_userdata_name']);
         $placeholderTexts = $_POST['placeholder_text'];
 
         // Loop through the arrays
         for ($i = 0; $i < count($itemTypes); $i++) {
             $type = $itemTypes[$i];
             $title = $itemTitles[$i];
-            $userdataName = str_replace(' ', '_', $itemUserdataNames[$i]);
             $placeholderText = !empty($placeholderTexts[$i]) ? $placeholderTexts[$i] : null;
-
+            $num_of_columns = get_column_count($mysqli);
             // Process the data
-            // echo "Type: $type, Title: $title, Userdata Name: $userdataName, Placeholder Text: $placeholderText<br>";
+            // echo "Type: $type, Title: $title, Userdata Placeholder Text: $placeholderText<br>";
 
             // Define the column type based on $type
             $columnType = ($type === 'textarea') ? 'TEXT DEFAULT NULL' : 'BOOLEAN DEFAULT FALSE';
 
             // Construct SQL to add the column
-            $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN $userdataName $columnType;";
+            $sqlAddColumn = "ALTER TABLE user_input ADD COLUMN `$num_of_columns` $columnType;";
 
             // Prepare and execute the SQL statement to add the column
             if ($mysqli->query($sqlAddColumn)) {
@@ -190,7 +167,7 @@ if ($result->num_rows > 0) {
 
             if ($stmt) {
                 // Bind your parameters
-                $stmt->bind_param("ssssi", $type, $title, $placeholderText, $userdataName, $latestID);
+                $stmt->bind_param("ssssi", $type, $title, $placeholderText, $num_of_columns, $latestID);
 
                 // Execute the statement
                 if ($stmt->execute()) {
