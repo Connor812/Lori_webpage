@@ -462,7 +462,6 @@ function bullet_section($bullet_row, $mysqli, $add_button)
         if ($result) {
             // Start the bullet point list
             echo '<section id="' . $order_num . '" class="section_container"><ul>';
-            echo $section_name;
             // Fetch data from the result set
             while ($row = $result->fetch_assoc()) {
                 // Access data in $row
