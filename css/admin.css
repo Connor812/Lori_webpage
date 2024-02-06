@@ -334,3 +334,37 @@ hr {
     padding: 15px;
     max-width: 50%;
 }
+
+.container-select-initial-page {
+    max-width: 1320px;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.change-permissions-container {
+    height: 300px;
+    background-color: #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px -10px rgba(0, 0, 0, 0.5);
+}
+
+
+@media screen and (max-width: 1120px) {
+    .permissions-container {
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .change-permissions-container {
+        width: 100%;
+    }
+}
